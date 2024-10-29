@@ -1,0 +1,145 @@
+@startuml
+Title Diagrama de clases Sistema de Gestión de Perros Perdidos (PETSIT)
+
+class Usuario #back:orange {
+    id: Long
+    nombre: String
+    correo: String
+    contraseña: String
+    tipoUsuario: TipoUsuario
+    mascotas: List<Mascota>
+    alertas: List<Alerta>
+
+    registrar()
+    iniciarSesion()
+    agregarMascota(mascota: Mascota)
+    eliminarMascota(mascota: Mascota)
+    generarAlerta(alerta: Alerta)
+    consultarMascotas(): List<Mascota>
+    consultarAlertas(): List<Alerta>
+}
+
+class Mascota #back:orange {
+    id: Long
+    nombre: String
+    raza: String
+    edad: Integer
+    historialMedico: String
+    propietario: Usuario
+    alertas: List<Alerta>
+
+    registrar()
+    actualizarDatos()
+    eliminar()
+    consultarHistorial(): String
+    generarAlerta(alerta: Alerta)
+}
+
+class Alerta #back:orange {
+    id: Long
+    tipoAlerta: TipoAlerta
+    descripcion: String
+    ubicacion: String
+    fecha: Date
+
+    crear()
+    actualizar()
+    eliminar()
+    notificarUsuarios()
+}
+
+class Refugio #back:orange {
+    id: Long
+    nombre: String
+    direccion: String
+    contacto: String
+
+    registrar()
+    actualizarDatos()
+    eliminar()
+    listarMascotas()
+    contactar()
+}
+
+class Veterinario #back:orange {
+    id: Long
+    nombre: String
+    direccion: String
+    contacto: String
+
+    registrar()
+    actualizarDatos()
+    eliminar()
+    consultarServicios(): List<String>
+}
+
+class MapaInteractivo #back:orange {
+    mostrarUbicacion(mascotas: List<Mascota>, refugios: List<Refugio>): void
+    obtenerDirecciones(ubicacion: String): void
+}
+
+class SistemaNotificaciones {
+    enviarNotificacion(usuario: Usuario, alerta: Alerta): void
+    personalizarNotificaciones(usuario: Usuario, preferencias: List<String>): void
+}
+
+class PetShop {
+    listarProductos(): List<Producto>
+    realizarCompra(producto: Producto, usuario: Usuario): void
+}
+
+class CapaControlador {
+    registrarUsuario(usuario: Usuario): void
+    iniciarSesion(correo: String, contraseña: String): Usuario
+    crearAlerta(alerta: Alerta): void
+    consultarMascotas(usuario: Usuario): List<Mascota>
+    consultarAlertas(usuario: Usuario): List<Alerta>
+    agregarMascota(usuario: Usuario, mascota: Mascota): void
+}
+
+class CapaServicio {
+    autenticarUsuario(correo: String, contraseña: String): Usuario
+    gestionarMascota(mascota: Mascota): void
+    gestionarAlerta(alerta: Alerta): void
+    listarRefugios(): List<Refugio>
+    listarVeterinarios(): List<Veterinario>
+}
+
+class CapaRepositorio {
+    guardarUsuario(usuario: Usuario): void
+    obtenerUsuario(id: Long): Usuario
+    actualizarUsuario(usuario: Usuario): void
+    eliminarUsuario(id: Long): void
+    guardarMascota(mascota: Mascota): void
+    obtenerMascota(id: Long): Mascota
+    actualizarMascota(mascota: Mascota): void
+    eliminarMascota(id: Long): void
+    guardarAlerta(alerta: Alerta): void
+    obtenerAlerta(id: Long): Alerta
+    actualizarAlerta(alerta: Alerta): void
+    eliminarAlerta(id: Long): void
+    listarAlertasPorUsuario(usuario: Usuario): List<Alerta>
+    listarMascotasPorRefugio(refugio: Refugio): List<Mascota>
+}
+
+class TipoAlertaStrategy {
+    crearAlerta(alerta: Alerta): void
+    notificarUsuarios(alerta: Alerta): void
+}
+
+Usuario "1" --> "0..*" Mascota : posee
+Usuario "1" --> "0..*" Alerta : genera
+Mascota "1" --> "0..*" Alerta : reporta
+Usuario "0..*" --> "0..*" Refugio : contacta
+Usuario "0..*" --> "0..*" Veterinario : consulta
+Usuario "0..*" --> "0..*" PetShop : compra
+Mascota "1" --> "0..*" PetShop : consultaProductos
+Refugio "1" --> "0..*" Mascota : tiene
+Veterinario "0..*" --> "0..*" Mascota : atiende
+MapaInteractivo --> Alerta : muestra ubicaciones
+SistemaNotificaciones --> Alerta : envía notificaciones
+CapaControlador --> CapaServicio : utiliza
+CapaServicio --> CapaRepositorio : utiliza
+TipoAlertaStrategy <|-- Alerta : utiliza
+
+@enduml
