@@ -1,0 +1,61 @@
+@startmindmap
+* PETSIT
+** Usuario
+*** Nombre
+*** Apellido
+*** Correo
+*** Contraseña
+*** Tipo
+**** Usuario estándar
+**** Refugio
+**** Veterinario
+*** Mascotas
+**** Nombre
+**** Raza
+**** Edad
+**** Género
+**** Historial Médico
+**** QR de identificación
+** Alerta
+*** Tipo
+**** Mascota Perdida
+**** Mascota Encontrada
+*** Ubicación
+*** Fecha de Publicación
+*** Descripción
+*** Imagen
+** Mapa Interactivo
+*** Refugios Cercanos
+*** Veterinarias 24hs
+*** Alertas de Mascotas
+*** Generación de rutas
+** Comunicación
+*** Mensajería
+**** Chat entre Usuarios
+**** Chat con Refugios
+**** Chat con Veterinarios
+** Notificaciones
+*** Personalizadas por Usuario
+**** Perros encontrados cerca
+**** Perros perdidos reportados
+** Refugio
+*** Nombre
+*** Dirección
+*** Contacto
+*** Servicios
+*** Horario de Atención
+** Veterinaria
+*** Nombre
+*** Dirección
+*** Contacto
+*** Servicios
+*** Horario de Atención
+** PetShop
+*** Categoría de Productos
+**** Alimentos
+**** Juguetes
+**** Accesorios
+*** Compra
+**** Método de pago
+**** Dirección de envío
+@endmindmap
