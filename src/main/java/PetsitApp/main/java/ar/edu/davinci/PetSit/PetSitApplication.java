@@ -1,4 +1,4 @@
-package ar.edu.davinci.PetSit;
+package PetsitApp.main.java.ar.edu.davinci.PetSit;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
