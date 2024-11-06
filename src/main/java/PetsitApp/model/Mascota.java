@@ -26,7 +26,7 @@ public class Mascota {
     @OneToMany(mappedBy = "mascota")
     private List<Alerta> alertas;
 
-    public void registrar() { /* Lógica para registrar mascota */ }
-    public void actualizarDatos() { /* Lógica para actualizar mascota */ }
-    public void eliminar() { /* Lógica para eliminar mascota */ }
+    public void registrar() {  }
+    public void actualizarDatos() {  }
+    public void eliminar() {  }
 }

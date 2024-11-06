@@ -23,6 +23,6 @@ public class Usuario {
     @OneToMany(mappedBy = "usuario")
     private List<Alerta> alertas;
 
-    public void registrar() { /* Lógica para registrar usuario */ }
-    public void iniciarSesion() { /* Lógica para iniciar sesión */ }
+    public void registrar() {  }
+    public void iniciarSesion() {  }
 }
