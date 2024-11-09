@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<title>Administrador de Usuarios</title>
+</head>
+<body>
+<div align="center">
+<h1>Listado de Usuarios</h1>
+<br />
+<table>
+<tbody>
+<tr>
+<th><a href="/petsit">Volver al menú pricipal</a></th>
+<th>&nbsp;</th>
+<th><a href="/petsit/usuarios/new">Crear un nuevo Usuario</a></th>
+
+</tr>
+</tbody>
+</table>
+<br />
+<div style = "display:flex;flex-direction:row">
+
+<p> Page Number: </p>
+<p th:text="${pageNumber}">Page Number</p>
+<br/>
+<p> Total Pages: </p>
+<p th:text="${totalPages}">Total Pages</p>
+
+</div>
+<table border="1" cellpadding="10">
+<thead>
+<tr>
+<th>Usuario ID</th>
+<th>Nombre</th>
+<th>Apellido</th>
+<th>Correo</th>
+<th>Tipo de usuario</th>
+<th>Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr th:each="usuario : ${listUsuarios}">
+<td th:text="${usuario.id}">Usuario ID</td>
+<td th:text="${usuario.nombre}">Nombre</td>
+<td th:text="${usuario.apellido}">Apellido</td>
+<td th:text="${usuario.correo}">Correo</td>
+<td th:text="${usuario.tipo.descripcion}">Tipo de usuario</td>
+<td><a th:href="@{'/petsit/usuarios/edit/' + ${usuario.id}}">Editar</a>
+
+&nbsp;&nbsp;&nbsp; <a th:href="@{'/petsit/usuarios/delete/' + ${usuario.id}}">Borrar</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</body>
+</html>
