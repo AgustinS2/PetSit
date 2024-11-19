@@ -35,7 +35,7 @@ throw new BusinessException("No se puede crear el usuario con un id específico.
 
 @Override
 public Usuario update(final Usuario usuario) throws BusinessException {
-LOGGER.debug("Modificamos la prenda: " + usuario.toString());
+LOGGER.debug("Modificamos el usuario: " + usuario.toString());
 if (usuario.getId() != null) {
 return repository.save(usuario);
 }
@@ -44,7 +44,7 @@ throw new BusinessException("No se puede modificar un usuario que aún no fue cr
 
 @Override
 public void delete(final Usuario usuario) {
-LOGGER.debug("Borramos la prenda: " + usuario.toString());
+LOGGER.debug("Borramos el usuario: " + usuario.toString());
 repository.delete(usuario);
 }
 public void delete(final Long id) {

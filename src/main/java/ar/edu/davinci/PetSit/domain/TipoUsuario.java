@@ -18,11 +18,11 @@ public String getDescripcion() {
 	return descripcion;
 }
 public static List<TipoUsuario> getTipoUsuarios() {
-	List<TipoUsuario> tipoPrendas = new LinkedList<TipoUsuario>();
-	tipoPrendas.add(TipoUsuario.VETERINARIO);
-	tipoPrendas.add(TipoUsuario.REFUGIO);
-	tipoPrendas.add(TipoUsuario.DUEÑO);
+	List<TipoUsuario> tipoUsuarios = new LinkedList<TipoUsuario>();
+	tipoUsuarios.add(TipoUsuario.VETERINARIO);
+	tipoUsuarios.add(TipoUsuario.REFUGIO);
+	tipoUsuarios.add(TipoUsuario.DUEÑO);
 	
-	return tipoPrendas;
+	return tipoUsuarios;
 }
 }
