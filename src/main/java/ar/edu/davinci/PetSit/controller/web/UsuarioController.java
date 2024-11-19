@@ -53,8 +53,14 @@ public class UsuarioController extends PetSitApp {
 	return "usuarios/new_usuarios";
 	}
 	
+	@GetMapping(path = "/usuarios/index")
+	public String indexUsuario(Model model) {
+	LOGGER.info("GET - indexUsuario - /usuarios/index");
+	return "usuarios/user_index";
+	}
+	
 	@PostMapping(value = "/usuarios/save")
-	public String savePrenda(@ModelAttribute("usuario") Usuario usuario) {
+	public String saveUsuario(@ModelAttribute("usuario") Usuario usuario) {
 	LOGGER.info("POST - saveUsuario - /usuarios/save");
 	
 	

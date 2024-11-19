@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 public abstract class PetSitRest {
 	// Esto es equivalente a hacer
-	// http://localhost:8090/tienda/api
+	// http://localhost:8090/petsit/api
 	// El puerto 8090, está configurado en la propiedad server.port
 
 }

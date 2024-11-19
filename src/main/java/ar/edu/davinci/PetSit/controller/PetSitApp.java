@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 public abstract class PetSitApp {
 	// Esto es equivalente a hacer
-	// http://localhost:8090/tienda
+	// http://localhost:8090/petsit
 	// El puerto 8090 está configurado en la propiedad server.port
 }
