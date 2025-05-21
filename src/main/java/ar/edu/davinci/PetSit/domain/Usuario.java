@@ -45,7 +45,7 @@ public class Usuario implements Serializable {
 	@Column(name = "usr_tipo_usuario")
 	@Enumerated(EnumType.STRING)
 	private TipoUsuario tipo;
-	@Column(name = "usr_contrasena", nullable = false)
+	@Column(name = "usr_contrasena")
 	private String contrasena;
 	@Column(name = "usr_telefono")
 	private String telefono;

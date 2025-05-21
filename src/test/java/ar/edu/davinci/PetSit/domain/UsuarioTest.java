@@ -11,6 +11,8 @@ class UsuarioTest {
 		String apellido = "Segovia";
 		String correo = "ags@gmail.com";
 		TipoUsuario tipoUsuario = TipoUsuario.DUEÑO;
+		String contrasena = "asdasd";
+		String telefono = "12341234";
 		// When
 		Usuario usuario = Usuario.builder()
 		
@@ -19,6 +21,8 @@ class UsuarioTest {
 		.apellido(apellido)
 		.correo(correo)
 		.tipo(tipoUsuario)
+		.contrasena(contrasena)
+		.telefono(telefono)
 		.build();
 	
 		// Then
@@ -28,5 +32,7 @@ class UsuarioTest {
 		assertEquals(apellido, usuario.getApellido());
 		assertEquals(tipoUsuario, usuario.getTipo());
 		assertEquals(correo, usuario.getCorreo());
+		assertEquals(contrasena, usuario.getContrasena());
+		assertEquals(telefono, usuario.getTelefono());
 		}
 }
