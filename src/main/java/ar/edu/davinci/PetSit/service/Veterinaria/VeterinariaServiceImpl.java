@@ -1,4 +1,4 @@
-package ar.edu.davinci.PetSit.service;
+package ar.edu.davinci.PetSit.service.Veterinaria;
 
 import java.util.List;
 import java.util.Optional;

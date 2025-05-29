@@ -14,7 +14,7 @@ usr_nombre varchar(255) DEFAULT NULL,
 usr_apellido varchar(255) DEFAULT NULL,
 usr_correo varchar(255) DEFAULT NULL,
 usr_tipo_usuario varchar(255) DEFAULT NULL,
-usr_contrasena VARCHAR(255) NOT NULL,
+usr_contrasena VARCHAR(255) DEFAULT NULL,
 usr_telefono varchar(255) DEFAULT NULL,
 PRIMARY KEY (usr_id)
 );

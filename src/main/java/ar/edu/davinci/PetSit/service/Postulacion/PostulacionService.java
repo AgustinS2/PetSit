@@ -1,4 +1,4 @@
-package ar.edu.davinci.PetSit.service;
+package ar.edu.davinci.PetSit.service.Postulacion;
 
 import java.util.List;
 import org.springframework.data.domain.Page;

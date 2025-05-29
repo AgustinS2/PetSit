@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8" />
+  <title>Listado de Alertas de Mascotas Perdidas</title>
+</head>
+<body>
+<div align="center">
+  <h1>Listado de Alertas</h1>
+  <br />
+  <table>
+    <tbody>
+    <tr>
+      <th><a href="/petsit">Volver al menú principal</a></th>
+      <th>&nbsp;</th>
+      <th><a href="/petsit/alertas/create">Crear nueva alerta</a></th>
+    </tr>
+    </tbody>
+  </table>
+  <br />
+  <table border="1" cellpadding="10">
+    <thead>
+    <tr>
+      <th>ID Alerta</th>
+      <th>Mascota</th>
+      <th>Dueño (Usuario)</th>
+      <th>Fecha</th>
+      <th>Descripción</th>
+      <th>Ubicación</th>
+      <th>Foto</th>
+      <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="alerta : ${listAlertas}">
+      <td th:text="${alerta.id}">ID</td>
+      <td th:text="${alerta.mascota != null ? alerta.mascota.nombre : 'Sin mascota'}">Mascota</td>
+      <td th:text="${alerta.usuario.nombre + ' ' + alerta.usuario.apellido}">Dueño</td>
+      <td th:text="${#dates.format(alerta.fecha, 'dd/MM/yyyy HH:mm')}">Fecha</td>
+      <td th:text="${alerta.descripcion}">Descripción</td>
+      <td th:text="${alerta.ubicacion}">Ubicación</td>
+      <td>
+        <img th:if="${alerta.foto != null}" th:src="@{${alerta.foto}}" alt="Foto Alerta" width="100" />
+        <span th:if="${alerta.foto == null}">Sin foto</span>
+      </td>
+      <td>
+        <a th:href="@{'/petsit/alertas/edit/' + ${alerta.id}}">Editar</a>
+        &nbsp;&nbsp;&nbsp;
+        <a th:href="@{'/petsit/alertas/delete/' + ${alerta.id}}">Borrar</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

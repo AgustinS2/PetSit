@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8" />
+  <title>Listado de Reportes</title>
+</head>
+<body>
+<div align="center">
+  <h1>Reportes de Perros Encontrados</h1>
+  <br />
+  <table>
+    <tbody>
+    <tr>
+      <th><a href="/petsit">Volver al menú principal</a></th>
+      <th>&nbsp;</th>
+      <th><a href="/petsit/reportes/new">Crear un nuevo reporte</a></th>
+    </tr>
+    </tbody>
+  </table>
+  <br />
+  <table border="1" cellpadding="10">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Usuario</th>
+      <th>Fecha</th>
+      <th>Ubicación</th>
+      <th>Descripción</th>
+      <th>Refugio asociado</th>
+      <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="reporte : ${listaReportes}">
+      <td th:text="${reporte.id}">ID</td>
+      <td th:text="${reporte.usuario.nombre + ' ' + reporte.usuario.apellido}">Usuario</td>
+      <td th:text="${#dates.format(reporte.fecha, 'dd/MM/yyyy HH:mm')}">Fecha</td>
+      <td th:text="${reporte.ubicacion}">Ubicación</td>
+      <td th:text="${reporte.descripcion}">Descripción</td>
+      <td th:text="${reporte.refugio != null ? reporte.refugio.nombre : 'No asignado'}">Refugio</td>
+      <td>
+        <a th:href="@{'/petsit/reportes/edit/' + ${reporte.id}}">Editar</a>
+        &nbsp;&nbsp;
+        <a th:href="@{'/petsit/reportes/delete/' + ${reporte.id}}">Borrar</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

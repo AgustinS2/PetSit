@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <title>Crear Nueva Postulación</title>
+</head>
+<body>
+<div align="center">
+    <h1>Crear una nueva Postulación</h1>
+    <br />
+    <table>
+        <tr>
+            <th><a href="/petsit">Volver al menú principal</a></th>
+            <th>&nbsp;</th>
+            <th><a href="/petsit/postulaciones/list">Volver</a></th>
+        </tr>
+    </table>
+    <br />
+    <form action="#" th:action="@{/petsit/postulaciones/save}" th:object="${postulacion}" method="post">
+        <table border="0" cellpadding="10">
+            <tr>
+                <td>Adopción:</td>
+                <td>
+                    <select th:field="*{adopcion}">
+                        <option th:each="adopcion : ${adopciones}" th:value="${adopcion.id}" th:text="${adopcion.mascota.nombre}">Adopción</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Usuario:</td>
+                <td>
+                    <select th:field="*{usuario}">
+                        <option th:each="usuario : ${usuarios}" th:value="${usuario.id}" th:text="${usuario.nombre} + ' ' + ${usuario.apellido}">Usuario</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Mensaje:</td>
+                <td><input type="text" th:field="*{mensaje}" /></td>
+            </tr>
+            <tr>
+                <td colspan="2"><button type="submit">Grabar</button></td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>

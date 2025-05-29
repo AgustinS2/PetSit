@@ -1,67 +1,72 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="utf-8" />
-
-<title>Editar Usuario</title>
+    <meta charset="utf-8" />
+    <title>Editar Usuario</title>
 </head>
 <body>
 <div align="center">
-<h1>Editar Usuario</h1>
-<br />
-<table>
-<tbody>
-<tr>
-<th><a href="/petsit">Volver al menú pricipal</a></th>
-<th>&nbsp;</th>
-<th><a href="/petsit/usuarios/list">Volver</a></th>
-</tr>
-</tbody>
-</table>
-<br />
-<form action="#" th:action="@{/petsit/usuarios/save}"
-th:object="${usuario}" method="post">
-<table border="0" cellpadding="10">
-<tr>
-<td>Usuario ID:</td>
-<td><input type="text" th:field="*{id}" readonly="readonly"
+    <h1>Editar Usuario</h1>
+    <br />
 
-/>
+    <table>
+        <tbody>
+        <tr>
+            <th><a href="/petsit">Volver al menú principal</a></th>
+            <th>&nbsp;</th>
+            <th><a href="/petsit/usuarios/list">Volver</a></th>
+        </tr>
+        </tbody>
+    </table>
 
-</td>
-</tr>
-<tr>
-<td>Nombre:</td>
-<td><input type="text" th:field="*{nombre}" /></td>
-</tr>
-<tr>
-<td>Apellido</td>
-<td><input type="text" th:field="*{apellido}" /></td>
-</tr>
-<tr>
-<td>Tipo:</td>
-<td th:object="${tipoUsuarios}">
-<select id="tipo" name="tipo">
-<option value="">Elija un tipo</option>
-<option th:each="tipoUsuario : ${tipoUsuarios}"
-th:value="${tipoUsuario}"
-th:text="${tipoUsuario.descripcion}"
+    <br />
 
-th:selected="${tipoUsuario==tipoUsuarioActual}">
-</option>
-</select>
-</td>
-</tr>
-<tr>
-<td>Correo</td>
-<td><input type="text" th:field="*{correo}" /></td>
-</tr>
-<tr>
-<td colspan="2"><button type="submit">Grabar</button></td>
-</tr>
-</table>
-</form>
+    <form action="#" th:action="@{/petsit/usuarios/save}"
+          th:object="${usuario}" method="post">
+        <table border="0" cellpadding="10">
+            <tr>
+                <td>Usuario ID:</td>
+                <td><input type="text" th:field="*{id}" readonly="readonly" /></td>
+            </tr>
+            <tr>
+                <td>Nombre:</td>
+                <td><input type="text" th:field="*{nombre}" /></td>
+            </tr>
+            <tr>
+                <td>Apellido:</td>
+                <td><input type="text" th:field="*{apellido}" /></td>
+            </tr>
+            <tr>
+                <td>Correo:</td>
+                <td><input type="email" th:field="*{correo}" /></td>
+            </tr>
+            <tr>
+                <td>Teléfono:</td>
+                <td><input type="text" th:field="*{telefono}" /></td>
+            </tr>
+            <tr>
+                <td>Contraseña:</td>
+                <td><input type="password" th:field="*{contrasena}" /></td>
+            </tr>
+            <tr>
+                <td>Tipo:</td>
+                <td>
+                    <select id="tipo" name="tipo" th:field="*{tipoUsuario}">
+                        <option value="">Elija un tipo</option>
+                        <option th:each="tipoUsuario : ${tipoUsuarios}"
+                                th:value="${tipoUsuario}"
+                                th:text="${tipoUsuario.descripcion}"
+                                th:selected="${tipoUsuario == tipoUsuarioActual}">
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"><button type="submit">Grabar</button></td>
+            </tr>
+        </table>
+    </form>
 </div>
 </body>
 </html>

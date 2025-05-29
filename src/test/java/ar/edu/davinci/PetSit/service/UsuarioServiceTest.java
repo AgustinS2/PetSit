@@ -2,6 +2,8 @@ package ar.edu.davinci.PetSit.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
+
+import ar.edu.davinci.PetSit.service.Usuario.UsuarioService;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;

@@ -1,4 +1,4 @@
-package ar.edu.davinci.PetSit.controller.web;
+package ar.edu.davinci.PetSit.controller.web.Usuario;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import ar.edu.davinci.PetSit.controller.PetSitApp;
 import ar.edu.davinci.PetSit.domain.Usuario;
 import ar.edu.davinci.PetSit.exceptions.BusinessException;
-import ar.edu.davinci.PetSit.service.UsuarioService;
+import ar.edu.davinci.PetSit.service.Usuario.UsuarioService;
 
 @Controller
 public class UsuarioController extends PetSitApp {

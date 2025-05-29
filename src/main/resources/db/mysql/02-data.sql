@@ -1,10 +1,10 @@
 -- Dumping data for table prendas
 --
-INSERT INTO usuarios (usr_nombre, usr_apellido, usr_telefono, usr_correo, usr_tipo_usuario, usr_contrasena) VALUES
-('Agustin', 'Segovia', '1122334455', 'agus@mgail.com', 'ADMIN', 'agus123'),
-('Maia', 'Cohen', '1133445566', 'maia@gmail.com', 'ADMIN', 'maia123'),
-('Carlos', 'Ferreira', '1133445566', 'carlos@gmail.com', 'DUENO', 'admin123'),
-('Refugio', 'San Martín', '1144556677', 'contacto@refugiosm.org', 'REFUGIO', 'refugio2024');
+INSERT INTO usuarios (usr_nombre, usr_apellido, usr_correo, usr_tipo_usuario, usr_contrasena, usr_telefono) VALUES
+('Agustin', 'Segovia', 'agus@mgail.com', 'ADMIN', 'agus123', '1122334455'),
+('Maia', 'Cohen', 'maia@gmail.com', 'ADMIN', 'maia123', '1122334456'),
+('Carlos', 'Ferreira', 'carlos@gmail.com', 'DUENO', 'admin123', '1122334457'),
+('Refugio', 'San Martín', 'contacto@refugiosm.org', 'REFUGIO', 'refugio2024', '1122334458');
 
 INSERT INTO mascotas (msc_nombre, msc_raza, msc_color, msc_tamano, msc_edad, msc_descripcion, msc_foto, msc_dueno_id) VALUES
 ('Firulais', 'Labrador', 'Negro', 'Grande', 5, 'Muy juguetón y sociable', 'firulais.jpg', 1),
