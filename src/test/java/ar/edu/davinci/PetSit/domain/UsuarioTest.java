@@ -10,7 +10,7 @@ class UsuarioTest {
 		String nombre = "Agustin";
 		String apellido = "Segovia";
 		String correo = "ags@gmail.com";
-		TipoUsuario tipoUsuario = TipoUsuario.DUEÑO;
+		TipoUsuario tipoUsuario = TipoUsuario.DUENO;
 		String contrasena = "asdasd";
 		String telefono = "12341234";
 		// When

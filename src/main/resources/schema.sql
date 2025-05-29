@@ -40,7 +40,7 @@ CREATE TABLE refugios (
   ref_telefono VARCHAR(20),
   ref_correo VARCHAR(100),
   ref_foto VARCHAR(255),
-  ref_ubicacion VARCHAR(255),
+  ref_ubicacion VARCHAR(255)
 );
 
 CREATE TABLE alertas (

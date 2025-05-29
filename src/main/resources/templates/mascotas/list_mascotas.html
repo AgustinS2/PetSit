@@ -40,7 +40,7 @@
       <td th:text="${mascota.tamano}">Tamaño</td>
       <td th:text="${mascota.edad}">Edad</td>
       <td th:text="${mascota.descripcion}">Descripción</td>
-      <td th:text="${mascota.dueno?.nombre + ' ' + mascota.dueno?.apellido}">Dueño</td>
+      <td th:text="${mascota.dueno.nombre + ' ' + mascota.dueno.apellido}">Dueño</td>
       <td>
         <a th:href="@{'/petsit/mascotas/edit/' + ${mascota.id}}">Editar</a>
         &nbsp;|&nbsp;

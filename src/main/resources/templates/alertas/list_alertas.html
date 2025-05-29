@@ -39,6 +39,7 @@
       <td th:text="${alerta.usuario.nombre + ' ' + alerta.usuario.apellido}">Dueño</td>
       <td th:text="${#dates.format(alerta.fecha, 'dd/MM/yyyy HH:mm')}">Fecha</td>
       <td th:text="${alerta.descripcion}">Descripción</td>
+
       <td th:text="${alerta.ubicacion}">Ubicación</td>
       <td>
         <img th:if="${alerta.foto != null}" th:src="@{${alerta.foto}}" alt="Foto Alerta" width="100" />

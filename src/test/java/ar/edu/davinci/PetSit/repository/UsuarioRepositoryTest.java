@@ -44,7 +44,7 @@ class UsuarioRepositoryTest {
 	
 	usuario.getTipo().getDescripcion());
 	
-	assertEquals(TipoUsuario.DUEÑO, usuario.getTipo());
+	assertEquals(TipoUsuario.DUENO, usuario.getTipo());
 	} else {
 	LOGGER.info("Usuario no encontrada para el id: " + id);
 	usuario = usuarioOptional.get();

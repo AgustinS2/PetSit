@@ -1,8 +1,8 @@
 -- Dumping data for table prendas
 --
 INSERT INTO usuarios (usr_nombre, usr_apellido, usr_correo, usr_tipo_usuario, usr_contrasena, usr_telefono) VALUES
-('Agustin', 'Segovia', 'agus@mgail.com', 'ADMIN', 'agus123', '1122334455'),
-('Maia', 'Cohen', 'maia@gmail.com', 'ADMIN', 'maia123', '1122334456'),
+('Agustin', 'Segovia', 'agus@mgail.com', 'DUENO', 'agus123', '1122334455'),
+('Maia', 'Cohen', 'maia@gmail.com', 'ADMINISTRADOR', 'maia123', '1122334456'),
 ('Carlos', 'Ferreira', 'carlos@gmail.com', 'DUENO', 'admin123', '1122334457'),
 ('Refugio', 'San Martín', 'contacto@refugiosm.org', 'REFUGIO', 'refugio2024', '1122334458');
 
@@ -11,8 +11,6 @@ INSERT INTO mascotas (msc_nombre, msc_raza, msc_color, msc_tamano, msc_edad, msc
 ('Mimi', 'Caniche', 'Blanco', 'Chico', 3, 'Le teme a los ruidos fuertes', 'mimi.jpg', 1),
 ('Toby', 'Mestizo', 'Marrón', 'Mediano', 4, 'Rescatado de la calle', 'toby.jpg', 3);
 
---VER SI HACEMOS USUARIO COMO CLASE ABSTRACTA Y LA BASE DE DATOS DE CADA TIPO DE USUARIO
---O SI LO DEJAMOS ASI. PARA EL JOIN DE MASCOTAS CON DUENO Y ESO
 
 INSERT INTO refugios (ref_nombre, ref_direccion, ref_telefono, ref_correo, ref_foto, ref_ubicacion) VALUES
 ('Refugio Esperanza', 'Av. Siempre Viva 123', '1122334455', 'esperanza@refugio.org', 'esperanza.jpg', 'Buenos Aires'),
