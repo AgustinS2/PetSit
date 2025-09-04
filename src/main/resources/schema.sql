@@ -26,8 +26,7 @@ CREATE TABLE mascotas (
   msc_color VARCHAR(100),
   msc_tamano VARCHAR(50), -- chico, mediano, grande
   msc_edad INT,
-  msc_descripcion varchar(255),
-  --msc_estado ENUM('PERDIDO', 'ENCONTRADO', 'EN_REFUGIO', 'EN_CASA') DEFAULT 'PERDIDO',
+  msc_descripcion varchar(255), -- msc_estado ENUM('PERDIDO', 'ENCONTRADO', 'EN_REFUGIO', 'EN_CASA') DEFAULT 'PERDIDO',
   msc_foto VARCHAR(255),
   msc_dueno_id INT,
   FOREIGN KEY (msc_dueno_id) REFERENCES usuarios(usr_id)
@@ -51,8 +50,8 @@ CREATE TABLE alertas (
   alt_descripcion VARCHAR(255),
   alt_ubicacion VARCHAR(255),
   alt_foto VARCHAR(255),
-  alt_lat DECIMAL(9,6) NULL, --Latitud de la coordenada
-  alt_lng DECIMAL(9,6) NULL, --Longitud de la coordenada
+  alt_lat DECIMAL(9,6) NULL, -- Latitud de la coordenada
+  alt_lng DECIMAL(9,6) NULL, -- Longitud de la coordenada
   FOREIGN KEY (alt_usuario_id) REFERENCES usuarios(usr_id),
   FOREIGN KEY (alt_mascota_id) REFERENCES mascotas(msc_id)
 );
@@ -103,4 +102,4 @@ CREATE TABLE veterinarias (
   vet_activa BOOLEAN DEFAULT TRUE
 );
 
-CREATE INDEX idx_alertas_lat_lng ON alertas (alt_lat, alt_lng); --index para que encuentre más rápido las alertas
+CREATE INDEX idx_alertas_lat_lng ON alertas (alt_lat, alt_lng); -- index para que encuentre más rápido las alertas

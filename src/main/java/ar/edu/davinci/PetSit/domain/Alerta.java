@@ -49,4 +49,10 @@ public class Alerta implements Serializable {
 
     @Column(name = "alt_foto")
     private String foto;
+
+    @Column(name = "alt_lat")
+    private Double lat;
+
+    @Column(name = "alt_lng")
+    private Double lng;
 }

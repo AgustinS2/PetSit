@@ -26,6 +26,11 @@ INSERT INTO veterinarias (vet_nombre, vet_direccion, vet_telefono, vet_horario_a
 ('VetPlus', 'Av. Rivadavia 1234', '1122334455', 'Lunes a viernes de 9 a 18hs', 'CABA', TRUE),
 ('PetCare', 'Calle Mitre 432', '1133445566', 'Todos los días de 8 a 20hs', 'Lanús', TRUE),
 ('Salud Animal', 'Diagonal Norte 100', '1144556677', 'Lunes a sábado de 10 a 17hs', 'Quilmes', FALSE);
+--Alertas de prueba para el mapa
+INSERT INTO alertas (alt_usuario_id, alt_descripcion, alt_lat, alt_lng)
+VALUES
+    (1, 'Visto en Plaza Italia', -34.5873, -58.4100),
+    (1, 'Se perdió en Microcentro', -34.6037, -58.3816);
 
 
 
