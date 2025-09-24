@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8" />
+  <title>Reportar Mascota Perdida</title>
+</head>
+<body>
+<div align="center">
+  <h1>Reportar Mascota Perdida</h1>
+  <br />
+  <table>
+    <tbody>
+    <tr>
+      <th><a href="/petsit">Volver al menú principal</a></th>
+      <th>&nbsp;</th>
+      <th><a href="/petsit/alertas/list">Volver al listado de alertas</a></th>
+    </tr>
+    </tbody>
+  </table>
+  <br />
+  <form action="#" th:action="@{/petsit/alertas/save}" th:object="${alerta}" method="post" enctype="multipart/form-data">
+    <table border="0" cellpadding="10">
+      <tr>
+        <td>Dueño (Usuario):</td>
+        <td>
+          <select th:field="*{usuario.id}">
+            <option value="" disabled>Seleccione un usuario</option>
+            <option th:each="usuario : ${usuarios}" th:value="${usuario.id}" th:text="${usuario.nombre} + ' ' + ${usuario.apellido}"></option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>Mascota:</td>
+        <td>
+          <select th:field="*{mascota.id}">
+            <option value="" disabled>Seleccione una mascota</option>
+            <option th:each="mascota : ${mascotas}" th:value="${mascota.id}" th:text="${mascota.nombre}"></option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>Descripción:</td>
+        <td><input type="text" th:field="*{descripcion}" /></td>
+      </tr>
+      <tr>
+        <td>Ubicación:</td>
+        <td><input type="text" th:field="*{ubicacion}" /></td>
+      </tr>
+      <tr>
+        <td>Foto:</td>
+        <td><input type="file" th:field="*{foto}" /></td>
+      </tr>
+      <tr>
+        <td colspan="2"><button type="submit">Reportar</button></td>
+      </tr>
+    </table>
+  </form>
+</div>
+</body>
+</html>

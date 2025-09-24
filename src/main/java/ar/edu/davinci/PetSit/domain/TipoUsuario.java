@@ -6,7 +6,8 @@ public enum TipoUsuario {
 	
 	VETERINARIO("Veterinario"),
 	REFUGIO("Refugio"),
-	DUEÑO("Dueño");
+	DUENO("Dueno"),
+	ADMINISTRADOR("Administrador");
 	
 private String descripcion;
 
@@ -21,7 +22,7 @@ public static List<TipoUsuario> getTipoUsuarios() {
 	List<TipoUsuario> tipoUsuarios = new LinkedList<TipoUsuario>();
 	tipoUsuarios.add(TipoUsuario.VETERINARIO);
 	tipoUsuarios.add(TipoUsuario.REFUGIO);
-	tipoUsuarios.add(TipoUsuario.DUEÑO);
+	tipoUsuarios.add(TipoUsuario.DUENO);
 	
 	return tipoUsuarios;
 }

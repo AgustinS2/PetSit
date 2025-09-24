@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8" />
+  <title>Editar Reporte</title>
+</head>
+<body>
+<div align="center">
+  <h1>Editar Reporte</h1>
+  <br />
+  <table>
+    <tbody>
+    <tr>
+      <th><a href="/petsit">Volver al menú principal</a></th>
+      <th>&nbsp;</th>
+      <th><a href="/petsit/reportes/list">Volver a reportes</a></th>
+    </tr>
+    </tbody>
+  </table>
+  <br />
+  <form action="#" th:action="@{/petsit/reportes/update}" th:object="${reporte}" method="post" enctype="multipart/form-data">
+    <table border="0" cellpadding="10">
+      <tr>
+        <td>ID del reporte:</td>
+        <td><input type="text" th:field="*{id}" readonly="readonly" /></td>
+      </tr>
+      <tr>
+        <td>Fecha de reporte:</td>
+        <td><input type="text" th:value="${#dates.format(reporte.fecha, 'dd/MM/yyyy HH:mm')}" readonly="readonly" /></td>
+      </tr>
+      <tr>
+        <td>Ubicación donde encontraste al perro:</td>
+        <td><input type="text" th:field="*{ubicacion}" required /></td>
+      </tr>
+      <tr>
+        <td>Descripción del perro:</td>
+        <td><textarea th:field="*{descripcion}" rows="3" cols="30"></textarea></td>
+      </tr>
+      <tr>
+        <td>Foto del perro:</td>
+        <td><input type="file" th:field="*{foto}" accept="image/*" /></td>
+      </tr>
+      <tr>
+        <td>Refugio asociado (opcional):</td>
+        <td>
+          <select th:field="*{refugio.id}">
+            <option value="">Seleccionar refugio</option>
+            <option th:each="refugio : ${listaRefugios}" th:value="${refugio.id}" th:text="${refugio.nombre}"
+                    th:selected="${refugio.id == reporte.refugio.id}"></option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" align="center"><button type="submit">Actualizar Reporte</button></td>
+      </tr>
+    </table>
+  </form>
+</div>
+</body>
+</html>

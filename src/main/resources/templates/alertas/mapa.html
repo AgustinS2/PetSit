@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mapa de Alertas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link
+          rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          crossorigin=""
+  />
+  <style>
+    html, body { height: 100%; margin: 0; }
+    #map { height: 100vh; width: 100vw; }
+  </style>
+</head>
+<body>
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  // Mapa base
+  const map = L.map('map').setView([-34.6037, -58.3816], 12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+
+  const bounds = [];
+
+  /*[# th:each="a : ${alertas}"]*/
+  (function() {
+    const lat  = /*[[${a.lat}]]*/ null;
+    const lng  = /*[[${a.lng}]]*/ null;
+    const desc = /*[['' + ${a.descripcion}]]*/ '';
+    const ubic = /*[['' + ${a.ubicacion}]]*/ '';
+
+    if (lat !== null && lng !== null) {
+      const m = L.marker([lat, lng]).addTo(map);
+      m.bindPopup(`<b>${desc || 'Sin descripción'}</b><br>${ubic || ''}`);
+      bounds.push([lat, lng]);
+    }
+  })();
+  /*[/]*/
+
+
+  if (bounds.length > 0) {
+    map.fitBounds(bounds, { padding: [40, 40] });
+  }
+  /*]]>*/
+</script>
+
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8" />
+  <title>Crear Reporte - Encontré un perro</title>
+</head>
+<body>
+<div align="center">
+  <h1>Reportar Perro Encontrado</h1>
+  <br />
+  <table>
+    <tbody>
+    <tr>
+      <th><a href="/petsit">Volver al menú principal</a></th>
+      <th>&nbsp;</th>
+      <th><a href="/petsit/reportes/list">Volver a reportes</a></th>
+    </tr>
+    </tbody>
+  </table>
+  <br />
+  <form action="#" th:action="@{/petsit/reportes/save}" th:object="${reporte}" method="post" enctype="multipart/form-data">
+    <table border="0" cellpadding="10">
+      <tr>
+        <td>Ubicación donde encontraste al perro:</td>
+        <td><input type="text" th:field="*{ubicacion}" placeholder="Ej: Parque Central, Av. 9 de Julio" required /></td>
+      </tr>
+      <tr>
+        <td>Descripción del perro:</td>
+        <td><textarea th:field="*{descripcion}" rows="3" cols="30" placeholder="Color, tamaño, comportamiento..."></textarea></td>
+      </tr>
+      <tr>
+        <td>Foto del perro:</td>
+        <td><input type="file" th:field="*{foto}" accept="image/*" /></td>
+      </tr>
+      <tr>
+        <td>Refugio asociado (opcional):</td>
+        <td>
+          <select th:field="*{refugio.id}">
+            <option value="" selected>Seleccionar refugio</option>
+            <option th:each="refugio : ${listaRefugios}" th:value="${refugio.id}" th:text="${refugio.nombre}"></option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" align="center"><button type="submit">Enviar Reporte</button></td>
+      </tr>
+    </table>
+  </form>
+</div>
+</body>
+</html>
