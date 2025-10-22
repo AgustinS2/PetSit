@@ -16,7 +16,7 @@ import ar.edu.davinci.PetSit.exceptions.BusinessException;
 import ar.edu.davinci.PetSit.service.Veterinaria.VeterinariaService;
 
 @Controller
-@RequestMapping("/veterinarias")
+@RequestMapping("/petsit/veterinarias")
 public class VeterinariaController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(VeterinariaController.class);

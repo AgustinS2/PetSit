@@ -11,13 +11,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import ar.edu.davinci.PetSit.controller.PetSitApp;
 import ar.edu.davinci.PetSit.domain.Refugio;
 import ar.edu.davinci.PetSit.exceptions.BusinessException;
 import ar.edu.davinci.PetSit.service.Refugio.RefugioService;
 
 @Controller
-@RequestMapping("/refugios")
-public class RefugioController {
+@RequestMapping("/petsit/refugios")
+public class RefugioController extends PetSitApp {
 
     private final Logger LOGGER = LoggerFactory.getLogger(RefugioController.class);
 

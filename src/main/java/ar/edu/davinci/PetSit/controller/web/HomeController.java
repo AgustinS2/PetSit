@@ -11,9 +11,14 @@ import ar.edu.davinci.PetSit.controller.PetSitApp;
 @Controller
 public class HomeController extends PetSitApp {
 	private final Logger LOGGER = LoggerFactory.getLogger(HomeController.class);
-	@GetMapping()
+	@GetMapping({"/" , "/index"})
 	public String viewHomePage(Model model) {
 	LOGGER.info("GET - viewHomePage - /index");
 	return "index";
 	}
+	
+	  @GetMapping("/index2")
+	    public String index2() {
+	        return "index2"; // Renderiza templates/index2.html
+	    }
 }
