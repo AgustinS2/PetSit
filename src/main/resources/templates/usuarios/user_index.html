@@ -2,22 +2,255 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="utf-8" />
-<link rel="stylesheet" th:href="@{/css/styles.css}" />
-<title>PetSit</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PetSit – Menú de usuario</title>
+  <meta name="description" content="Acciones rápidas para usuarios de PetSit.">
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Fuente Caudex -->
+  <link href="https://fonts.googleapis.com/css2?family=Caudex:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Iconos -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <!-- Estilos globales -->
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+
+  <!-- Favicons -->
+  <link rel="icon" th:href="@{/assets/favicon/favicon.ico}" sizes="any">
+  <link rel="apple-touch-icon" sizes="180x180" th:href="@{/assets/favicon/apple-touch-icon.png}">
+  <meta name="theme-color" content="#0f6a67">
 </head>
-<body>
-	<div align="center">
-		<h1>PetSit</h1>
-		<h2>Menú Principal</h2>
-		<h3>2024</h3>
-	</div>
-	<br />
-	<div align="left">
-		<ul>
-			<li><a href="/petsit/usuarios/list">Listado de usuarios</a></li>
-		</ul>
-	<br/>
-	</div>
+
+<body class="petsit-bg">
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-nav border-bottom" aria-label="Menú principal">
+    <div class="container-fluid px-3 px-md-4">
+
+      <!-- Logo -->
+      <a class="navbar-brand d-flex align-items-center gap-2 app-home" th:href="@{/petsit/usuarios/index}" aria-label="Inicio menú usuario">
+        <img th:src="@{/assets/img/icons/logo.png}" alt="Logo PetSit" height="56">
+        <img th:src="@{/assets/img/Petsit.png}" alt="PetSit" class="brand-name">
+      </a>
+
+      <!-- Toggle -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+              aria-controls="mainNav" aria-expanded="false" aria-label="Abrir menú">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Menú principal -->
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav me-auto nav-center gap-lg-3">
+          <li class="nav-item"><a class="nav-link" th:href="@{/petsit/mascotas/mis-mascotas}">Mis mascotas</a></li>
+          <li class="nav-item"><a class="nav-link" th:href="@{/petsit/veterinarias/index}">Veterinarias</a></li>
+          <li class="nav-item"><a class="nav-link" th:href="@{/petsit/refugios/index}">Refugios</a></li>
+          <li class="nav-item"><a class="nav-link" th:href="@{/petsit/mascotas/adoptar}">Adoptar</a></li>
+          <li class="nav-item"><a class="nav-link" th:href="@{/petsit/mascotas/report}">Reportar</a></li>
+          <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/chat}">Chat</a></li>
+
+          <!-- MOBILE ONLY: perfil + logout -->
+          <li class="nav-item d-lg-none"><hr class="dropdown-divider my-2"></li>
+          <li class="nav-item d-lg-none">
+            <a class="nav-link d-flex align-items-center gap-2" th:href="@{/petsit/usuarios/perfil}">
+              <i class="bi bi-person-gear"></i> Mi perfil
+            </a>
+          </li>
+          <li class="nav-item d-lg-none">
+            <a class="nav-link d-flex align-items-center gap-2 text-danger" id="logoutBtnMobile" th:href="@{/petsit/index2}">
+              <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+            </a>
+          </li>
+        </ul>
+
+        <!-- Dropdown desktop -->
+        <ul class="navbar-nav ms-auto align-items-center d-none d-lg-flex">
+          <li class="nav-item dropdown">
+            <a class="nav-link user-chip dropdown-toggle d-flex align-items-center gap-2" href="#"
+               role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <span class="user-avatar">
+                <img th:src="@{/assets/img/icons/usuario.png}" alt="Avatar del usuario" />
+              </span>
+              <span id="navUser">Usuario</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end user-menu">
+              <li>
+                <a class="dropdown-item d-flex align-items-center gap-2" th:href="@{/petsit/usuarios/perfil}">
+                  <i class="bi bi-person-gear"></i> Mi perfil
+                </a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <a class="dropdown-item text-danger d-flex align-items-center gap-2" id="logoutBtn" th:href="@{/petsit/index2}">
+                  <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero-petsit">
+    <div class="container hero-petsit__inner">
+      <div class="row align-items-center hero-row">
+        <div class="col-lg-6">
+          <h1 class="hero-petsit__title">¡Bienvenido, <span id="hUser">Usuario</span>!</h1>
+          <p class="hero-petsit__lead">Nuestro refugio digital está listo para ayudarte.</p>
+          <p class="hero-petsit__lead">¿Qué querés hacer hoy?</p>
+
+          <div class="hero-cta row g-3 pt-2">
+            <div class="col-auto">
+              <a class="btn btn-cta" th:href="@{/petsit/mascotas/mis-mascotas}"><i class="bi bi-heart-fill me-2"></i>Registrar mascota</a>
+            </div>
+            <div class="col-auto">
+              <a class="btn btn-ghost" th:href="@{/petsit/refugios/index}"><i class="bi bi-geo-alt me-2"></i>Refugios cerca</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6 text-center">
+          <div class="hero-pet with-blob no-bg">
+            <span class="blob blob--a blob--teal" style="--w:520px; --h:360px; --x:-40px; --y:-30px; --rot:-8deg;"></span>
+            <span class="blob blob--c blob--teal-strong" style="--w:380px; --h:280px; --x:220px; --y:120px; --rot:18deg;"></span>
+            <img th:src="@{/assets/img/menu-usuario.png}" alt="Ilustración de un perrito sonriente">
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ACCIONES RÁPIDAS -->
+  <section class="container py-5 quick-actions">
+    <div class="text-center mb-4">
+      <p class="eyebrow text-teal mb-1">Tu panel</p>
+      <h2 class="actions-heading">Acciones rápidas</h2>
+      <p class="text-muted small">Elegí una opción para empezar</p>
+    </div>
+
+    <div class="row g-4 justify-content-center row-cols-2 row-cols-sm-3 row-cols-lg-4 row-cols-xxl-4">
+
+      <!-- Mis mascotas -->
+      <div class="col">
+        <a class="action-item" th:href="@{/petsit/mascotas/mis-mascotas}">
+          <span class="action-avatar"><img th:src="@{/assets/img/icons/mis-mascotas.png}" alt=""></span>
+          <span class="action-title">Mis mascotas</span>
+          <span class="action-sub">Ver / registrar</span>
+        </a>
+      </div>
+
+      <!-- Veterinarias -->
+      <div class="col">
+        <a class="action-item" th:href="@{/petsit/veterinarias/index}">
+          <span class="action-avatar"><img th:src="@{/assets/img/icons/veterinario.png}" alt=""></span>
+          <span class="action-title">Veterinarias</span>
+          <span class="action-sub">Cercanas y guardias</span>
+        </a>
+      </div>
+
+      <!-- Refugios -->
+      <div class="col">
+        <a class="action-item" th:href="@{/petsit/refugios/index}">
+          <span class="action-avatar"><img th:src="@{/assets/img/icons/buscar-refugio.png}" alt=""></span>
+          <span class="action-title">Refugios</span>
+          <span class="action-sub">Contacto y horarios</span>
+        </a>
+      </div>
+
+      <!-- Reportar -->
+      <div class="col">
+        <a class="action-item" th:href="@{/petsit/mascotas/list}">
+          <span class="action-avatar"><img th:src="@{/assets/img/icons/reportar-mascota.png}" alt=""></span>
+          <span class="action-title">Reportar</span>
+          <span class="action-sub">Perdida / encontrada</span>
+        </a>
+      </div>
+
+      <!--  Adoptar -->
+      <div class="col">
+        <a class="action-item" th:href="@{/petsit/mascotas/adoptar}">
+          <span class="action-avatar"><img th:src="@{/assets/img/icons/adoptar.png}" alt=""></span>
+          <span class="action-title">Adoptar</span>
+          <span class="action-sub">Buscar compañero</span>
+        </a>
+      </div>
+
+      <!--Chat -->
+      <div class="col">
+        <a class="action-item" th:href="@{/petsit/usuarios/chat}">
+          <span class="action-avatar"><img th:src="@{/assets/img/icons/chat.png}" alt=""></span>
+          <span class="action-title">Chat</span>
+          <span class="action-sub">Comunidad</span>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer mt-5">
+    <div class="container py-4">
+      <div class="row text-white">
+        <div class="col-md-4 mb-3">
+          <h6 class="fw-bold text-uppercase">Más información</h6>
+          <ul class="list-unstyled">
+            <li><a th:href="@{/petsit/home/contacto}" class="footer-link">Contactanos</a></li>
+            <li><a th:href="@{/petsit/home/nosotros}" class="footer-link">Sobre nosotros</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4 mb-3">
+          <h6 class="fw-bold text-uppercase">Legal</h6>
+          <ul class="list-unstyled">
+            <li><a href="#" class="footer-link">Políticas de privacidad</a></li>
+            <li><a href="#" class="footer-link">Términos de servicio</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4 mb-3">
+          <h6 class="fw-bold text-uppercase">Seguinos</h6>
+          <a href="#" class="footer-social me-2" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="footer-social me-2" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="footer-social" aria-label="Twitter/X"><i class="bi bi-twitter"></i></a>
+        </div>
+      </div>
+      <div class="text-center small mt-3 text-white">
+        Copyright 2025 © Escuela Da Vinci | Keila Degregorio | Maia Cohen | Matias Bernal | Agustin Segovia
+      </div>
+    </div>
+  </footer>
+
+  <!-- JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    (()=>{
+      // 1) Tomar nombre del query ?name=..., o de localStorage, o fallback "Usuario"
+      const params = new URLSearchParams(window.location.search);
+      const queryName = params.get('name');
+      const storedName = localStorage.getItem('userName');
+      const name = (queryName && queryName.trim()) || (storedName && storedName.trim()) || 'Usuario';
+
+      // Guardar si vino por query, así persiste
+      if (queryName) localStorage.setItem('userName', name);
+
+      const setText = id => { const el = document.getElementById(id); if (el) el.textContent = name; };
+      setText('navUser');
+      setText('hUser');
+
+      // 2) Logout (desktop y mobile)
+      const doLogout = (e) => {
+        // Si querés que ignore el enlace y fuerce index.html, descomentá:
+        // e.preventDefault();
+        localStorage.removeItem('auth');
+        localStorage.removeItem('userName');
+        // window.location.href = 'index.html'; // o dejar que el link navegue
+      };
+      document.getElementById('logoutBtn')?.addEventListener('click', doLogout);
+      document.getElementById('logoutBtnMobile')?.addEventListener('click', doLogout);
+    })();
+  </script>
+
 </body>
 </html>

@@ -16,13 +16,28 @@ import ar.edu.davinci.PetSit.exceptions.BusinessException;
 import ar.edu.davinci.PetSit.service.Mascota.MascotaService;
 
 @Controller
-@RequestMapping("/mascotas")
+@RequestMapping("/petsit/mascotas")
 public class MascotaController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(MascotaController.class);
 
     @Autowired
     private MascotaService mascotaService;
+
+    @GetMapping("/mis-mascotas")
+	    public String misMascotas() {
+	        return "mascotas/mis_mascotas"; // Renderiza templates/"""".html
+	}
+    
+    @GetMapping("/adoptar")
+	    public String adoptar() {
+	        return "mascotas/adoptar_mascotas"; // Renderiza templates/"""".html
+	}
+
+    @GetMapping("/document")
+	    public String document() {
+	        return "mascotas/document_mascotas"; // Renderiza templates/"""".html
+	}
 
     @GetMapping("/list")
     public String listMascotas(Model model) {

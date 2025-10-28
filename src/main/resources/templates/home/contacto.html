@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PetSit – Inicio</title>
-  <meta name="description" content="PetSit reúne mascotas perdidas con sus familias y conecta con refugios y veterinarias.">
+  <title>PetSit – Contactanos</title>
+  <meta name="description" content="Escribinos y ubicá nuestras oficinas en el mapa.">
 
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -21,11 +21,11 @@
   <link th:href="@{/css/style.css}" rel="stylesheet">
 
   <!-- Favicons -->
-  <link rel="icon" th:href="@{/assets/favicon/favicon.ico}" sizes="any">
-  <link rel="icon" type="image/png" sizes="32x32" th:href="@{/assets/favicon/favicon-32x32.png}">
-  <link rel="icon" type="image/png" sizes="16x16" th:href="@{/assets/favicon/favicon-16x16.png}">
-  <link rel="apple-touch-icon" sizes="180x180" th:href="@{/assets/favicon/apple-touch-icon.png}">
-  <link rel="manifest" th:href="@{/assets/favicon/site.webmanifest}">
+  <link rel="icon" href="/assets/favicon/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+  <link rel="manifest" href="/assets/favicon/site.webmanifest">
   <meta name="theme-color" content="#0f6a67">
 </head>
 <body>
@@ -34,7 +34,7 @@
   <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-nav border-bottom" aria-label="Navegación principal">
       <div class="container-fluid px-3 px-md-4">
-        <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/petsit/index2}" aria-label="Inicio">
+        <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{index.html}" aria-label="Inicio">
           <img th:src="@{/assets/img/icons/logo.png}" alt="Logo PetSit" height="56">
           <img th:src="@{/assets/img/Petsit.png}" alt="Marca PetSit" class="brand-name">
         </a>
@@ -46,9 +46,9 @@
 
         <div class="collapse navbar-collapse justify-content-center" id="mainNav">
           <ul class="navbar-nav mx-auto nav-center gap-lg-4">
-            <li class="nav-item"><a class="nav-link active" th:href="@{/petsit/index}" aria-current="page">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/index}" aria-current="page">Inicio</a></li>
             <li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/nosotros}">¿Quiénes somos?</a></li>
-            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/contacto}">Contactanos</a></li>
+            <li class="nav-item"><a class="nav-link active" th:href="@{/petsit/home/contacto}">Contactanos</a></li>
             <li class="nav-item"><a class="nav-link" th:href="@{/petsit/refugios/list}">Refugios</a></li>
             <li class="nav-item"><a class="nav-link" th:href="@{/petsit/veterinarias/list}">Veterinarias</a></li>
             <li class="nav-item"><a class="nav-link" th:href="@{/petsit/mascotas/list}">Perdidos</a></li>
@@ -59,46 +59,48 @@
     </nav>
   </header>
 
-  <!-- HERO / REGISTRO RÁPIDO -->
-  <main class="hero-wrap">
+  <!-- CONTENIDO -->
+  <main class="contact-wrap py-4 py-md-5">
     <div class="container">
-      <div class="row align-items-center gy-5">
-        <!-- Columna izquierda: tarjeta registro -->
-        <div class="col-lg-5 offset-lg-1">
-          <section class="login-card p-4 p-md-5" aria-labelledby="heroTitle">
-            <h1 id="heroTitle" class="h2 fw-bold mb-2">SÉ PARTE DE <br>NUESTRA FAMILIA</h1>
+      <section class="contact-card p-4 p-md-5" aria-labelledby="contactoTitle">
+        <h1 id="contactoTitle" class="about-title">Contactanos</h1>
+        <div class="about-accent"></div>
 
-            <form class="mt-4" action="#" method="post" novalidate>
-              <div class="mb-3">
-                <label for="name" class="form-label">Nombre</label>
-                <input id="name" name="name" type="text" class="form-control" placeholder="Tu nombre" autocomplete="name">
-              </div>
+        <form class="row g-4 mt-1" action="#" method="post" novalidate>
+          <div class="col-md-6">
+            <label for="c-nombre" class="form-label">Nombre</label>
+            <input id="c-nombre" name="nombre" type="text" class="form-control contact-input"
+                   placeholder="Tu nombre" autocomplete="name" required>
+          </div>
 
-              <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input id="email" name="email" type="email" class="form-control" placeholder="nombre@correo.com" autocomplete="email" inputmode="email">
-              </div>
+          <div class="col-md-6">
+            <label for="c-email" class="form-label">Email</label>
+            <input id="c-email" name="email" type="email" class="form-control contact-input"
+                   placeholder="nombre@correo.com" autocomplete="email" inputmode="email" required>
+          </div>
 
-              <div class="mb-4">
-                <label for="password" class="form-label">Contraseña</label>
-                <input id="password" name="password" type="password" class="form-control" placeholder="********" autocomplete="new-password">
-              </div>
+          <div class="col-12">
+            <label for="c-mensaje" class="form-label">Mensaje</label>
+            <textarea id="c-mensaje" name="mensaje" rows="5" class="form-control contact-input"
+                      placeholder="Contanos en qué podemos ayudarte" required></textarea>
+          </div>
 
-              <button type="submit" class="btn btn-dark w-100 py-2">Iniciar</button>
+          <div class="col-12 d-flex justify-content-center">
+            <button class="btn contact-btn px-5 py-2" type="submit">Enviar</button>
+          </div>
+        </form>
 
-              <p class="small mt-3 text-center text-muted">
-                ¿Ya estás registrad@?
-                <a th:href="@{/petsit/home/login}" class="text-decoration-underline">Iniciar sesión</a>
-              </p>
-            </form>
-          </section>
+        <hr class="my-4 my-md-5">
+
+        <div class="mb-2 fw-semibold text-uppercase small">Ubicanos</div>
+        <div class="map-embed">
+          <iframe
+            title="Mapa de ubicación"
+            src="https://www.google.com/maps?q=Av.+Corrientes,+Buenos+Aires&output=embed"
+            loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen>
+          </iframe>
         </div>
-
-        <!-- Columna derecha: imagen -->
-        <div class="col-lg-6 text-end">
-          <img th:src="@{/assets/img/dog-index.png}" width="980" height="760" alt="Perro con juguete" class="dog-img">
-        </div>
-      </div>
+      </section>
     </div>
   </main>
 
@@ -110,8 +112,8 @@
           <h2 class="visually-hidden">Enlaces del sitio</h2>
           <h6 class="fw-bold text-uppercase">Más información</h6>
           <ul class="list-unstyled">
-            <li><a th:href="@{/petsit/home/contacto}" class="footer-link">Contactanos</a></li>
-            <li><a href="@{/petsit/home/nosotros}" class="footer-link">Sobre nosotros</a></li>
+            <li><a href="@{contacto.html}" class="footer-link">Contactanos</a></li>
+            <li><a href="@{quienes-somos.html}" class="footer-link">Sobre nosotros</a></li>
           </ul>
         </div>
 

@@ -1,54 +1,511 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+	xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="utf-8" />
-  <title>Listado de Mascotas</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PetSit – Perdidos</title>
+
+  <!-- Bootstrap / Iconos / Fuentes -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link href="https://fonts.googleapis.com/css2?family=Caudex:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Estilos -->
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+
+  <!-- Favicons -->
+  <link rel="icon" th:href="@{/assets/favicon/favicon.ico}" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" th:href="@{/assets/favicon/favicon-32x32.png}">
+  <link rel="icon" type="image/png" sizes="16x16" th:href="@{/assets/favicon/favicon-16x16.png}">
+  <link rel="apple-touch-icon" sizes="180x180" th:href="@{/assets/favicon/apple-touch-icon.png}">
+  <link rel="manifest" href="@{/assets/favicon/site.webmanifest}">
+  <meta name="theme-color" content="#0f6a67">
 </head>
 <body>
-<div align="center">
-  <h1>Listado de Mascotas</h1>
-  <br />
-  <table>
-    <tr>
-      <th><a href="/petsit">Volver al menú principal</a></th>
-      <th>&nbsp;</th>
-      <th><a href="/petsit/mascotas/new">Crear una nueva Mascota</a></th>
-    </tr>
-  </table>
-  <br />
-  <table border="1" cellpadding="10">
-    <thead>
-    <tr>
-      <th>ID</th>
-      <th>Nombre</th>
-      <th>Raza</th>
-      <th>Color</th>
-      <th>Tamaño</th>
-      <th>Edad</th>
-      <th>Descripción</th>
-      <th>Dueño</th>
-      <th>Acciones</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="mascota : ${listMascotas}">
-      <td th:text="${mascota.id}">ID</td>
-      <td th:text="${mascota.nombre}">Nombre</td>
-      <td th:text="${mascota.raza}">Raza</td>
-      <td th:text="${mascota.color}">Color</td>
-      <td th:text="${mascota.tamano}">Tamaño</td>
-      <td th:text="${mascota.edad}">Edad</td>
-      <td th:text="${mascota.descripcion}">Descripción</td>
-      <td th:text="${mascota.dueno.nombre + ' ' + mascota.dueno.apellido}">Dueño</td>
-      <td>
-        <a th:href="@{'/petsit/mascotas/edit/' + ${mascota.id}}">Editar</a>
-        &nbsp;|&nbsp;
-        <a th:href="@{'/petsit/mascotas/delete/' + ${mascota.id}}">Borrar</a>
-      </td>
-    </tr>
-    </tbody>
-  </table>
-</div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-nav border-bottom">
+    <div class="container-fluid px-3 px-md-4">
+      <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/petsit/index}" aria-label="Inicio">
+        <img th:src="@{/assets/img/icons/logo.png}" alt="Logo PetSit" height="56">
+        <img th:src="@{/assets/img/Petsit.png}" alt="PetSit nombre" class="brand-name">
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+              aria-controls="mainNav" aria-expanded="false" aria-label="Abrir menú">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse justify-content-center" id="mainNav">
+          <ul class="navbar-nav mx-auto nav-center gap-lg-4">
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/index}" aria-current="page">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/nosotros}">¿Quiénes somos?</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/contacto}">Contactanos</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/refugios/list}">Refugios</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/veterinarias/list}">Veterinarias</a></li>
+            <li class="nav-item"><a class="nav-link active" th:href="@{/petsit/mascotas/list}">Perdidos</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/login}">Iniciar sesión</a></li>
+          </ul>
+        </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero-sticker">
+    <div class="container py-4 py-md-5">
+      <div class="mb-2">
+        <h1 class="about-title mb-1">Perdidos</h1>
+        <div class="about-accent"></div>
+      </div>
+      <p class="refugios-subtitle mb-3">
+        Aquí encontrarás a los peludos reportados como extraviados. Si reconocés a alguno, <b>contactá</b> a su familia. Cada aviso suma.
+      </p>
+
+      <!-- Filtros -->
+      <div class="row g-2 align-items-center">
+        <div class="col-lg-5">
+          <div class="search-input-wrap">
+            <i class="bi bi-search"></i>
+            <input id="qLost" type="search" class="form-control refugios-input"
+                   placeholder="Buscar por nombre, zona o señas" autocomplete="off">
+          </div>
+        </div>
+
+        <div class="col-lg-7 d-flex flex-wrap gap-2 justify-content-lg-end">
+          <select id="fTipo" class="form-select form-select-sm" style="width:auto;">
+            <option value="">Tipo: todos</option>
+            <option>Perro</option>
+            <option>Gato</option>
+            <option>Otro</option>
+          </select>
+
+          <select id="fZona" class="form-select form-select-sm" style="width:auto;">
+            <option value="">Zona: todas</option>
+            <option>Palermo</option>
+            <option>Caballito</option>
+            <option>Villa Devoto</option>
+            <option>Belgrano</option>
+            <option>Colegiales</option>
+            <option>Almagro</option>
+            <option>Villa Urquiza</option>
+            <option>Recoleta</option>
+          </select>
+
+          <select id="fOrden" class="form-select form-select-sm" style="width:auto;">
+            <option value="recent">Más recientes</option>
+            <option value="zona">Por zona (A–Z)</option>
+            <option value="nombre">Por nombre (A–Z)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ola inferior -->
+    <svg class="hero-wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="waveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%"  stop-color="#eef1ef"/>
+          <stop offset="100%" stop-color="#e9efec"/>
+        </linearGradient>
+      </defs>
+      <path fill="url(#waveGrad)"
+            d="M0,32L60,37.3C120,43,240,53,360,58.7C480,64,600,64,720,58.7C840,53,960,43,1080,32C1200,21,1320,11,1380,5.3L1440,0V80H0Z"></path>
+    </svg>
+  </section>
+
+  <!-- GRID -->
+  <main class="container py-4">
+    <div id="lostInfo" class="small text-muted mb-2" role="status" aria-live="polite"></div>
+    <div id="lostGrid" class="row g-4"></div>
+    <div id="lostEmpty" class="empty-state d-none mt-3">No se encontraron reportes con esos filtros.</div>
+  </main>
+
+  <!-- FAB Reportar -->
+  <button id="fabReport" class="fab-report" type="button"
+          title="Reportar mascota perdida" aria-label="Reportar"
+          data-bs-toggle="modal" data-bs-target="#reportModal">
+    <i class="bi bi-plus-lg"></i>
+  </button>
+
+  <!-- MODAL: Detalle -->
+  <div class="modal fade" id="lostModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content refugio-modal">
+        <div class="modal-header">
+          <h5 class="modal-title">Mascota perdida</h5>
+          <button class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <img id="lmImg" class="img-fluid rounded" alt="Foto de la mascota">
+            </div>
+            <div class="col-md-6">
+              <h3 id="lmName" class="h4 mb-1"></h3>
+              <div class="text-muted small mb-2" id="lmTipo"></div>
+              <div class="refugio-detail mb-3">
+                <div><i class="bi bi-geo-alt me-1"></i><span id="lmZona"></span></div>
+                <div><i class="bi bi-calendar-event me-1"></i><span id="lmFecha"></span></div>
+                <div><i class="bi bi-file-earmark-text me-1"></i><span id="lmSenas"></span></div>
+              </div>
+              <a id="lmCall" class="btn btn-primary">Llamar</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Reportar -->
+  <div class="modal fade" id="reportModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content refugio-modal">
+        <div class="modal-header">
+          <h5 class="modal-title">Reportar mascota perdida</h5>
+          <button class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <form id="reportForm" class="row g-3" novalidate>
+            <div class="col-md-6">
+              <label class="form-label">Nombre (opcional)</label>
+              <input class="form-control contact-input" id="rNombre" placeholder="Ej: Luna">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Tipo</label>
+              <select class="form-select contact-input" id="rTipo" required>
+                <option value="">Elegí…</option>
+                <option>Perro</option><option>Gato</option><option>Otro</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Raza (opcional)</label>
+              <input class="form-control contact-input" id="rRaza" placeholder="Ej: mestizo">
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Zona / Barrio</label>
+              <input class="form-control contact-input" id="rZona" required placeholder="Ej: Caballito">
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Fecha</label>
+              <input type="date" class="form-control contact-input" id="rFecha" required>
+            </div>
+
+            <div class="col-md-12">
+              <label class="form-label">Señas particulares</label>
+              <textarea class="contact-input form-control" id="rSenas" rows="3"
+                        placeholder="Color del collar, cicatriz, comportamiento, etc."></textarea>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Teléfono de contacto</label>
+              <input class="form-control contact-input" id="rPhone" required placeholder="+54 11 ...">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Imagen</label>
+              <input type="file" accept="image/*" class="form-control contact-input" id="rImg">
+              <img id="rPreview" class="mt-2 d-none rounded" style="max-height:160px" alt="">
+            </div>
+
+            <div class="col-12 d-flex justify-content-end">
+              <button class="btn btn-primary px-4" type="submit">Reportar</button>
+            </div>
+          </form>
+          <div id="reportOk" class="alert alert-success d-none mt-3">¡Reporte enviado! (demo)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: requiere login (opcional en demo)
+  <div class="modal fade" id="loginRequiredModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+      <div class="modal-content brand-modal login-required">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title">Iniciá sesión</h5>
+          <button class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body pt-2">
+          <div class="row g-0 align-items-center">
+            <div class="col-sm-4 text-center mb-3 mb-sm-0">
+              <img src="assets/img/login-registro.png" alt="Perro simpático" class="login-illustration"/>
+            </div>
+            <div class="col-sm-8 ps-sm-3">
+              <p class="text-muted mb-3">Para reportar una mascota tenés que iniciar sesión o registrarte.</p>
+              <div class="d-flex gap-2 flex-wrap">
+                <a class="btn btn-outline-secondary flex-fill" href="login.html">Iniciar sesión</a>
+                <a class="btn btn-primary flex-fill" href="login.html#registro">Registrarme</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <!-- FOOTER -->
+  <footer class="footer mt-5">
+    <div class="container py-4">
+      <div class="row text-white">
+        <div class="col-md-4 mb-3">
+          <h6 class="fw-bold text-uppercase">Más información</h6>
+          <ul class="list-unstyled">
+            <li><a th:href="@{/petsit/home/contacto}" class="footer-link">Contactanos</a></li>
+            <li><a th:href="@{/petsit/home/nosotros}" class="footer-link">Sobre nosotros</a></li>
+          </ul>
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <h6 class="fw-bold text-uppercase">Legal</h6>
+          <ul class="list-unstyled">
+            <li><a href="#" class="footer-link">Políticas de privacidad</a></li>
+            <li><a href="#" class="footer-link">Términos de servicio</a></li>
+          </ul>
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <h6 class="fw-bold text-uppercase">Seguinos</h6>
+          <a href="#" class="footer-social me-2"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="footer-social me-2"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="footer-social"><i class="bi bi-twitter"></i></a>
+        </div>
+      </div>
+
+      <div class="text-center small mt-3 text-white">
+        Copyright 2025 © Escuela Da Vinci | Keila Degregorio | Maia Cohen | Matias Bernal | Agustin Segovia
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Página: JS -->
+  <script>
+    // ===== Datos base (sin tags ni recompensa) =====
+    const LOST = [
+      { id:'luna',  nombre:'Luna',  tipo:'Gato',  raza:'Siamés', zona:'Villa Devoto',
+        fecha:'2025-08-31', senas:'Muy dócil. Sin collar.', phone:'+54 11 4567-8901',
+        img:'/assets/img/perdidos/gatoperdido1.jpg' },
+      { id:'copito', nombre:'Copito', tipo:'Gato', raza:'Naranja', zona:'Recoleta',
+        fecha:'2025-09-02', senas:'Collar naranja.', phone:'+54 11 4511-9090',
+        img:'/assets/img/perdidos/gatoperdido6.jpg' },
+      { id:'snow',  nombre:'Snow',  tipo:'Gato',  raza:'Doméstico', zona:'Belgrano',
+        fecha:'2025-09-03', senas:'Pelaje largo, ojos celestes.', phone:'+54 11 4777-1212',
+        img:'/assets/img/perdidos/gatoperdido7.jpg' },
+      { id:'toby',  nombre:'Toby',  tipo:'Perro', raza:'Labrador', zona:'Caballito',
+        fecha:'2025-09-04', senas:'Cicatriz en oreja izquierda.', phone:'+54 11 4321-2222',
+        img:'/assets/img/perdidos/perroperdido2.jpg' },
+      { id:'milo',  nombre:'Milo',  tipo:'Perro', raza:'Mestizo (Cattle Dog)', zona:'Palermo',
+        fecha:'2025-09-06', senas:'Responde a su nombre. Activo.', phone:'+54 11 4000-8888',
+        img:'/assets/img/perdidos/perroperdido3.jpg' },
+      { id:'simba', nombre:'Simba', tipo:'Perro', raza:'Golden Retriever', zona:'Colegiales',
+        fecha:'2025-09-05', senas:'Muy amigable, sin collar.', phone:'+54 11 4555-1111',
+        img:'/assets/img/perdidos/perroperdido4.jpg' },
+      { id:'duna',  nombre:'Duna',  tipo:'Perro', raza:'Border/Aussie', zona:'Almagro',
+        fecha:'2025-09-03', senas:'Collar rosa con correa.', phone:'+54 11 4701-3344',
+        img:'/assets/img/perdidos/perroperdido5.jpg' },
+      { id:'panda', nombre:'Panda', tipo:'Perro', raza:'Cachorro mestizo', zona:'Villa Urquiza',
+        fecha:'2025-09-01', senas:'Collar azul con medalla.', phone:'+54 11 4521-7788',
+        img:'/assets/img/perdidos/perroperdido8.jpg' },
+    ];
+
+    // ===== Persistencia (localStorage)
+    let SAVED = JSON.parse(localStorage.getItem('lost_reports') || '[]');
+    if (Array.isArray(SAVED) && SAVED.length) {
+      // Agrego los guardados al inicio (más recientes arriba)
+      LOST.unshift(...SAVED);
+    }
+
+    // ===== Refs
+    const $grid = document.getElementById('lostGrid');
+    const $empty = document.getElementById('lostEmpty');
+    const $info  = document.getElementById('lostInfo');
+    const $q     = document.getElementById('qLost');
+    const $tipo  = document.getElementById('fTipo');
+    const $zona  = document.getElementById('fZona');
+    const $ord   = document.getElementById('fOrden');
+
+    // ===== Helpers
+    const fmt = d => new Date(d).toLocaleDateString('es-AR', { day:'2-digit', month:'2-digit', year:'numeric' });
+    const FOCUS_Y = { milo:30, simba:32, toby:28, snow:52, duna:45, copito:34, panda:42, luna:36 };
+
+    // ===== Render
+    function render(list){
+      $grid.innerHTML = '';
+      if(!list.length){
+        $empty.classList.remove('d-none');
+        $info.textContent = '';
+        return;
+      }
+      $empty.classList.add('d-none');
+
+      const frag = document.createDocumentFragment();
+      list.forEach(p=>{
+        const col  = document.createElement('div');
+        col.className = 'col-sm-6 col-lg-4 d-flex';
+
+        const card = document.createElement('article');
+        card.className = 'lost-card h-100';
+        card.tabIndex = 0;
+        card.setAttribute('role','button');
+        card.setAttribute('aria-label', (p.nombre || p.tipo) + ' en ' + (p.zona || 'zona'));
+
+        const img = document.createElement('img');
+        img.className = 'lost-img';
+        img.src = p.img;
+        img.alt = p.nombre || p.tipo;
+        img.loading = 'lazy';
+        img.style.setProperty('--fy', (FOCUS_Y[p.id] ?? 38) + '%');
+        img.onerror = () => img.src = 'https://images.unsplash.com/photo-1558944351-c8f7a309f1d2?q=80&w=1200&auto=format&fit=crop';
+        img.addEventListener('click', ()=>openModal(p));
+
+        const body = document.createElement('div');
+        body.className = 'p-3 d-flex flex-column';
+
+        const title = document.createElement('h3');
+        title.className = 'lost-name';
+        title.textContent = p.nombre || '(Sin nombre)';
+
+        const meta = document.createElement('div');
+        meta.className = 'd-flex justify-content-between align-items-center text-muted small mb-2';
+        meta.innerHTML = `<span><i class="bi bi-geo-alt me-1"></i>${p.zona}</span>
+                          <span><i class="bi bi-calendar-event me-1"></i>${fmt(p.fecha)}</span>`;
+
+        const btn = document.createElement('button');
+        btn.className = 'btn btn-outline-secondary mt-auto';
+        btn.textContent = 'Ver datos';
+        btn.addEventListener('click', ()=>openModal(p));
+
+        // Acceso por teclado (Enter/Espacio)
+        card.addEventListener('keydown', (e)=>{
+          if(e.key === 'Enter' || e.key === ' '){
+            e.preventDefault();
+            openModal(p);
+          }
+        });
+
+        body.append(title, meta, btn);
+        card.append(img, body);
+        col.append(card);
+        frag.append(col);
+      });
+
+      $grid.append(frag);
+      $info.textContent = `${list.length} aviso(s) encontrados`;
+    }
+
+    function openModal(p){
+      const m = new bootstrap.Modal(document.getElementById('lostModal'));
+
+      const $mImg = document.getElementById('lmImg');
+      $mImg.src = p.img;
+      $mImg.style.setProperty('--fy', (FOCUS_Y[p.id] ?? 38) + '%');
+
+      document.getElementById('lmName').textContent = p.nombre || '(Sin nombre)';
+      document.getElementById('lmTipo').textContent  = `${p.tipo}${p.raza ? ' · ' + p.raza : ''}`;
+      document.getElementById('lmZona').textContent  = p.zona || '—';
+      document.getElementById('lmFecha').textContent = fmt(p.fecha);
+      document.getElementById('lmSenas').textContent = p.senas || '—';
+
+      // Teléfono
+      const tel = (p.phone||'').replace(/[^0-9+]/g,'');
+      const $call = document.getElementById('lmCall');
+      $call.href = tel ? `tel:${tel}` : '#';
+      $call.classList.toggle('disabled', !tel);
+
+      m.show();
+    }
+
+    // ===== Filtros
+    function apply(){
+      const q = $q.value.toLowerCase().trim();
+      let list = LOST.map(x=>({...x}));
+
+      if (q){
+        list = list.filter(p =>
+          (p.nombre||'').toLowerCase().includes(q) ||
+          (p.zona||'').toLowerCase().includes(q)   ||
+          (p.senas||'').toLowerCase().includes(q)
+        );
+      }
+
+      if ($tipo.value) list = list.filter(p => p.tipo === $tipo.value);
+      if ($zona.value) list = list.filter(p => p.zona === $zona.value);
+
+      if ($ord.value === 'recent') list.sort((a,b)=> b.fecha.localeCompare(a.fecha));
+      if ($ord.value === 'zona')   list.sort((a,b)=> (a.zona||'').localeCompare(b.zona||''));
+      if ($ord.value === 'nombre') list.sort((a,b)=> (a.nombre||'').localeCompare(b.nombre||''));
+
+      render(list);
+    }
+
+    // Listeners filtros
+    $q.addEventListener('input', apply);
+    [$tipo,$zona,$ord].forEach(el => el.addEventListener('change', apply));
+
+    // Primer render
+    apply();
+
+    // ===== FAB: (si querés forzar login en demo, descomentá este bloque)
+    // if (typeof window.LOGGED_IN === 'undefined') window.LOGGED_IN = false;
+    // document.getElementById('fabReport').addEventListener('click', e=>{
+    //   e.preventDefault();
+    //   const target = LOGGED_IN ? 'reportModal' : 'loginRequiredModal';
+    //   new bootstrap.Modal(document.getElementById(target)).show();
+    // });
+
+    // ===== Reporte (demo: preview + inyección al array + persistencia)
+    let prevURL = '';
+    const rImg = document.getElementById('rImg');
+    const rPreview = document.getElementById('rPreview');
+
+    rImg.addEventListener('change', e=>{
+      const file=e.target.files[0];
+      if(prevURL){ URL.revokeObjectURL(prevURL); prevURL=''; }
+      if(!file){ rPreview.classList.add('d-none'); rPreview.src=''; return; }
+      prevURL = URL.createObjectURL(file);
+      rPreview.src = prevURL;
+      rPreview.classList.remove('d-none');
+    });
+
+    document.getElementById('reportForm').addEventListener('submit', e=>{
+      e.preventDefault();
+      const tipo=rTipo.value, zona=rZona.value, fecha=rFecha.value, phone=rPhone.value;
+
+      // Validación mínima + teléfono
+      if(!tipo || !zona || !fecha || !phone){
+        alert('Completá los campos obligatorios.');
+        return;
+      }
+      const telOk = /^\+?[0-9\s()\-]{7,}$/.test(phone);
+      if(!telOk){ alert('Ingresá un teléfono válido.'); return; }
+
+      const nuevo = {
+        id:'new-'+Date.now(),
+        nombre: rNombre.value.trim(),
+        tipo, raza: rRaza.value.trim(),
+        zona, fecha, senas: rSenas.value.trim(),
+        phone,
+        img: rPreview.src || 'https://images.unsplash.com/photo-1558944351-c8f7a309f1d2?q=80&w=1200&auto=format&fit=crop'
+      };
+
+      LOST.unshift(nuevo);
+
+      // Persistencia
+      if(!Array.isArray(SAVED)) SAVED = [];
+      SAVED.push(nuevo);
+      localStorage.setItem('lost_reports', JSON.stringify(SAVED));
+
+      apply();
+      document.getElementById('reportOk').classList.remove('d-none');
+      setTimeout(()=> document.getElementById('reportOk').classList.add('d-none'), 2500);
+      e.target.reset();
+      rPreview.classList.add('d-none');
+      if(prevURL){ URL.revokeObjectURL(prevURL); prevURL=''; }
+      rPreview.src = '';
+    });
+  </script>
 </body>
 </html>

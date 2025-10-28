@@ -25,6 +25,11 @@ public class RefugioController extends PetSitApp {
     @Autowired
     private RefugioService refugioService;
 
+    @GetMapping("/index")
+	    public String indexRefugio() {
+	        return "refugios/list_refugios"; // Renderiza templates/index2.html
+	}
+
     @GetMapping("/list")
     public String listRefugios(Model model) {
         LOGGER.info("GET - listRefugios - /refugios/list");

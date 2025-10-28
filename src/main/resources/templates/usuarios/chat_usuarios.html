@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PetSit – Chat</title>
+
+  <!-- Bootstrap / Iconos / Fuentes -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link href="https://fonts.googleapis.com/css2?family=Caudex:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Estilos -->
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+
+  <!-- Favicon -->
+  <link rel="icon" th:href="@{/assets/favicon/favicon.ico}" sizes="any">
+</head>
+<body class="in-app petsit-bg">
+
+  <!-- NAVBAR INTERNO -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-nav border-bottom">
+    <div class="container-fluid px-3 px-md-4">
+      <a class="navbar-brand d-flex align-items-center gap-2 app-home" th:href="@{/petsit/usuarios/index}" aria-label="Inicio de usuario">
+        <img th:src="@{/assets/img/icons/logo.png}" alt="Logo PetSit" height="56">
+        <img th:src="@{/assets/img/Petsit.png}" alt="PetSit" class="brand-name">
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+              aria-controls="mainNav" aria-expanded="false" aria-label="Abrir menú">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav me-auto nav-center gap-lg-3">
+          <li><a class="nav-link" th:href="@{/petsit/mascotas/mis-mascotas}">Mis mascotas</a></li>
+          <li><a class="nav-link" th:href="@{/petsit/veterinarias/index}">Veterinarias</a></li>
+          <li><a class="nav-link" th:href="@{/petsit/refugios/index}">Refugios</a></li>
+          <li><a class="nav-link" th:href="@{/petsit/mascotas/adoptar}">Adoptar</a></li>
+          <li><a class="nav-link" th:href="@{/petsit/mascotas/report}">Reportar</a></li>
+          <li><a class="nav-link active" th:href="@{/petsit/usuarios/chat}">Chat</a></li>
+
+          <!-- MOBILE ONLY: perfil + logout -->
+          <li class="nav-item d-lg-none"><hr class="dropdown-divider my-2"></li>
+          <li class="nav-item d-lg-none">
+            <a class="nav-link d-flex align-items-center gap-2" th:href="@{/petsit/usuarios/perfil}">
+              <i class="bi bi-person-gear"></i> Mi perfil
+            </a>
+          </li>
+          <li class="nav-item d-lg-none">
+            <a class="nav-link d-flex align-items-center gap-2 text-danger" id="logoutBtnMobile" th:href="@{/petsit/index2}">
+              <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+            </a>
+          </li>
+        </ul>
+
+        <!-- Dropdown desktop -->
+        <ul class="navbar-nav ms-auto align-items-center d-none d-lg-flex">
+          <li class="nav-item dropdown">
+            <a class="nav-link user-chip dropdown-toggle d-flex align-items-center gap-2" href="#"
+               role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <span class="user-avatar">
+                <img th:src="@{/assets/img/icons/usuario.png}" alt="Avatar usuario">
+              </span>
+              <span>Usuario</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end user-menu">
+              <li>
+                <a class="dropdown-item d-flex align-items-center gap-2" th:href="@{/petsit/usuarios/perfil}">
+                  <i class="bi bi-person-gear"></i> Mi perfil
+                </a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <a class="dropdown-item text-danger d-flex align-items-center gap-2" id="logoutBtn" th:href="@{/petsit/index2}">
+                  <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- CONTENIDO -->
+  <main class="container py-4 py-md-5">
+    <div class="d-flex flex-column flex-lg-row gap-3">
+
+      <!-- contactos -->
+      <aside class="chat-aside card border-0 shadow-sm rounded-4 p-3" style="max-height:70vh; overflow:auto;">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+          <h2 class="h5 m-0">Conversaciones</h2>
+          <button id="newChatBtn" class="btn btn-sm btn-outline-secondary"><i class="bi bi-plus-lg"></i></button>
+        </div>
+
+        <div class="mb-2">
+          <input id="searchContact" type="search" class="form-control form-control-sm" placeholder="Buscar contacto…">
+        </div>
+
+        <ul id="contactList" class="list-group list-group-flush small"></ul>
+      </aside>
+
+      <!-- Ventana de chat -->
+      <section class="flex-grow-1">
+        <h1 class="about-title mb-1">Chat</h1>
+        <div class="about-accent mb-3"></div>
+        <p class="text-muted mb-4">Chateá con refugios, adoptantes o veterinarias de PetSit.</p>
+
+        <div class="chat-box shadow-sm rounded-4 overflow-hidden d-flex flex-column">
+          <!-- Header -->
+          <div class="d-flex align-items-center gap-2 p-3 bg-white border-bottom">
+            <label for="targetSelect" class="text-muted small mb-0">Conversación:</label>
+            <select id="targetSelect" class="form-select form-select-sm" style="max-width: 360px"></select>
+            <button id="clearChatBtn" class="btn btn-sm btn-outline-danger ms-auto">
+              <i class="bi bi-trash3"></i> Limpiar
+            </button>
+          </div>
+
+          <!-- Mensajes -->
+          <div id="chatMessages" class="chat-messages p-3" role="log" aria-live="polite">
+            <div class="text-center text-muted small my-3">Elegí un contacto para empezar 🐾</div>
+          </div>
+
+          <!-- Input -->
+          <form id="chatForm" class="chat-input d-flex p-3 border-top bg-white">
+            <input id="chatText" type="text" class="form-control me-2" placeholder="Escribí un mensaje…" autocomplete="off">
+            <button class="btn btn-success rounded-pill px-4" type="submit" title="Enviar">
+              <i class="bi bi-send"></i>
+            </button>
+          </form>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer mt-5">
+    <div class="container py-4">
+      <div class="row text-white">
+        <div class="col-md-4 mb-3">
+          <h6 class="fw-bold text-uppercase">Más información</h6>
+          <ul class="list-unstyled">
+            <li><a th:href="@{/petsit/home/contacto}" class="footer-link">Contactanos</a></li>
+            <li><a th:href="@{/petsit/home/nosotros}" class="footer-link">Sobre nosotros</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4 mb-3">
+          <h6 class="fw-bold text-uppercase">Legal</h6>
+          <ul class="list-unstyled">
+            <li><a href="#" class="footer-link">Políticas de privacidad</a></li>
+            <li><a href="#" class="footer-link">Términos de servicio</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4 mb-3">
+          <h6 class="fw-bold text-uppercase">Seguinos</h6>
+          <a href="#" class="footer-social me-2"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="footer-social me-2"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="footer-social"><i class="bi bi-twitter"></i></a>
+        </div>
+      </div>
+      <div class="text-center small mt-3 text-white">
+        Copyright 2025 © Escuela Da Vinci | Keila Degregorio | Maia Cohen | Matias Bernal | Agustin Segovia
+      </div>
+    </div>
+  </footer>
+  
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Chat JS (selector + persistencia) -->
+  <script>
+    // ---------- Contactos demo ----------
+    const CONTACTS = [
+      { id:'refugio_animal',   name:'Animal Resource Center', tag:'Refugio' },
+      { id:'vet_caballito',  name:'Vet. Caballito',         tag:'Veterinaria' },
+      { id:'adoptante_ana',  name:'Ana (adoptante)',        tag:'Adoptante' },
+      { id:'pets_hotel',     name:'The Pets Hotel',             tag:'Refugio' }
+    ];
+
+    // ---------- Refs UI ----------
+    const $contactList   = document.getElementById('contactList');
+    const $searchContact = document.getElementById('searchContact');
+    const $select        = document.getElementById('targetSelect');
+    const $msgs          = document.getElementById('chatMessages');
+    const $form          = document.getElementById('chatForm');
+    const $input         = document.getElementById('chatText');
+    const $clearBtn      = document.getElementById('clearChatBtn');
+    const $newBtn        = document.getElementById('newChatBtn');
+
+    // ---------- Storage helpers ----------
+    const KEY_LAST   = 'petsit_chat_last';
+    const KEY_PREFIX = 'petsit_chat_'; // + contactId
+
+    const getThread = id => {
+      try { return JSON.parse(localStorage.getItem(KEY_PREFIX + id)) || []; }
+      catch { return []; }
+    };
+    const setThread = (id, arr) => localStorage.setItem(KEY_PREFIX + id, JSON.stringify(arr));
+    const setLast   = id => localStorage.setItem(KEY_LAST, id);
+    const getLast   = () => localStorage.getItem(KEY_LAST);
+
+    // ---------- Render contactos ----------
+    function renderContacts(list = CONTACTS){
+      $contactList.innerHTML = '';
+      list.forEach(c => {
+        const li = document.createElement('li');
+        li.className = 'list-group-item d-flex align-items-center gap-2';
+        li.style.cursor = 'pointer'; /* evita depender de .pointer en CSS */
+        li.innerHTML = `
+          <div class="flex-grow-1">
+            <div class="fw-semibold">${c.name}</div>
+            <div class="text-muted small">${c.tag}</div>
+          </div>
+          <i class="bi bi-chevron-right text-muted"></i>
+        `;
+        li.addEventListener('click', () => {
+          $select.value = c.id;
+          changeTarget();
+        });
+        $contactList.appendChild(li);
+      });
+    }
+
+    // ---------- Render selector ----------
+    function populateSelect(){
+      $select.innerHTML = '';
+      CONTACTS.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.id;
+        opt.textContent = `${c.name} — ${c.tag}`;
+        $select.appendChild(opt);
+      });
+
+      // Restaurar última conversación o elegir primera
+      const last = getLast();
+      if (last && CONTACTS.some(c => c.id === last)) {
+        $select.value = last;
+      } else if (CONTACTS.length) {
+        $select.value = CONTACTS[0].id;
+        setLast($select.value);
+      }
+    }
+
+    // ---------- Render mensajes ----------
+    function renderMsgs(id){
+      const thread = getThread(id);
+      $msgs.innerHTML = '';
+      if (!thread.length){
+        $msgs.innerHTML = `<div class="text-center text-muted small my-3">Comenzá la conversación con <b>${getName(id)}</b></div>`;
+      } else {
+        const frag = document.createDocumentFragment();
+        thread.forEach(m => {
+          const div = document.createElement('div');
+          div.className = 'chat-bubble ' + (m.from === 'me' ? 'me' : 'you');
+          div.innerHTML = `${escapeHtml(m.text)}<div class="bubble-time">${fmtTime(m.ts)}</div>`;
+          frag.appendChild(div);
+        });
+        $msgs.appendChild(frag);
+      }
+      $msgs.scrollTop = $msgs.scrollHeight;
+    }
+
+    // ---------- Utilidades ----------
+    const fmtTime   = ts => new Date(ts).toLocaleTimeString('es-AR', { hour:'2-digit', minute:'2-digit' });
+    const getName   = id => (CONTACTS.find(c => c.id === id) || {}).name || 'Contacto';
+    const escapeMap = { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' };
+    const escapeHtml = s => String(s).replace(/[&<>"]/g, c => escapeMap[c]);
+
+    // ---------- Cambio de conversación ----------
+    function changeTarget(){
+      const id = $select.value;
+      if (!id) return;
+      setLast(id);
+      renderMsgs(id);
+    }
+
+    // ---------- Envío ----------
+    $form.addEventListener('submit', e => {
+      e.preventDefault();
+      const text = $input.value.trim();
+      if (!text) return;
+      const id = $select.value;
+      const thread = getThread(id);
+      thread.push({ from:'me', text, ts: Date.now() });
+      setThread(id, thread);
+      $input.value = '';
+      renderMsgs(id);
+
+      // Respuesta automática demo
+      setTimeout(() => {
+        const t2 = getThread(id);
+        t2.push({ from:'them', text:'Recibido 👍 ¡Gracias por escribir!', ts: Date.now() });
+        setThread(id, t2);
+        renderMsgs(id);
+      }, 700);
+    });
+
+    // ---------- Limpiar conversación ----------
+    $clearBtn.addEventListener('click', () => {
+      const id = $select.value;
+      if (!id) return;
+      if (!confirm('¿Borrar esta conversación?')) return;
+      localStorage.removeItem(KEY_PREFIX + id);
+      renderMsgs(id);
+    });
+
+    // ---------- Buscar contacto ----------
+    $searchContact.addEventListener('input', () => {
+      const q = $searchContact.value.toLowerCase().trim();
+      const list = CONTACTS.filter(c =>
+        c.name.toLowerCase().includes(q) || c.tag.toLowerCase().includes(q)
+      );
+      renderContacts(list);
+    });
+
+    // ---------- Nuevo contacto (demo) ----------
+    $newBtn.addEventListener('click', () => {
+      const nombre = prompt('Nombre del contacto:');
+      if (!nombre) return;
+      const id = 'custom_' + Math.random().toString(36).slice(2, 8);
+      CONTACTS.push({ id, name:nombre, tag:'Personal' });
+      populateSelect();
+      renderContacts();
+      $select.value = id;
+      changeTarget();
+    });
+
+    // ---------- Init ----------
+    populateSelect();
+    renderContacts();
+    changeTarget();
+  </script>
+
+</body>
+</html>

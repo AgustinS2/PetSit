@@ -18,14 +18,14 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
   <!-- Estilos globales -->
-  <link th:href="@{css/style.css}" rel="stylesheet">
+  <link th:href="@{/css/style.css}" rel="stylesheet">
 
   <!-- Favicons -->
-  <link rel="icon" href="assets/favicon/favicon.ico" sizes="any">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
-  <link rel="manifest" href="assets/favicon/site.webmanifest">
+  <link rel="icon" th:href="@{/assets/favicon/favicon.ico}" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" th:href="@{/assets/favicon/favicon-32x32.png}">
+  <link rel="icon" type="image/png" sizes="16x16" th:href="@{/assets/favicon/favicon-16x16.png}">
+  <link rel="apple-touch-icon" sizes="180x180" th:href="@{/assets/favicon/apple-touch-icon.png}">
+  <link rel="manifest" href="/assets/favicon/site.webmanifest">
   <meta name="theme-color" content="#0f6a67">
 </head>
 <body>
@@ -34,9 +34,9 @@
   <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-nav border-bottom" aria-label="Navegación principal">
       <div class="container-fluid px-3 px-md-4">
-        <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{index.html}" aria-label="Inicio">
-          <img src="assets/img/icons/logo.png" alt="Logo PetSit" height="56">
-          <img src="assets/img/Petsit.png" alt="Marca PetSit" class="brand-name">
+        <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/petsit/index2}" aria-label="Inicio">
+          <img th:src="@{/assets/img/icons/logo.png}" alt="Logo PetSit" height="56">
+          <img th:src="@{/assets/img/Petsit.png}" alt="Marca PetSit" class="brand-name">
         </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
@@ -46,13 +46,13 @@
 
         <div class="collapse navbar-collapse justify-content-center" id="mainNav">
           <ul class="navbar-nav mx-auto nav-center gap-lg-4">
-            <li class="nav-item"><a class="nav-link" th:href="@{index.html}">Inicio</a></li>
-            <li class="nav-item"><a class="nav-link" th:href="@{quienes-somos.html}">¿Quiénes somos?</a></li>
-            <li class="nav-item"><a class="nav-link" th:href="@{contacto.html}">Contactanos</a></li>
-            <li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{refugios.html}">Refugios</a></li>
-            <li class="nav-item"><a class="nav-link" th:href="@{veterinarias.html}">Veterinarias</a></li>
-            <li class="nav-item"><a class="nav-link" th:href="@{perdidos.html}">Perdidos</a></li>
-            <li class="nav-item"><a class="nav-link" th:href="@{login.html}">Iniciar sesión</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/index}" aria-current="page">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/nosotros}">¿Quiénes somos?</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/contacto}">Contactanos</a></li>
+            <li class="nav-item"><a class="nav-link active" th:href="@{/petsit/refugios/list}">Refugios</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/veterinarias/list}">Veterinarias</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/mascotas/list}">Perdidos</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/login}">Iniciar sesión</a></li>
           </ul>
         </div>
       </div>
@@ -103,7 +103,6 @@
 
       <div id="resultsInfo" class="small text-muted mb-2" role="status" aria-live="polite"></div>
       <div id="sheltersGrid" class="row g-4" aria-live="polite" aria-busy="false"></div>
-
       <div id="emptyState" class="empty-state d-none mt-3" role="status" aria-live="polite">
         No se encontraron refugios con los filtros actuales.
       </div>
@@ -151,8 +150,8 @@
         <div class="col-md-4 mb-3">
           <h6 class="fw-bold text-uppercase">Más información</h6>
           <ul class="list-unstyled">
-            <li><a th:href="@{contacto.html}" class="footer-link">Contactanos</a></li>
-            <li><a th:href="@{quienes-somos.html}" class="footer-link">Sobre nosotros</a></li>
+            <li><a th:href="@{/petsit/home/contacto}" class="footer-link">Contactanos</a></li>
+            <li><a th:href="@{/petsit/home/nosotros}" class="footer-link">Sobre nosotros</a></li>
           </ul>
         </div>
 
@@ -189,31 +188,31 @@
       const SHELTERS = [
         { id:'arca', name:'Lost & Found', city:'Villa Devoto', address:'Av. Francisco Beiró 4567',
           phone:'+54 11 4567-8901', hours:'Lun a Vie: 10–18 hs · Sáb: 10–14 hs',
-          lat:-34.6009, lon:-58.5159, img:'assets/img/refugios/arca-peludos.png' },
+          lat:-34.6009, lon:-58.5159, img:'/assets/img/refugios/arca-peludos.png' },
         { id:'cielo', name:'Animal Resource Center', city:'Caballito', address:'Neuquén 1234',
           phone:'+54 11 4321-2222', hours:'Lun a Vie: 9–17 hs',
-          lat:-34.6178, lon:-58.4409, img:'assets/img/refugios/cielo-mascotas.png' },
+          lat:-34.6178, lon:-58.4409, img:'/assets/img/refugios/cielo-mascotas.png' },
         { id:'america', name:'America Dog & Cat Hotel', city:'Colegiales', address:'Zapiola 2230',
           phone:'+54 11 4782-3010', hours:'Lun a Sáb: 9–19 hs',
-          lat:-34.5739, lon:-58.4518, img:'assets/img/refugios/america.jpg' },
+          lat:-34.5739, lon:-58.4518, img:'/assets/img/refugios/america.jpg' },
         { id:'animalcare', name:'Animal Care', city:'Belgrano', address:'Juramento 2450',
           phone:'+54 11 4786-1122', hours:'Lun a Vie: 10–18 hs · Sáb: 10–14 hs',
-          lat:-34.5619, lon:-58.4567, img:'assets/img/refugios/animal-care.jpg' },
+          lat:-34.5619, lon:-58.4567, img:'/assets/img/refugios/animal-care.jpg' },
         { id:'friends', name:'Friends', city:'Recoleta', address:'Av. Callao 980',
           phone:'+54 11 4371-8899', hours:'Lun a Vie: 10–19 hs · Sáb: 10–15 hs',
-          lat:-34.5965, lon:-58.3931, img:'assets/img/refugios/friends.jpg' },
+          lat:-34.5965, lon:-58.3931, img:'/assets/img/refugios/friends.jpg' },
         { id:'greenville', name:'Greenville', city:'Caballito', address:'Av. Pedro Goyena 850',
           phone:'+54 11 4901-3377', hours:'Lun a Vie: 9–18 hs',
-          lat:-34.6252, lon:-58.4367, img:'assets/img/refugios/Greenville.jpg' },
+          lat:-34.6252, lon:-58.4367, img:'/assets/img/refugios/Greenville.jpg' },
         { id:'petland', name:'Petland', city:'Palermo', address:'Av. Santa Fe 4100',
           phone:'+54 11 4832-7700', hours:'Lun a Sáb: 10–20 hs',
-          lat:-34.5804, lon:-58.4165, img:'assets/img/refugios/petland.jpg' },
+          lat:-34.5804, lon:-58.4165, img:'/assets/img/refugios/petland.jpg' },
         { id:'petshotel', name:'The Pets Hotel', city:'Villa Urquiza', address:'Av. Monroe 5200',
           phone:'+54 11 4543-2290', hours:'Lun a Dom: 9–20 hs',
-          lat:-34.5676, lon:-58.4889, img:'assets/img/refugios/pets-hotel.jpg' },
+          lat:-34.5676, lon:-58.4889, img:'/assets/img/refugios/pets-hotel.jpg' },
         { id:'vidaanimal', name:'Vida Animal', city:'Belgrano', address:'Virrey del Pino 2750',
           phone:'+54 11 4781-5566', hours:'Lun a Vie: 10–18 hs · Sáb: 10–14 hs',
-          lat:-34.5628, lon:-58.4633, img:'assets/img/refugios/vida-animal.jpg' }
+          lat:-34.5628, lon:-58.4633, img:'/assets/img/refugios/vida-animal.jpg' }
       ];
 
       // ===== Refs UI =====

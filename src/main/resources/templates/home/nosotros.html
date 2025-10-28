@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PetSit – ¿Quiénes somos?</title>
+  <meta name="description" content="Conocé la historia, misión, visión, servicios y equipo de PetSit.">
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Fuente Caudex -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caudex:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Iconos Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+  <!-- Estilos -->
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+
+  <!-- Favicons -->
+  <link rel="icon" href="/assets/favicon/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+  <link rel="manifest" href="/assets/favicon/site.webmanifest">
+  <meta name="theme-color" content="#0f6a67">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-nav border-bottom" aria-label="Navegación principal">
+      <div class="container-fluid px-3 px-md-4">
+        <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/petsit/index2}" aria-label="Inicio">
+          <img src="/assets/img/icons/logo.png" alt="Logo PetSit" height="56">
+          <img src="/assets/img/Petsit.png" alt="Marca PetSit" class="brand-name">
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+                aria-controls="mainNav" aria-expanded="false" aria-label="Abrir menú">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-center" id="mainNav">
+          <ul class="navbar-nav mx-auto nav-center gap-lg-4">
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/index2}" aria-current="page">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link active" th:href="@{/petsit/home/nosotros}">¿Quiénes somos?</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/contacto}">Contactanos</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/refugios/list}">Refugios</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/veterinarias/list}">Veterinarias</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/mascotas/list}">Perdidos</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/login}">Iniciar sesión</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- HERO / NOSOTROS -->
+  <section class="qs-hero hero-sticker about-hero" id="nosotros">
+    <div class="container hero-container">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <span class="about-kicker">Nosotros</span>
+          <h1 class="about-title">Ayudamos a que mascotas y familias se reencuentren</h1>
+          <div class="about-accent"></div>
+
+          <p class="about-copy">
+            Somos estudiantes de la <strong>Escuela Da Vinci</strong> y nos apasionan los animales.
+            PetSit surge como un proyecto para <strong>construir comunidad</strong> alrededor del
+            cuidado y la protección de las mascotas.
+          </p>
+          <p class="about-copy mb-4">
+            Queremos <strong>vincular refugios, veterinarias y vecinos</strong> en un mismo lugar:
+            facilitar adopciones, agilizar el <strong>reencuentro</strong> de mascotas perdidas
+            y promover la <strong>tenencia responsable</strong> con herramientas simples y confiables.
+          </p>
+
+          <a href="#equipo" class="about-btn">Conocé el equipo</a>
+        </div>
+
+        <!-- Imagen-->
+        <div class="col-lg-6 position-relative">
+          <img src="assets/img/perro-hero.png" class="hero-dog" alt="" aria-hidden="true">
+        </div>
+      </div>
+    </div>
+
+    <svg class="hero-wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0,32 C240,96 480,-16 720,16 C960,48 1200,64 1440,24 L1440,80 L0,80 Z" fill="#eef1ef"/>
+    </svg>
+  </section>
+
+  <main class="qs-main py-4 py-md-5">
+    <div class="container">
+
+      <!-- Valores -->
+      <section class="mb-4 mb-md-5" aria-labelledby="valoresTitle">
+        <h2 id="valoresTitle" class="visually-hidden">Valores</h2>
+        <div class="row g-4">
+          <div class="col-12 col-sm-6 col-lg-3">
+            <div class="qs-card h-100 p-4 text-center">
+              <div class="qs-icon mb-2">
+                <img src="assets/img/icons/nuestra-mision.png" alt="Nuestra misión" class="qs-icon-img">
+              </div>
+              <h3 class="qs-h3">Misión</h3>
+              <p>Impulsar el bienestar animal y la reunificación rápida de mascotas, promoviendo una comunidad solidaria y responsable.</p>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-6 col-lg-3">
+            <div class="qs-card h-100 p-4 text-center">
+              <div class="qs-icon mb-2">
+                <img src="assets/img/icons/nuestra-vision.png" alt="Nuestra visión" class="qs-icon-img">
+              </div>
+              <h3 class="qs-h3">Visión</h3>
+              <p>Una sociedad donde ninguna mascota se quede sin hogar y el cuidado responsable sea parte de la cultura.</p>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-6 col-lg-3">
+            <div class="qs-card h-100 p-4 text-center">
+              <div class="qs-icon mb-2">
+                <img src="assets/img/icons/etica-empresarial.png" alt="Ética empresarial" class="qs-icon-img">
+              </div>
+              <h3 class="qs-h3">Ética</h3>
+              <p>Transparencia, responsabilidad y foco en el interés de los animales en cada decisión.</p>
+            </div>
+          </div>
+
+          <div class="col-12 col-sm-6 col-lg-3">
+            <div class="qs-card h-100 p-4 text-center">
+              <div class="qs-icon mb-2">
+                <img src="assets/img/icons/objetivo.png" alt="Nuestro objetivo" class="qs-icon-img">
+              </div>
+              <h3 class="qs-h3">Objetivo</h3>
+              <p>Crear una comunidad comprometida con la protección, la adopción responsable y la reunificación de mascotas con sus familias.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Nuestros Servicios -->
+      <section class="services py-2 py-md-3" aria-labelledby="serviciosTitle">
+        <h2 id="serviciosTitle" class="about-title">Nuestros servicios</h2>
+        <div class="about-accent"></div>
+        <p class="qs-intro mb-4">Todo lo que necesitás para cuidar y localizar a tus mascotas.</p>
+
+        <div class="row g-4 justify-content-center">
+          <div class="col-sm-6 col-lg-4">
+            <div class="service-card h-100 text-center">
+              <img src="assets/img/icons/qr.png" class="service-img" alt="Registro y código QR">
+              <h3 class="h5 mt-3">Registro y QR</h3>
+              <p>Código QR único con datos de contacto para volver a casa más rápido.</p>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-lg-4">
+            <div class="service-card h-100 text-center">
+              <img src="assets/img/icons/buscar-refugio.png" class="service-img" alt="Búsqueda de refugios">
+              <h3 class="h5 mt-3">Refugios</h3>
+              <p>Conocé refugios cercanos.</p>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-lg-4">
+            <div class="service-card h-100 text-center">
+              <img src="assets/img/icons/veterinario.png" class="service-img" alt="Clínicas veterinarias">
+              <h3 class="h5 mt-3">Veterinarias</h3>
+              <p>Clínicas cercanas, guardias y visitas a domicilio.</p>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-lg-4">
+            <div class="service-card h-100 text-center">
+              <img src="assets/img/icons/reportar-mascota.png" class="service-img" alt="Reportar mascotas perdidas">
+              <h3 class="h5 mt-3">Mascotas perdidas</h3>
+              <p>Publicá o buscá avisos para reencontrarse cuanto antes.</p>
+            </div>
+          </div>
+
+          <div class="col-sm-6 col-lg-4">
+            <div class="service-card h-100 text-center">
+              <img src="assets/img/icons/mis-mascotas.png" class="service-img" alt="Adopciones responsables">
+              <h3 class="h5 mt-3">Adopciones</h3>
+              <p>Adoptá con responsabilidad y encontrá tu nuevo compañero.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Equipo -->
+      <section class="team-tiles" id="equipo" aria-labelledby="equipoTitle">
+        <h2 id="equipoTitle" class="about-title">Nuestro equipo</h2>
+        <div class="about-accent"></div>
+        <p class="qs-intro mb-4">El equipo detrás de PetSit: personas que diseñan, construyen y cuidan la experiencia.</p>
+
+        <div class="team-tiles__grid">
+          <article class="member-card mod-teal">
+            <div class="member-card__accent"></div>
+            <div class="member-card__avatar">
+              <img src="assets/img/equipo/agustin.jpg" alt="Agustín Segovia">
+            </div>
+            <p class="member-card__bio">Lidera la estrategia técnica y garantiza una base sólida y segura para la plataforma.</p>
+            <div class="member-card__footer">
+              <div class="member-card__name">Agustín Segovia</div>
+              <div class="member-card__role">Desarrollo Back-End · Dirección de Proyecto</div>
+            </div>
+          </article>
+
+          <article class="member-card mod-green">
+            <div class="member-card__accent"></div>
+            <div class="member-card__avatar">
+              <img src="assets/img/equipo/maia.jpg" alt="Maia Cohen">
+            </div>
+            <p class="member-card__bio">Optimiza la eficiencia del back-end y coordina hitos para entregar funcionalidades clave.</p>
+            <div class="member-card__footer">
+              <div class="member-card__name">Maia Cohen</div>
+              <div class="member-card__role">Desarrollo Back-End · Dirección de Proyecto</div>
+            </div>
+          </article>
+
+          <article class="member-card mod-blue">
+            <div class="member-card__accent"></div>
+            <div class="member-card__avatar">
+              <img src="assets/img/equipo/mati.jpg" alt="Matías Bernal">
+            </div>
+            <p class="member-card__bio">Asegura la seguridad y la documentación clara del proyecto; apoya acciones de marketing técnico.</p>
+            <div class="member-card__footer">
+              <div class="member-card__name">Matías Bernal</div>
+              <div class="member-card__role">Seguridad · Documentación · Representación</div>
+            </div>
+          </article>
+
+          <article class="member-card mod-orange">
+            <div class="member-card__accent"></div>
+            <div class="member-card__avatar">
+              <img src="assets/img/equipo/kei.jpg" alt="Keila Degregorio">
+            </div>
+            <p class="member-card__bio">Define la identidad visual y UX; lidera el front-end y la estrategia de marketing del producto.</p>
+            <div class="member-card__footer">
+              <div class="member-card__name">Keila Degregorio</div>
+              <div class="member-card__role">Diseño · Front-End · Marketing</div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer mt-5">
+    <div class="container py-4">
+      <div class="row text-white">
+        <div class="col-md-4 mb-3">
+          <h2 class="visually-hidden">Enlaces del sitio</h2>
+          <h6 class="fw-bold text-uppercase">Más información</h6>
+          <ul class="list-unstyled">
+            <li><a th:href="@{contacto.html}" class="footer-link">Contactanos</a></li>
+            <li><a th:href="@{quienes-somos.html}" class="footer-link">Sobre nosotros</a></li>
+          </ul>
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <h6 class="fw-bold text-uppercase">Legal</h6>
+          <ul class="list-unstyled">
+            <li><a href="#" class="footer-link">Políticas de privacidad</a></li>
+            <li><a href="#" class="footer-link">Términos de servicio</a></li>
+          </ul>
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <h6 class="fw-bold text-uppercase">Seguinos</h6>
+          <a href="#" class="footer-social me-2" aria-label="Facebook"><i class="bi bi-facebook" aria-hidden="true"></i></a>
+          <a href="#" class="footer-social me-2" aria-label="Instagram"><i class="bi bi-instagram" aria-hidden="true"></i></a>
+          <a href="#" class="footer-social" aria-label="Twitter/X"><i class="bi bi-twitter" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div class="text-center small mt-3 text-white">
+        Copyright 2025 © Escuela Da Vinci | Keila Degregorio | Maia Cohen | Matias Bernal | Agustin Segovia
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
+</body>
+</html>

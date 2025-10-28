@@ -18,11 +18,11 @@
   <link th:href="@{/css/style.css}" rel="stylesheet">
 
   <!-- Favicons -->
-  <link rel="icon" href="/assets/favicon/favicon.ico" sizes="any">
-  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
-  <link rel="manifest" href="assets/favicon/site.webmanifest">
+  <link rel="icon" th:href="@{/assets/favicon/favicon.ico}" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" th:href="@{/assets/favicon/favicon-32x32.png}">
+  <link rel="icon" type="image/png" sizes="16x16" th:href="@{/assets/favicon/favicon-16x16.png}">
+  <link rel="apple-touch-icon" sizes="180x180" th:href="@{/assets/favicon/apple-touch-icon.png}">
+  <link rel="manifest" th:href="@{/assets/favicon/site.webmanifest}">
   
 </head>
 <body>
@@ -31,9 +31,9 @@
   <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-nav border-bottom" aria-label="Navegación principal">
       <div class="container-fluid px-3 px-md-4">
-        <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{index.html}" aria-label="Inicio">
-          <img src="/assets/img/icons/logo.png" alt="Logo PetSit" height="56">
-          <img src="/assets/img/Petsit.png" alt="Marca PetSit" class="brand-name">
+        <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/petsit/index}" aria-label="Inicio">
+          <img th:src="@{/assets/img/icons/logo.png}" alt="Logo PetSit" height="56">
+          <img th:src="@{/assets/img/Petsit.png}" alt="Marca PetSit" class="brand-name">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
                 aria-controls="mainNav" aria-expanded="false" aria-label="Abrir menú">
@@ -42,13 +42,13 @@
 
         <div class="collapse navbar-collapse justify-content-center" id="mainNav">
           <ul class="navbar-nav mx-auto nav-center gap-lg-4">
-            <li class="nav-item"><a class="nav-link" th:href="@{index.html}">Inicio</a></li>
-            <li class="nav-item"><a class="nav-link" th:href="@{quienes-somos.html}">¿Quiénes somos?</a></li>
-            <li class="nav-item"><a class="nav-link" th:href="@{contacto.html}">Contactanos</a></li>
-            <li class="nav-item"><a class="nav-link" th:href="@{refugios.html}">Refugios</a></li>
-            <li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{veterinarias.html}">Veterinarias</a></li>
-            <li class="nav-item"><a class="nav-link" th:href="@{perdidos.html}">Perdidos</a></li>
-            <li class="nav-item"><a class="nav-link" th:href="@{login.html}">Iniciar sesión</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/index}" aria-current="page">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/nosotros}">¿Quiénes somos?</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/contacto}">Contactanos</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/refugios/list}">Refugios</a></li>
+            <li class="nav-item"><a class="nav-link active" th:href="@{/petsit/veterinarias/list}">Veterinarias</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/mascotas/list}">Perdidos</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/login}">Iniciar sesión</a></li>
           </ul>
         </div>
       </div>
@@ -186,8 +186,8 @@
         <div class="col-md-4 mb-3">
           <h6 class="fw-bold text-uppercase">Más información</h6>
           <ul class="list-unstyled">
-            <li><a th:href="@{contacto.html}" class="footer-link">Contactanos</a></li>
-            <li><a th:href="@{quienes-somos.html}" class="footer-link">Sobre nosotros</a></li>
+            <li><a th:href="@{/petsit/home/contacto}" class="footer-link">Contactanos</a></li>
+            <li><a th:href="@{/petsit/home/nosotros}" class="footer-link">Sobre nosotros</a></li>
           </ul>
         </div>
 
@@ -223,28 +223,28 @@
     const VETS = [
       { id:'clinica', name:'Clínica Veterinaria', city:'Belgrano', address:'Moldes 2345',
         phone:'+54 11 4555-1111', hours:'Lun a Dom 24 h', lat:-34.563, lon:-58.459,
-        img:'assets/img/vets/veterinaria1.jpg', domicilio:true, guardia:true, emergencias:true },
+        img:'/assets/img/vets/veterinaria1.jpg', domicilio:true, guardia:true, emergencias:true },
       { id:'patitas', name:'Patitas', city:'Caballito', address:'Hidalgo 987',
         phone:'+54 11 4321-3333', hours:'Lun a Sáb 9–20 h', lat:-34.614, lon:-58.440,
-        img:'assets/img/vets/veterinaria2.jpg', domicilio:false, guardia:false, emergencias:true },
+        img:'/assets/img/vets/veterinaria2.jpg', domicilio:false, guardia:false, emergencias:true },
       { id:'love', name:'Love Pets', city:'Palermo', address:'Av. Santa Fe 123',
         phone:'+54 11 4000-7777', hours:'Lun a Dom 8–22 h', lat:-34.580, lon:-58.420,
-        img:'assets/img/vets/veterinaria3.jpg', domicilio:true, guardia:false, emergencias:false },
+        img:'/assets/img/vets/veterinaria3.jpg', domicilio:true, guardia:false, emergencias:false },
       { id:'black', name:'BlackDog', city:'Almagro', address:'Corrientes 3560',
         phone:'+54 11 4777-1212', hours:'Lun a Sáb 9–21 h', lat:-34.607, lon:-58.421,
-        img:'assets/img/vets/veterinaria4.jpg', domicilio:true, guardia:false, emergencias:true },
+        img:'/assets/img/vets/veterinaria4.jpg', domicilio:true, guardia:false, emergencias:true },
       { id:'galia', name:'Galia Vet', city:'Recoleta', address:'Azcuénaga 1450',
         phone:'+54 11 4511-9090', hours:'Lun a Dom 24 h', lat:-34.588, lon:-58.397,
-        img:'assets/img/vets/veterinaria5.jpg', domicilio:false, guardia:true, emergencias:true },
+        img:'/assets/img/vets/veterinaria5.jpg', domicilio:false, guardia:true, emergencias:true },
       { id:'hub', name:'Hub City', city:'Palermo', address:'Honduras 4901',
         phone:'+54 11 4899-2200', hours:'Lun a Vie 10–20 h · Sáb 10–14 h', lat:-34.588, lon:-58.430,
-        img:'assets/img/vets/veterinaria6.jpg', domicilio:true, guardia:false, emergencias:false },
+        img:'/assets/img/vets/veterinaria6.jpg', domicilio:true, guardia:false, emergencias:false },
       { id:'pet', name:'Pet World', city:'Saavedra', address:'Balbín 4700',
         phone:'+54 11 4701-3344', hours:'Lun a Dom 8–23 h', lat:-34.548, lon:-58.491,
-        img:'assets/img/vets/veterinaria7.jpg', domicilio:false, guardia:true, emergencias:true },
+        img:'/assets/img/vets/veterinaria7.jpg', domicilio:false, guardia:true, emergencias:true },
       { id:'master', name:'Master-Animal', city:'Villa Urquiza', address:'Av. Monroe 5200',
         phone:'+54 11 4521-7788', hours:'Lun a Sáb 9–20 h', lat:-34.573, lon:-58.489,
-        img:'assets/img/vets/veterinaria8.jpg', domicilio:true, guardia:false, emergencias:true }
+        img:'/assets/img/vets/veterinaria8.jpg', domicilio:true, guardia:false, emergencias:true }
     ];
 
     // Refs

@@ -24,6 +24,12 @@ public class VeterinariaController {
     @Autowired
     private VeterinariaService veterinariaService;
 
+    @GetMapping("/index")
+	    public String indexVeterinaria() {
+	        return "veterinarias/list_veterinarias"; // Renderiza templates/index2.html
+	}
+
+
     @GetMapping("/list")
     public String listVeterinarias(Model model) {
         LOGGER.info("GET - listVeterinarias - /veterinarias/list");

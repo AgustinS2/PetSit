@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PetSit – Adoptar</title>
+
+  <!-- Bootstrap / Iconos / Fuentes -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link href="https://fonts.googleapis.com/css2?family=Caudex:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Estilos -->
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+
+  <!-- Favicons -->
+  <link rel="icon" th:href="@{/assets/favicon/favicon.ico}" sizes="any">
+</head>
+<body class="in-app">
+
+  <!-- NAVBAR INTERNO -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-nav border-bottom">
+    <div class="container-fluid px-3 px-md-4">
+      <a class="navbar-brand d-flex align-items-center gap-2 app-home" th:href="@{/petsit/usuarios/perfil}" aria-label="Inicio de usuario">
+        <img th:src="@{/assets/img/icons/logo.png}" alt="Logo PetSit" height="56">
+        <img th:src="@{/assets/img/Petsit.png}" alt="PetSit" class="brand-name">
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+              aria-controls="mainNav" aria-expanded="false" aria-label="Abrir menú">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav me-auto nav-center gap-lg-3">
+          <li><a class="nav-link" th:href="@{/petsit/mascotas/mis-mascotas}">Mis mascotas</a></li>
+          <li><a class="nav-link" th:href="@{/petsit/veterinarias/index}">Veterinarias</a></li>
+          <li><a class="nav-link" th:href="@{/petsit/refugios/index}">Refugios</a></li>
+          <li><a class="nav-link active" th:href="@{/petsit/mascotas/adoptar}">Adoptar</a></li>
+          <li><a class="nav-link" th:href="@{/petsit/mascotas/report}">Reportar</a></li>
+          <li><a class="nav-link" th:href="@{/petsit/usuarios/chat}">Chat</a></li>
+
+        <!-- MOBILE ONLY: perfil + logout -->
+        <li class="nav-item d-lg-none"><hr class="dropdown-divider my-2"></li>
+        <li class="nav-item d-lg-none">
+          <a class="nav-link d-flex align-items-center gap-2" th:href="@{/petsit/usuarios/perfil}">
+            <i class="bi bi-person-gear"></i> Mi perfil
+          </a>
+        </li>
+        <li class="nav-item d-lg-none">
+        <a class="nav-link d-flex align-items-center gap-2 text-danger"
+          id="logoutBtnMobile" th:href="@{/petsit/index2}">
+          <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+        </a>
+      </li>
+      </ul>
+
+      <!-- Dropdown desktop -->
+      <ul class="navbar-nav ms-auto align-items-center d-none d-lg-flex">
+        <li class="nav-item dropdown">
+          <a class="nav-link user-chip dropdown-toggle d-flex align-items-center gap-2" href="#"
+             role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="user-avatar">
+              <img th:src="@{/assets/img/icons/usuario.png}" alt="Avatar usuario">
+            </span>
+            <span>Usuario</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end user-menu">
+            <li>
+              <a class="dropdown-item d-flex align-items-center gap-2" th:href="@{/petsit/usuarios/perfil}">
+                <i class="bi bi-person-gear"></i> Mi perfil
+              </a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+             <li>
+              <a class="dropdown-item text-danger d-flex align-items-center gap-2"
+                id="logoutBtn" th:href="@{/petsit/index2}">
+                <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+              </a>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero-sticker">
+    <div class="container py-4 py-md-5">
+      <div class="mb-2">
+        <h1 class="about-title mb-1">Adoptar</h1>
+        <div class="about-accent"></div>
+      </div>
+      <p class="refugios-subtitle mb-3">
+        Encontrá tu nuevo compañero. Filtrá por tipo, zona o nombre y <b>contactá</b> al refugio.
+      </p>
+
+      <!-- Filtros -->
+      <div class="row g-2 align-items-center">
+        <div class="col-lg-5">
+          <div class="search-input-wrap">
+            <i class="bi bi-search"></i>
+            <input id="qAdopt" type="search" class="form-control refugios-input"
+                   placeholder="Buscar por nombre, zona o señas" autocomplete="off">
+          </div>
+        </div>
+
+        <div class="col-lg-7 d-flex flex-wrap gap-2 justify-content-lg-end">
+          <select id="fTipo" class="form-select form-select-sm" style="width:auto;">
+            <option value="">Tipo: todos</option>
+            <option>Perro</option>
+            <option>Gato</option>
+          </select>
+
+          <select id="fZona" class="form-select form-select-sm" style="width:auto;">
+            <option value="">Zona: todas</option>
+            <option>Palermo</option>
+            <option>Caballito</option>
+            <option>Villa Devoto</option>
+            <option>Belgrano</option>
+            <option>Colegiales</option>
+            <option>Almagro</option>
+            <option>Villa Urquiza</option>
+            <option>Recoleta</option>
+          </select>
+
+          <select id="fOrden" class="form-select form-select-sm" style="width:auto;">
+            <option value="recent">Más recientes</option>
+            <option value="zona">Por zona (A–Z)</option>
+            <option value="nombre">Por nombre (A–Z)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ola -->
+    <svg class="hero-wave" viewBox="0 0 1440 80" preserveAspectRatio="none">
+      <path fill="#eef1ef"
+            d="M0,32L60,37.3C120,43,240,53,360,58.7C480,64,600,64,720,58.7C840,53,960,43,1080,32C1200,21,1320,11,1380,5.3L1440,0V80H0Z"></path>
+    </svg>
+  </section>
+
+  <!-- GRID -->
+  <main class="container py-4">
+    <div id="adoptInfo" class="small text-muted mb-2"></div>
+    <div id="adoptGrid" class="row g-4"></div>
+    <div id="adoptEmpty" class="empty-state d-none mt-3">No se encontraron mascotas con esos filtros.</div>
+  </main>
+
+  <!-- MODAL -->
+  <div class="modal fade" id="adoptModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content refugio-modal">
+        <div class="modal-header">
+          <h5 class="modal-title">Mascota en adopción</h5>
+          <button class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <img id="amImg" class="img-fluid rounded" alt="Foto de la mascota">
+            </div>
+            <div class="col-md-6">
+              <h3 id="amName" class="h4 mb-1"></h3>
+              <div class="text-muted small mb-2" id="amTipo"></div>
+
+              <!-- Datos -->
+              <div class="refugio-detail mb-3">
+                <div><i class="bi bi-geo-alt me-1"></i><span id="amZona"></span></div>
+                <div><i class="bi bi-house-heart me-1"></i><span id="amRefugio"></span></div>
+                <div><i class="bi bi-calendar3 me-1"></i><span id="amEdad"></span></div>
+                <div><i class="bi bi-clipboard-data me-1"></i><span id="amPeso"></span></div>
+                <div><i class="bi bi-file-earmark-text me-1"></i><span id="amSenas"></span></div>
+              </div>
+
+              <!-- Ficha rápida (barras) -->
+              <div class="pet-traits mt-3">
+                <h6 class="mb-2">Ficha rápida</h6>
+                <ul id="traitsList" class="trait-list list-unstyled m-0"></ul>
+              </div>
+
+              <a id="amContact" class="btn btn-primary mt-3">Contactar</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer mt-5">
+    <div class="container py-4">
+      <div class="row text-white">
+        <div class="col-md-4 mb-3">
+          <h6 class="fw-bold text-uppercase">Más información</h6>
+          <ul class="list-unstyled">
+            <li><a th:href="@{/petsit/home/contacto}" class="footer-link">Contactanos</a></li>
+            <li><a th:href="@{/petsit/home/nosotros}" class="footer-link">Sobre nosotros</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4 mb-3">
+          <h6 class="fw-bold text-uppercase">Legal</h6>
+          <ul class="list-unstyled">
+            <li><a href="#" class="footer-link">Políticas de privacidad</a></li>
+            <li><a href="#" class="footer-link">Términos de servicio</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4 mb-3">
+          <h6 class="fw-bold text-uppercase">Seguinos</h6>
+          <a href="#" class="footer-social me-2"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="footer-social me-2"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="footer-social"><i class="bi bi-twitter"></i></a>
+        </div>
+      </div>
+      <div class="text-center small mt-3 text-white">
+        Copyright 2025 © Escuela Da Vinci | Keila Degregorio | Maia Cohen | Matias Bernal | Agustin Segovia
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Datos + Script -->
+ <script>
+  // ===== Datos de adopción (dejá tu array tal cual) =====
+  const ADOPT = [
+    { id:'gato1', nombre:'Luna',  tipo:'Gato',  zona:'Villa Devoto', senas:'Muy tranquila y cariñosa.', refugio:'Lost & Found',              contact:'+54 11 4567-8901', img:'/assets/img/adoptar/gato1.jpg', fecha:'2025-09-06' },
+    { id:'gato2', nombre:'Mishi', tipo:'Gato',  zona:'Belgrano',     senas:'Castrado, muy sociable.',  refugio:'Animal Care',                 contact:'+54 11 4777-1212', img:'/assets/img/adoptar/gato2.jpg', fecha:'2025-09-05' },
+    { id:'gato3', nombre:'Simba', tipo:'Gato',  zona:'Colegiales',   senas:'Activo y curioso.',        refugio:'America Dog & Cat Hotel',     contact:'+54 11 4555-1111', img:'/assets/img/adoptar/gato3.jpg', fecha:'2025-09-04' },
+    { id:'gato4', nombre:'Copito',tipo:'Gato',  zona:'Recoleta',     senas:'Cariñoso y de pelo largo.',refugio:'Friends',                      contact:'+54 11 4511-9090', img:'/assets/img/adoptar/gato4.jpg', fecha:'2025-09-03' },
+    { id:'perro1',nombre:'Toby',  tipo:'Perro', zona:'Palermo',      senas:'Juguetón y leal.',         refugio:'Petland',                      contact:'+54 11 4000-8888', img:'/assets/img/adoptar/perro1.jpg', fecha:'2025-09-02' },
+    { id:'perro2',nombre:'Greta', tipo:'Perro', zona:'Colegiales',   senas:'Tranquila y obediente.',   refugio:'America Dog & Cat Hotel',     contact:'+54 11 4701-3344', img:'/assets/img/adoptar/perro2.jpg', fecha:'2025-09-02' },
+    { id:'perro3',nombre:'Duna',  tipo:'Perro', zona:'Caballito',    senas:'Ideal para departamento.', refugio:'Greenville',                   contact:'+54 11 4555-2020', img:'/assets/img/adoptar/perro3.jpg', fecha:'2025-09-01' },
+    { id:'perro4',nombre:'Rocky', tipo:'Perro', zona:'Villa Urquiza',senas:'Cariñoso con niños.',      refugio:'The Pets Hotel',               contact:'+54 11 4999-3030', img:'/assets/img/adoptar/perro4.jpg', fecha:'2025-09-01' },
+    { id:'perro5',nombre:'Bruno', tipo:'Perro', zona:'Belgrano',     senas:'Muy simpático y dormilón.',refugio:'Vida Animal',                  contact:'+54 11 4666-7070', img:'/assets/img/adoptar/perro5.jpg', fecha:'2025-08-31' },
+    { id:'perro6',nombre:'Max',   tipo:'Perro', zona:'Caballito',    senas:'Ágil y obediente.',        refugio:'Greenville',                   contact:'+54 11 4555-2020', img:'/assets/img/adoptar/perro6.jpg', fecha:'2025-08-30' }
+  ];
+
+  // ===== Presets p/ "Ficha rápida" (pool de etiquetas + iconos) =====
+  const PRESETS = {
+    personalidad: [
+      { label: "Cariñoso/a",   icon: "heart" },
+      { label: "Juguetón/a",   icon: "emoji-smile" },
+      { label: "Tranquilo/a",  icon: "wind" },
+      { label: "Guardian",     icon: "shield" }
+    ],
+    convivencia: [
+      { label: "Con niños",    icon: "people" },
+      { label: "Con perros",   icon: "hand-thumbs-up" },
+      { label: "Con gatos",    icon: "hand-thumbs-up" },
+      { label: "Apto depto",   icon: "house-door" }
+    ],
+    rutina: [
+      { label: "Energía",        icon: "lightning-charge" },
+      { label: "Paseos/día",     icon: "sun" },
+      { label: "Aprendizaje",    icon: "journal-check" },
+      { label: "Se queda solo",  icon: "clock" }
+    ]
+  };
+  const TRAIT_POOL = [
+    ...PRESETS.personalidad,
+    ...PRESETS.convivencia,
+    ...PRESETS.rutina
+  ];
+
+  // ===== Utils random =====
+  const rint  = (min,max)=> Math.floor(Math.random()*(max-min+1))+min;
+  const pick  = arr => arr[Math.floor(Math.random()*arr.length)];
+  const sample = (arr,n)=>{
+    const a = arr.slice();
+    for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+    return a.slice(0,n);
+  };
+
+  // Edad aleatoria: 3 meses a 15 años
+  function randAge(tipo){
+    const months = rint(3, 180);
+    if(months < 12) return `${months} ${months===1?'mes':'meses'}`;
+    const years = Math.floor(months/12);
+    return `${years} ${years===1?'año':'años'}`;
+  }
+
+  // Peso aleatorio por tipo
+  function randWeight(tipo){
+    if(tipo === 'Gato'){
+      return ( (Math.random()*3) + 3 ).toFixed(1) + ' kg'; // 3.0–6.0 kg
+    }
+    // Perro: chico/mediano/grande
+    const bucket = rint(1,3);
+    if(bucket===1) return rint(5,12)  + ' kg';
+    if(bucket===2) return rint(13,25) + ' kg';
+    return rint(26,45) + ' kg';
+  }
+
+  // Traits aleatorios (4) con score 1..5
+  function randTraits(){
+    return sample(TRAIT_POOL, 4).map(t => ({ ...t, score: rint(1,5) }));
+  }
+
+  // ===== Persistencia por sesión (evita que cambien al recargar) =====
+  const DECOR_KEY = 'petsit_adopt_decor_v1';
+  let DECOR_MAP = loadDecor();
+  function loadDecor(){
+    try { return JSON.parse(sessionStorage.getItem(DECOR_KEY)) || {}; }
+    catch { return {}; }
+  }
+  function saveDecor(){
+    sessionStorage.setItem(DECOR_KEY, JSON.stringify(DECOR_MAP));
+  }
+
+  // Asegura edad/peso/traits para cada mascota y los guarda en sessionStorage
+  function ensureDecor(p){
+    let rec = DECOR_MAP[p.id];
+    if(!rec){
+      rec = { edad: randAge(p.tipo), peso: randWeight(p.tipo), traits: randTraits() };
+      DECOR_MAP[p.id] = rec;
+      saveDecor();
+    }
+    Object.assign(p, rec);
+    return p;
+  }
+  ADOPT.forEach(ensureDecor);
+
+  // ====== Render / filtros / modal ======
+  const $grid=document.getElementById('adoptGrid'),
+        $empty=document.getElementById('adoptEmpty'),
+        $info=document.getElementById('adoptInfo');
+  const $q=document.getElementById('qAdopt'),
+        $tipo=document.getElementById('fTipo'),
+        $zona=document.getElementById('fZona'),
+        $ord=document.getElementById('fOrden');
+
+  const fmt=d=>new Date(d).toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit',year:'numeric'});
+  const fallback='https://images.unsplash.com/photo-1558944351-c8f7a309f1d2?q=80&w=1200&auto=format&fit=crop';
+
+  function render(list){
+    $grid.innerHTML='';
+    if(!list.length){$empty.classList.remove('d-none');$info.textContent='';return;}
+    $empty.classList.add('d-none');
+    const frag=document.createDocumentFragment();
+    list.forEach(p=>{
+      const col=document.createElement('div');col.className='col-sm-6 col-lg-4 d-flex';
+      const card=document.createElement('article');card.className='lost-card h-100';
+      const img=document.createElement('img');img.className='lost-img';img.src=p.img;img.alt=p.nombre;img.onerror=()=>img.src=fallback;img.addEventListener('click',()=>openModal(p));
+      const body=document.createElement('div');body.className='p-3 d-flex flex-column';
+      body.innerHTML=`<h3 class="lost-name">${p.nombre}</h3>
+        <div class="d-flex justify-content-between align-items-center text-muted small mb-2">
+          <span><i class="bi bi-geo-alt me-1"></i>${p.zona}</span>
+          <span><i class="bi bi-calendar-event me-1"></i>${fmt(p.fecha)}</span>
+        </div>
+        <div class="text-muted small mb-2"><i class="bi bi-house-heart me-1"></i>${p.refugio}</div>`;
+      const btn=document.createElement('button');btn.className='btn btn-outline-secondary mt-auto';btn.textContent='Ver datos';btn.addEventListener('click',()=>openModal(p));
+      body.append(btn);card.append(img,body);col.append(card);frag.append(col);
+    });
+    $grid.append(frag);$info.textContent=`${list.length} mascota(s) para adoptar`;
+  }
+
+  // Ficha rápida (barritas naranjas) — markup <div class="trait-meter"><span></span></div>
+  function renderTraits(items){
+    const list = document.getElementById('traitsList');
+    if (!list) return;
+    list.innerHTML = '';
+    items.forEach(({label, icon, score})=>{
+      const s = Math.max(0, Math.min(score ?? 0, 5));
+      const li = document.createElement('li');
+      li.className = 'trait';
+      li.innerHTML = `
+        <span class="trait-label"><i class="bi bi-${icon||'heart'} me-1"></i>${label}</span>
+        <div class="trait-meter" data-score="${s}"><span></span></div>
+      `;
+      list.appendChild(li);
+    });
+    // setear el ancho via CSS var --w
+    list.querySelectorAll('.trait-meter').forEach(m=>{
+      const s = +m.dataset.score || 0;
+      m.style.setProperty('--w', (s/5*100)+'%');
+      m.setAttribute('role','progressbar');
+      m.setAttribute('aria-valuemin','0');
+      m.setAttribute('aria-valuemax','5');
+      m.setAttribute('aria-valuenow', s);
+    });
+  }
+
+  function openModal(p){
+    ensureDecor(p); // asegura edad/peso/traits persistentes
+    const m=new bootstrap.Modal(document.getElementById('adoptModal'));
+    document.getElementById('amImg').src=p.img;
+    document.getElementById('amName').textContent=p.nombre;
+    document.getElementById('amTipo').textContent=`${p.tipo}`;
+    document.getElementById('amZona').textContent=p.zona||'—';
+    document.getElementById('amRefugio').textContent=p.refugio||'—';
+    document.getElementById('amEdad').textContent=p.edad||'—';
+    document.getElementById('amPeso').textContent=p.peso||'—';
+    document.getElementById('amSenas').textContent=p.senas||'—';
+    renderTraits(p.traits);
+
+    const tel=(p.contact||'').replace(/[^0-9+]/g,'');
+    const $c=document.getElementById('amContact');
+    $c.href=tel?`tel:${tel}`:'#';
+    $c.classList.toggle('disabled',!tel);
+    m.show();
+  }
+
+  function apply(){
+    const q=$q.value.toLowerCase().trim();let list=ADOPT.map(x=>({...x}));
+    if(q) list=list.filter(p=>(p.nombre||'').toLowerCase().includes(q)||(p.zona||'').toLowerCase().includes(q)||(p.senas||'').toLowerCase().includes(q)||(p.refugio||'').toLowerCase().includes(q));
+    if($tipo.value) list=list.filter(p=>p.tipo===$tipo.value);
+    if($zona.value) list=list.filter(p=>p.zona===$zona.value);
+    if($ord.value==='recent') list.sort((a,b)=>b.fecha.localeCompare(a.fecha));
+    if($ord.value==='zona') list.sort((a,b)=>(a.zona||'').localeCompare(b.zona||''));
+    if($ord.value==='nombre') list.sort((a,b)=>(a.nombre||'').localeCompare(b.nombre||''));
+    render(list);
+  }
+
+  [$q,$tipo,$zona,$ord].forEach(el=>el.addEventListener('input',apply));
+  apply();
+</script>
+
+</body>
+</html>

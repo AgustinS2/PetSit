@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Documento de mascota</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body class="petsit-bg">
+  <main class="container py-4">
+    <h1 class="about-title">Documento de la mascota</h1>
+    <div class="about-accent mb-3"></div>
+
+    <div id="docWrap" class="doc-wrap"></div>
+    <div id="docError" class="alert alert-warning d-none mt-3">
+      No encontramos la mascota. Es posible que el código o el registro hayan cambiado.
+    </div>
+    <a th:href="@{/petsit/index2}" class="btn btn-outline-secondary mt-3">Volver a PetSit</a>
+  </main>
+
+  <script>
+    (function(){
+      const params = new URLSearchParams(location.search);
+      const id = params.get('pid');
+      const wrap = document.getElementById('docWrap');
+      const err = document.getElementById('docError');
+
+      function loadPets(){
+        try { return JSON.parse(localStorage.getItem('petsit.pets')||'[]'); } catch { return []; }
+      }
+      const p = loadPets().find(x => x.id === id);
+      if(!p){
+        err.classList.remove('d-none');
+        return;
+      }
+      wrap.innerHTML = `
+        <img src="${p.image || 'assets/img/perro-hero.png'}" alt="${p.name}">
+        <div>
+          <h5>${p.name || ''}</h5>
+          <div class="muted">${[p.breed || '—', p.sex ? '· '+p.sex : '', p.birth ? '· '+new Date(p.birth).toLocaleDateString('es-AR') : ''].join(' ')}</div>
+          <hr>
+          <div><strong>Documento:</strong> ${p.doc || '—'}</div>
+          <div><strong>Contacto:</strong> ${p.contact || '—'}</div>
+        </div>
+      `;
+    })();
+  </script>
+</body>
+</html>
