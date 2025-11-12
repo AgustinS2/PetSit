@@ -22,6 +22,7 @@ import ar.edu.davinci.PetSit.exceptions.BusinessException;
 import ar.edu.davinci.PetSit.service.Usuario.UsuarioService;
 
 @Controller
+@RequestMapping("/petsit/usuarios")
 public class UsuarioController extends PetSitApp {
 	
 	private final Logger LOGGER = LoggerFactory.getLogger(UsuarioController.class);
@@ -29,6 +30,21 @@ public class UsuarioController extends PetSitApp {
 	@Autowired
 	private UsuarioService usuarioService;
 	
+    @GetMapping("/chat")
+	    public String chat() {
+	        return "usuarios/chat_usuarios"; // Renderiza templates/"""".html
+	}
+
+    @GetMapping("/perfil")
+	    public String perfilUsuario() {
+	        return "usuarios/perfil_usuarios"; // Renderiza templates/"""".html
+	}
+
+    @GetMapping("/index")
+	    public String indexUsuario() {
+	        return "usuarios/user_index"; // Renderiza templates/"""".html
+	}
+
 	@GetMapping(path = "/usuarios/list")
 	public String showUsuarioPage(Model model) {
 		LOGGER.info("GET - showUsuarioPage - /usuarios/list");

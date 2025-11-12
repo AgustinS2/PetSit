@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PetSit – Refugios</title>
+  <meta name="description" content="Encontrá refugios cercanos, buscá por nombre o ciudad y mirá su ficha de contacto.">
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Fuente Caudex -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caudex:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Iconos Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+  <!-- Estilos globales -->
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+
+  <!-- Favicons -->
+  <link rel="icon" th:href="@{/assets/favicon/favicon.ico}" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" th:href="@{/assets/favicon/favicon-32x32.png}">
+  <link rel="icon" type="image/png" sizes="16x16" th:href="@{/assets/favicon/favicon-16x16.png}">
+  <link rel="apple-touch-icon" sizes="180x180" th:href="@{/assets/favicon/apple-touch-icon.png}">
+  <link rel="manifest" href="/assets/favicon/site.webmanifest">
+  <meta name="theme-color" content="#0f6a67">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-nav border-bottom" aria-label="Navegación principal">
+      <div class="container-fluid px-3 px-md-4">
+        <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/petsit/index2}" aria-label="Inicio">
+          <img th:src="@{/assets/img/icons/logo.png}" alt="Logo PetSit" height="56">
+          <img th:src="@{/assets/img/Petsit.png}" alt="Marca PetSit" class="brand-name">
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+                aria-controls="mainNav" aria-expanded="false" aria-label="Abrir menú">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-center" id="mainNav">
+          <ul class="navbar-nav mx-auto nav-center gap-lg-4">
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/index}" aria-current="page">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/nosotros}">¿Quiénes somos?</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/contacto}">Contactanos</a></li>
+            <li class="nav-item"><a class="nav-link active" th:href="@{/petsit/refugios/list}">Refugios</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/veterinarias/list}">Veterinarias</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/mascotas/list}">Perdidos</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/login}">Iniciar sesión</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- CONTENIDO -->
+  <main class="refugios-wrap py-4 py-md-5">
+    <div class="container">
+
+      <div class="d-flex flex-column align-items-start mb-3">
+        <h1 class="about-title mb-1">Refugios</h1>
+        <div class="about-accent"></div>
+        <p class="refugios-subtitle mb-0">Encontrá refugios cercanos, buscá por nombre o ciudad y mirá su ficha de contacto.</p>
+      </div>
+
+      <!-- Buscador -->
+      <section class="search-block mb-4">
+        <form class="row g-3 align-items-center" role="search" onsubmit="return false;">
+          <div class="col-lg-6">
+            <div class="search-input-wrap">
+              <i class="bi bi-search" aria-hidden="true"></i>
+              <input id="qInput" type="search" class="form-control refugios-input"
+                     placeholder="Buscar refugios (nombre o ciudad)" autocomplete="off">
+            </div>
+          </div>
+
+          <div class="col-lg-6 refugios-actions d-flex flex-wrap gap-2 justify-content-lg-end">
+            <div class="d-flex align-items-center gap-2">
+              <label for="radiusSelect" class="text-muted small mb-0">Radio</label>
+              <select id="radiusSelect" class="form-select form-select-sm" style="width:auto;">
+                <option value="5">5 km</option>
+                <option value="10">10 km</option>
+                <option value="15">15 km</option>
+                <option value="25" selected>25 km</option>
+                <option value="50">50 km</option>
+              </select>
+            </div>
+            <button id="nearMeBtn" class="btn btn-outline-secondary" type="button">
+              <i class="bi bi-geo-alt" aria-hidden="true"></i> Cerca de mí
+            </button>
+            <button id="clearLocBtn" class="btn btn-outline-secondary d-none" type="button">
+              Limpiar ubicación
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <div id="resultsInfo" class="small text-muted mb-2" role="status" aria-live="polite"></div>
+      <div id="sheltersGrid" class="row g-4" aria-live="polite" aria-busy="false"></div>
+      <div id="emptyState" class="empty-state d-none mt-3" role="status" aria-live="polite">
+        No se encontraron refugios con los filtros actuales.
+      </div>
+    </div>
+  </main>
+
+  <!-- MODAL -->
+  <div class="modal fade" id="shelterModal" tabindex="-1" aria-labelledby="shelterModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content refugio-modal">
+        <div class="modal-header">
+          <h2 class="modal-title h5 m-0" id="shelterModalLabel">Refugio</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <img id="modalImg" src="" alt="Imagen del refugio" class="img-fluid rounded">
+            </div>
+            <div class="col-md-6">
+              <h3 class="h4 mb-2" id="modalName">Nombre</h3>
+              <div class="modal-contact mb-2">
+                <div><i class="bi bi-geo-alt" aria-hidden="true"></i> <span id="modalAddress">Dirección</span></div>
+                <div><i class="bi bi-telephone" aria-hidden="true"></i> <a id="modalPhone" href="#">Teléfono</a></div>
+                <div><i class="bi bi-clock" aria-hidden="true"></i> <span id="modalHours">Horarios</span></div>
+                <div class="mt-1 text-muted small"><span id="modalCity"></span></div>
+              </div>
+              <div id="modalDistanceWrap" class="mb-2 d-none">
+                <span class="badge-distance" id="modalDistance"></span>
+              </div>
+            </div>
+            <div class="col-12">
+              <iframe id="modalMap" class="map-embed" title="Mapa del refugio" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer mt-5">
+    <div class="container py-4">
+      <div class="row text-white">
+        <div class="col-md-4 mb-3">
+          <h6 class="fw-bold text-uppercase">Más información</h6>
+          <ul class="list-unstyled">
+            <li><a th:href="@{/petsit/home/contacto}" class="footer-link">Contactanos</a></li>
+            <li><a th:href="@{/petsit/home/nosotros}" class="footer-link">Sobre nosotros</a></li>
+          </ul>
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <h6 class="fw-bold text-uppercase">Legal</h6>
+          <ul class="list-unstyled">
+            <li><a href="#" class="footer-link">Políticas de privacidad</a></li>
+            <li><a href="#" class="footer-link">Términos de servicio</a></li>
+          </ul>
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <h6 class="fw-bold text-uppercase">Seguinos</h6>
+          <a href="#" class="footer-social me-2" aria-label="Facebook"><i class="bi bi-facebook" aria-hidden="true"></i></a>
+          <a href="#" class="footer-social me-2" aria-label="Instagram"><i class="bi bi-instagram" aria-hidden="true"></i></a>
+          <a href="#" class="footer-social" aria-label="Twitter/X"><i class="bi bi-twitter" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div class="text-center small mt-3 text-white">
+        Copyright 2025 © Escuela Da Vinci | Keila Degregorio | Maia Cohen | Matias Bernal | Agustin Segovia
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
+
+  <!-- SCRIPT PRINCIPAL (encapsulado) -->
+  <script>
+  (function initWhenReady(){
+    function init(){
+      // ===== Mock de refugios =====
+      const SHELTERS = [
+        { id:'arca', name:'Lost & Found', city:'Villa Devoto', address:'Av. Francisco Beiró 4567',
+          phone:'+54 11 4567-8901', hours:'Lun a Vie: 10–18 hs · Sáb: 10–14 hs',
+          lat:-34.6009, lon:-58.5159, img:'/assets/img/refugios/arca-peludos.png' },
+        { id:'cielo', name:'Animal Resource Center', city:'Caballito', address:'Neuquén 1234',
+          phone:'+54 11 4321-2222', hours:'Lun a Vie: 9–17 hs',
+          lat:-34.6178, lon:-58.4409, img:'/assets/img/refugios/cielo-mascotas.png' },
+        { id:'america', name:'America Dog & Cat Hotel', city:'Colegiales', address:'Zapiola 2230',
+          phone:'+54 11 4782-3010', hours:'Lun a Sáb: 9–19 hs',
+          lat:-34.5739, lon:-58.4518, img:'/assets/img/refugios/america.jpg' },
+        { id:'animalcare', name:'Animal Care', city:'Belgrano', address:'Juramento 2450',
+          phone:'+54 11 4786-1122', hours:'Lun a Vie: 10–18 hs · Sáb: 10–14 hs',
+          lat:-34.5619, lon:-58.4567, img:'/assets/img/refugios/animal-care.jpg' },
+        { id:'friends', name:'Friends', city:'Recoleta', address:'Av. Callao 980',
+          phone:'+54 11 4371-8899', hours:'Lun a Vie: 10–19 hs · Sáb: 10–15 hs',
+          lat:-34.5965, lon:-58.3931, img:'/assets/img/refugios/friends.jpg' },
+        { id:'greenville', name:'Greenville', city:'Caballito', address:'Av. Pedro Goyena 850',
+          phone:'+54 11 4901-3377', hours:'Lun a Vie: 9–18 hs',
+          lat:-34.6252, lon:-58.4367, img:'/assets/img/refugios/Greenville.jpg' },
+        { id:'petland', name:'Petland', city:'Palermo', address:'Av. Santa Fe 4100',
+          phone:'+54 11 4832-7700', hours:'Lun a Sáb: 10–20 hs',
+          lat:-34.5804, lon:-58.4165, img:'/assets/img/refugios/petland.jpg' },
+        { id:'petshotel', name:'The Pets Hotel', city:'Villa Urquiza', address:'Av. Monroe 5200',
+          phone:'+54 11 4543-2290', hours:'Lun a Dom: 9–20 hs',
+          lat:-34.5676, lon:-58.4889, img:'/assets/img/refugios/pets-hotel.jpg' },
+        { id:'vidaanimal', name:'Vida Animal', city:'Belgrano', address:'Virrey del Pino 2750',
+          phone:'+54 11 4781-5566', hours:'Lun a Vie: 10–18 hs · Sáb: 10–14 hs',
+          lat:-34.5628, lon:-58.4633, img:'/assets/img/refugios/vida-animal.jpg' }
+      ];
+
+      // ===== Refs UI =====
+      const $grid = document.getElementById('sheltersGrid');
+      const $empty = document.getElementById('emptyState');
+      const $q = document.getElementById('qInput');
+      const $nearMe = document.getElementById('nearMeBtn');
+      const $clearLoc = document.getElementById('clearLocBtn');
+      const $radius = document.getElementById('radiusSelect');
+      const $resultsInfo = document.getElementById('resultsInfo');
+
+      // Modal
+      const modalEl = document.getElementById('shelterModal');
+      const modal = new bootstrap.Modal(modalEl);
+      const $mImg = document.getElementById('modalImg');
+      const $mName = document.getElementById('modalName');
+      const $mAddress = document.getElementById('modalAddress');
+      const $mPhone = document.getElementById('modalPhone');
+      const $mHours = document.getElementById('modalHours');
+      const $mCity = document.getElementById('modalCity');
+      const $mMap = document.getElementById('modalMap');
+      const $mDist = document.getElementById('modalDistance');
+      const $mDistWrap = document.getElementById('modalDistanceWrap');
+
+      // ===== Helpers =====
+      let userLoc = null;
+      const toRad = deg => deg * Math.PI / 180;
+      function haversine(lat1, lon1, lat2, lon2){
+        const R = 6371;
+        const dLat = toRad(lat2-lat1);
+        const dLon = toRad(lon2-lon1);
+        const a = Math.sin(dLat/2)**2 +
+                  Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+                  Math.sin(dLon/2)**2;
+        return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
+      }
+      function gmapEmbed(lat, lon, q){
+        const query = encodeURIComponent(q || '');
+        return `https://maps.google.com/maps?q=${lat},${lon}%20${query}&hl=es&z=14&output=embed`;
+      }
+
+      // ===== Render =====
+      function render(list){
+        $grid.innerHTML = '';
+        if(!list.length){
+          $empty.classList.remove('d-none');
+          $resultsInfo.textContent = '';
+          return;
+        }
+        $empty.classList.add('d-none');
+
+        const frag = document.createDocumentFragment();
+        list.forEach(item => {
+          const col = document.createElement('div');
+          col.className = 'col-sm-6 col-lg-4';
+
+          const card = document.createElement('article');
+          card.className = 'shelter-card h-100';
+
+          const img = document.createElement('img');
+          img.className = 'shelter-img';
+          img.alt = `Foto de ${item.name}`;
+          img.loading = 'lazy';
+          img.src = item.img;
+          img.onerror = () => img.src = 'https://images.unsplash.com/photo-1558944351-c8f7a309f1d2?q=80&w=1200&auto=format&fit=crop';
+
+          const body = document.createElement('div');
+          body.className = 'p-3';
+
+          const name = document.createElement('h3');
+          name.className = 'shelter-name';
+          name.textContent = item.name;
+
+          const meta = document.createElement('div');
+          meta.className = 'shelter-meta d-flex align-items-center justify-content-between';
+          meta.innerHTML = `
+            <span><i class="bi bi-geo-alt" aria-hidden="true"></i> ${item.city}</span>
+            ${typeof item.distance === 'number' ? `<span class="badge-distance">${item.distance.toFixed(1)} km</span>` : ''}
+          `;
+
+          const btn = document.createElement('button');
+          btn.className = 'btn btn-outline-secondary mt-2';
+          btn.type = 'button';
+          btn.textContent = 'Ver más';
+          btn.addEventListener('click', () => openModal(item));
+
+          body.append(name, meta, btn);
+          card.append(img, body);
+          col.append(card);
+          frag.append(col);
+        });
+
+        $grid.append(frag);
+
+        const txtLoc = userLoc ? ` · filtrado por ubicación (${($radius.value)} km)` : '';
+        $resultsInfo.textContent = `${list.length} refugio(s) encontrados${txtLoc}`;
+      }
+
+      function openModal(item){
+        $mImg.src = item.img;
+        $mImg.onerror = () => $mImg.src = 'https://images.unsplash.com/photo-1558944351-c8f7a309f1d2?q=80&w=1200&auto=format&fit=crop';
+        $mName.textContent = item.name;
+        $mAddress.textContent = item.address || '—';
+        $mPhone.textContent = item.phone || '—';
+        $mPhone.href = item.phone ? `tel:${item.phone.replace(/[^0-9+]/g,'')}` : '#';
+        $mHours.textContent = item.hours || '—';
+        $mCity.textContent = item.city || '';
+
+        if(typeof item.distance === 'number'){
+          $mDist.textContent = `${item.distance.toFixed(1)} km`;
+          $mDistWrap.classList.remove('d-none');
+        }else{
+          $mDistWrap.classList.add('d-none');
+        }
+
+        $mMap.src = gmapEmbed(item.lat, item.lon, item.name);
+        modal.show();
+      }
+
+      function applyFilters(){
+        const q = $q.value.toLowerCase().trim();
+        const r = Number($radius.value);
+        let list = SHELTERS.map(s => ({...s}));
+
+        if(q){
+          list = list.filter(s =>
+            s.name.toLowerCase().includes(q) ||
+            (s.city && s.city.toLowerCase().includes(q)) ||
+            (s.address && s.address.toLowerCase().includes(q))
+          );
+        }
+
+        if(userLoc){
+          list.forEach(s => { s.distance = haversine(userLoc.lat, userLoc.lon, s.lat, s.lon); });
+          list = list.filter(s => s.distance <= r);
+          list.sort((a,b) => a.distance - b.distance);
+        }else{
+          list.forEach(s => delete s.distance);
+        }
+
+        render(list);
+      }
+
+      // ===== Eventos =====
+      $q.addEventListener('input', applyFilters);
+      $radius.addEventListener('change', applyFilters);
+
+      $nearMe.addEventListener('click', () => {
+        if(!navigator.geolocation){
+          alert('Tu navegador no soporta geolocalización.');
+          return;
+        }
+        $nearMe.disabled = true;
+        navigator.geolocation.getCurrentPosition(pos => {
+          userLoc = { lat: pos.coords.latitude, lon: pos.coords.longitude };
+          $nearMe.classList.add('d-none');
+          $clearLoc.classList.remove('d-none');
+          applyFilters();
+          $nearMe.disabled = false;
+        }, err => {
+          console.warn(err);
+          alert('No pudimos obtener tu ubicación. Revisá permisos del navegador.');
+          $nearMe.disabled = false;
+        }, { enableHighAccuracy:true, timeout:10000 });
+      });
+
+      $clearLoc.addEventListener('click', () => {
+        userLoc = null;
+        $nearMe.classList.remove('d-none');
+        $clearLoc.classList.add('d-none');
+        applyFilters();
+      });
+
+      // Init
+      render(SHELTERS);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init, { once:true });
+    } else {
+      init();
+    }
+  })();
+  </script>
+</body>
+</html>

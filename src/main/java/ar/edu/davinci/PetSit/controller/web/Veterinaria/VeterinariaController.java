@@ -16,13 +16,19 @@ import ar.edu.davinci.PetSit.exceptions.BusinessException;
 import ar.edu.davinci.PetSit.service.Veterinaria.VeterinariaService;
 
 @Controller
-@RequestMapping("/veterinarias")
+@RequestMapping("/petsit/veterinarias")
 public class VeterinariaController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(VeterinariaController.class);
 
     @Autowired
     private VeterinariaService veterinariaService;
+
+    @GetMapping("/index")
+	    public String indexVeterinaria() {
+	        return "veterinarias/list_veterinarias"; // Renderiza templates/index2.html
+	}
+
 
     @GetMapping("/list")
     public String listVeterinarias(Model model) {

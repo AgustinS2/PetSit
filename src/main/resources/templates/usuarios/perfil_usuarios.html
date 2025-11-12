@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PetSit – Mi perfil</title>
+
+  <!-- Bootstrap / Iconos / Fuente -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link href="https://fonts.googleapis.com/css2?family=Caudex:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Estilos del sitio -->
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+
+  <!-- Favicons -->
+  <link rel="icon" href="@{/assets/favicon/favicon.ico}" sizes="any">
+</head>
+<body class="in-app petsit-bg">
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-light bg-nav border-bottom">
+  <div class="container-fluid px-3 px-md-4">
+    <a class="navbar-brand d-flex align-items-center gap-2 app-home" th:href="@{/petsit/usuarios/user_index}" aria-label="Inicio menú usuario">
+      <img th:src="@{/assets/img/icons/logo.png}" alt="Logo PetSit" height="56">
+      <img th:src="@{/assets/img/Petsit.png}" alt="PetSit" class="brand-name">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+            aria-controls="mainNav" aria-expanded="false" aria-label="Abrir menú">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav me-auto nav-center gap-lg-3">
+        <li><a class="nav-link" th:href="@{/petsit/mascotas/mis-mascotas}">Mis mascotas</a></li>
+        <li><a class="nav-link" th:href="@{/petsit/veterinarias/index}">Veterinarias</a></li>
+        <li><a class="nav-link" th:href="@{/petsit/refugios/index}">Refugios</a></li>
+        <li><a class="nav-link" th:href="@{/petsit/mascotas/adoptar}">Adoptar</a></li>
+        <li><a class="nav-link" th:href="@{/petsit/mascotas/list}">Reportar</a></li>
+        <li><a class="nav-link" th:href="@{/petsit/usuarios/chat}">Chat</a></li>
+
+        <!-- MOBILE ONLY: perfil + logout -->
+        <li class="nav-item d-lg-none"><hr class="dropdown-divider my-2"></li>
+        <li class="nav-item d-lg-none">
+          <a class="nav-link d-flex align-items-center gap-2" th:href="@{/petsit/usuarios/perfil}">
+            <i class="bi bi-person-gear"></i> Mi perfil
+          </a>
+        </li>
+        <li class="nav-item d-lg-none">
+          <a class="nav-link d-flex align-items-center gap-2 text-danger" id="logoutBtnMobile" th:href="@{/petsit/usuarios/user_index}">
+            <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+          </a>
+        </li>
+      </ul>
+
+      <!-- Dropdown desktop -->
+      <ul class="navbar-nav ms-auto align-items-center d-none d-lg-flex">
+        <li class="nav-item dropdown">
+          <a class="nav-link user-chip dropdown-toggle d-flex align-items-center gap-2" href="#"
+             role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="user-avatar">
+              <img th:src="@{/assets/img/icons/perfil.png}" alt="Avatar usuario">
+            </span>
+            <span>Usuario</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end user-menu">
+            <li>
+              <a class="dropdown-item d-flex align-items-center gap-2" th:href="@{/petsit/usuarios/perfil}">
+                <i class="bi bi-person-gear"></i> Mi perfil
+              </a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+              <a class="dropdown-item text-danger d-flex align-items-center gap-2"
+                 id="logoutBtn" th:href="@{/petsit/index2}">
+                <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- PERFIL -->
+<main class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+
+      <div class="profile-card shadow-sm rounded-4 bg-white p-4">
+        <div class="row g-4 align-items-center">
+          <!-- Avatar + acciones -->
+          <div class="col-md-4 text-center">
+            <div class="profile-avatar mx-auto">
+              <img id="profilePic" th:src="@{/assets/img/icons/usuario.png}" alt="Foto de perfil">
+            </div>
+
+            <div class="d-flex justify-content-center gap-2 mt-3 flex-wrap">
+              <label for="uploadPic" class="btn btn-outline-secondary btn-sm rounded-pill">
+                <i class="bi bi-camera"></i> Subir foto
+              </label>
+              <button id="chooseAvatarBtn" class="btn btn-outline-primary btn-sm rounded-pill" type="button">
+                <i class="bi bi-images"></i> Elegir avatar
+              </button>
+              <input type="file" id="uploadPic" class="d-none" accept="image/*">
+            </div>
+          </div>
+
+          <!-- Info + stats -->
+          <div class="col-md-8">
+            <div class="d-flex align-items-center gap-2 mb-1">
+              <h2 class="h4 m-0">Información del usuario</h2>
+            </div>
+            <div class="badge profile-badge">Miembro desde 2025</div>
+
+            <dl class="row mb-0 profile-dl">
+              <dt class="col-sm-4">Nombre</dt>
+              <dd class="col-sm-8" id="pName">Keila Degregorio</dd>
+
+              <dt class="col-sm-4">Correo</dt>
+              <dd class="col-sm-8" id="pEmail">keila@example.com</dd>
+
+              <dt class="col-sm-4">Teléfono</dt>
+              <dd class="col-sm-8" id="pPhone">+54 11 5555-5555</dd>
+
+              <dt class="col-sm-4">Ciudad</dt>
+              <dd class="col-sm-8" id="pCity">Buenos Aires</dd>
+            </dl>
+
+            <div class="mt-4 d-flex justify-content-end gap-2 flex-wrap">
+              <button id="editBtn" class="btn btn-outline-secondary rounded-pill" type="button">
+                <i class="bi bi-pencil"></i> Editar perfil
+              </button>
+              <button id="logoutBtnProfile" class="btn btn-danger rounded-pill" type="button">
+                <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+              </button>
+            </div>
+
+            <!-- Mini-stats -->
+            <div class="row g-3 mt-3 profile-stats">
+              <div class="col-12 col-sm-6">
+                <div class="stat-card">
+                  <i class="bi bi-paw"></i>
+                  <div>
+                    <div class="stat-num" id="stPets">2</div>
+                    <div class="stat-label">Mascotas registradas</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-6">
+                <div class="stat-card">
+                  <i class="bi bi-heart"></i>
+                  <div>
+                    <div class="stat-num" id="stAdopt">1</div>
+                    <div class="stat-label">Adopciones</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div><!-- /col-md-8 -->
+        </div>
+      </div><!-- /profile-card -->
+
+      <!-- PREFERENCIAS + ALERTAS -->
+      <div class="row g-3 mt-3">
+        <!-- Preferencias -->
+        <div class="col-lg-6">
+          <div class="card shadow-sm rounded-4 p-3">
+            <h3 class="h6 mb-3">Preferencias y notificaciones</h3>
+
+            <div class="form-check form-switch mb-2">
+              <input class="form-check-input" type="checkbox" id="pf_email">
+              <label class="form-check-label" for="pf_email">Recibir avisos por correo</label>
+            </div>
+
+            <div class="form-check form-switch mb-2">
+              <input class="form-check-input" type="checkbox" id="pf_push">
+              <label class="form-check-label" for="pf_push">Notificaciones del navegador</label>
+            </div>
+
+            <div class="form-check form-switch mb-3">
+              <input class="form-check-input" type="checkbox" id="pf_news">
+              <label class="form-check-label" for="pf_news">Novedades y mejoras de PetSit</label>
+            </div>
+
+            <div class="d-flex justify-content-end">
+              <button id="btnSavePrefs" class="btn btn-primary btn-sm rounded-pill" type="button">Guardar preferencias</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Alertas -->
+        <div class="col-lg-6">
+          <div class="card shadow-sm rounded-4 p-3">
+            <h3 class="h6 mb-3">Alertas de adopción</h3>
+
+            <div class="row g-2">
+              <div class="col-md-6">
+                <label class="form-label small mb-1" for="al_tipo">Tipo</label>
+                <select id="al_tipo" class="form-select form-select-sm">
+                  <option value="">Cualquier tipo</option>
+                  <option>Perro</option>
+                  <option>Gato</option>
+                  <option>Otro</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small mb-1" for="al_tamano">Tamaño</label>
+                <select id="al_tamano" class="form-select form-select-sm">
+                  <option value="">Cualquiera</option>
+                  <option>Pequeño</option>
+                  <option>Mediano</option>
+                  <option>Grande</option>
+                </select>
+              </div>
+              <div class="col-12">
+                <label class="form-label small mb-1" for="al_zona">Zona</label>
+                <input id="al_zona" class="form-control form-control-sm" placeholder="Barrio / Ciudad">
+              </div>
+            </div>
+
+            <div class="form-check form-switch mt-2 mb-3">
+              <input class="form-check-input" type="checkbox" id="al_activo">
+              <label class="form-check-label" for="al_activo">Activar alertas</label>
+            </div>
+
+            <div class="d-flex justify-content-end">
+              <button id="btnSaveAlerts" class="btn btn-primary btn-sm rounded-pill" type="button">Guardar alertas</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<!-- MODAL: Selector de avatar -->
+<div class="modal fade" id="avatarModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content refugio-modal">
+      <div class="modal-header">
+        <h5 class="modal-title">Elegí tu avatar</h5>
+        <button class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <div class="avatar-surface p-3 rounded-3">
+          <div id="avatarGrid" class="row g-3" role="grid" aria-label="Galería de avatares"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-secondary" data-bs-dismiss="modal" type="button">Cancelar</button>
+        <button id="saveAvatarBtn" class="btn btn-primary" type="button" disabled>Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container py-4">
+    <div class="row text-white">
+      <div class="col-md-4 mb-3">
+        <h6 class="fw-bold text-uppercase">Más información</h6>
+        <ul class="list-unstyled">
+          <li><a th:href="@{/petsit/home/contacto}" class="footer-link">Contactanos</a></li>
+          <li><a th:href="@{/petsit/home/nosotros}" class="footer-link">Sobre nosotros</a></li>
+        </ul>
+      </div>
+      <div class="col-md-4 mb-3">
+        <h6 class="fw-bold text-uppercase">Legal</h6>
+        <ul class="list-unstyled">
+          <li><a href="#" class="footer-link">Políticas de privacidad</a></li>
+          <li><a href="#" class="footer-link">Términos de servicio</a></li>
+        </ul>
+      </div>
+      <div class="col-md-4 mb-3">
+        <h6 class="fw-bold text-uppercase">Seguinos</h6>
+        <a href="#" class="footer-social me-2"><i class="bi bi-facebook"></i></a>
+        <a href="#" class="footer-social me-2"><i class="bi bi-instagram"></i></a>
+        <a href="#" class="footer-social"><i class="bi bi-twitter"></i></a>
+      </div>
+    </div>
+    <div class="text-center small mt-3 text-white">
+      Copyright 2025 © Escuela Da Vinci | Keila Degregorio | Maia Cohen | Matias Bernal | Agustin Segovia
+    </div>
+  </div>
+</footer>
+
+<!-- JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  /* ===== Avatares ===== */
+  const AVATAR_COUNT = 14;
+  const AVATAR_PATH = i => `assets/img/avatar/avatar${i}.jpg`;
+  const KEY_AVATAR  = 'petsit_user_avatar';
+
+  const pic           = document.getElementById('profilePic');
+  const upload        = document.getElementById('uploadPic');
+  const chooseBtn     = document.getElementById('chooseAvatarBtn');
+  const saveAvatarBtn = document.getElementById('saveAvatarBtn');
+  const grid          = document.getElementById('avatarGrid');
+
+  (function loadAvatar(){
+    const saved = localStorage.getItem(KEY_AVATAR);
+    if (saved) pic.src = saved;
+  })();
+
+  upload.addEventListener('change', e => {
+    const f = e.target.files[0];
+    if(!f) return;
+    const url = URL.createObjectURL(f);
+    pic.onload = () => { try { URL.revokeObjectURL(url); } catch {} };
+    pic.src = url;
+    localStorage.setItem(KEY_AVATAR, url);
+  });
+
+  const avatarModal = new bootstrap.Modal(document.getElementById('avatarModal'));
+  let selected = null;
+
+  chooseBtn.addEventListener('click', () => {
+    renderGrid();
+    selected = null; saveAvatarBtn.disabled = true;
+    avatarModal.show();
+  });
+
+  function renderGrid(){
+    grid.innerHTML = '';
+    const frag = document.createDocumentFragment();
+    for(let i=1;i<=AVATAR_COUNT;i++){
+      const col = document.createElement('div');
+      col.className = 'col-6 col-sm-4 col-md-3';
+      col.innerHTML = `
+        <button type="button" class="avatar-item w-100 p-0 border-0 bg-transparent"
+                data-src="${AVATAR_PATH(i)}" aria-label="Avatar ${i}"
+                role="gridcell">
+          <img src="${AVATAR_PATH(i)}" class="img-fluid rounded-4 border avatar-img"
+               alt="Avatar ${i}" loading="lazy">
+        </button>`;
+      frag.appendChild(col);
+    }
+    grid.appendChild(frag);
+
+    grid.querySelectorAll('.avatar-item').forEach(btn=>{
+      const selectThis = () => {
+        grid.querySelectorAll('.avatar-img').forEach(img=>{
+          img.classList.remove('selected');
+          img.parentElement.setAttribute('aria-selected','false');
+        });
+        btn.querySelector('img').classList.add('selected');
+        btn.setAttribute('aria-selected','true');
+        selected = btn.dataset.src;
+        saveAvatarBtn.disabled = false;
+      };
+      btn.addEventListener('click', selectThis);
+      btn.addEventListener('keydown', (e)=>{
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectThis(); }
+      });
+    });
+  }
+
+  saveAvatarBtn.addEventListener('click', ()=>{
+    if(!selected) return;
+    pic.src = selected;
+    localStorage.setItem(KEY_AVATAR, selected);
+    avatarModal.hide();
+  });
+</script>
+
+<script>
+  /* ===== Preferencias ===== */
+  const KEY_PREFS = 'petsit_prefs';
+  const pf_email = document.getElementById('pf_email');
+  const pf_push  = document.getElementById('pf_push');
+  const pf_news  = document.getElementById('pf_news');
+  const btnSavePrefs = document.getElementById('btnSavePrefs');
+
+  (function initPrefs(){
+    try {
+      const p = JSON.parse(localStorage.getItem(KEY_PREFS)) || {};
+      pf_email.checked = !!p.email;
+      pf_push.checked  = !!p.push;
+      pf_news.checked  = !!p.news;
+    } catch {}
+    btnSavePrefs.addEventListener('click', ()=>{
+      const p = { email:pf_email.checked, push:pf_push.checked, news:pf_news.checked };
+      localStorage.setItem(KEY_PREFS, JSON.stringify(p));
+      toast('Preferencias guardadas');
+    });
+  })();
+
+  /* ===== Alertas ===== */
+  const KEY_ALERT = 'petsit_alerts';
+  const al_tipo   = document.getElementById('al_tipo');
+  const al_tamano = document.getElementById('al_tamano');
+  const al_zona   = document.getElementById('al_zona');
+  const al_activo = document.getElementById('al_activo');
+  const btnSaveAlerts = document.getElementById('btnSaveAlerts');
+
+  function toggleAlertControls(disabled){
+    [al_tipo, al_tamano, al_zona].forEach(el => el.disabled = disabled);
+  }
+
+  (function initAlerts(){
+    try {
+      const a = JSON.parse(localStorage.getItem(KEY_ALERT)) || {};
+      al_tipo.value   = a.tipo   || '';
+      al_tamano.value = a.tamano || '';
+      al_zona.value   = a.zona   || '';
+      al_activo.checked = !!a.activo;
+      toggleAlertControls(!al_activo.checked);
+    } catch {}
+    al_activo.addEventListener('change', ()=>toggleAlertControls(!al_activo.checked));
+    btnSaveAlerts.addEventListener('click', ()=>{
+      const a = {
+        tipo: al_tipo.value,
+        tamano: al_tamano.value,
+        zona: al_zona.value.trim(),
+        activo: al_activo.checked
+      };
+      localStorage.setItem(KEY_ALERT, JSON.stringify(a));
+      toast('Alertas guardadas');
+    });
+  })();
+
+  /* Mini toast */
+  function toast(msg){
+    const t = document.createElement('div');
+    t.textContent = msg;
+    t.style.cssText = `
+      position:fixed; bottom:18px; left:50%; transform:translateX(-50%);
+      background:rgba(0,0,0,.85); color:#fff; padding:.5rem .75rem; border-radius:12px;
+      z-index:1060; font-size:.9rem; box-shadow:0 6px 18px rgba(0,0,0,.2)`;
+    document.body.appendChild(t);
+    setTimeout(()=>t.remove(), 1800);
+  }
+
+  /* Acciones demo */
+  document.getElementById('editBtn').addEventListener('click', () => {
+    alert('Función de edición en desarrollo');
+  });
+  document.getElementById('logoutBtnProfile').addEventListener('click', () => {
+    if (confirm('¿Cerrar sesión?')) location.href = '/petsit/index2';
+  });
+</script>
+
+</body>
+</html>
