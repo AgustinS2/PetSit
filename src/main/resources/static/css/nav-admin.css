@@ -1,0 +1,200 @@
+/* =========================================================
+   NAV ADMIN (SCOPED) — .petsit-nav-admin + layout admin
+   Depende de core.css (tokens, bg, shadows, etc.)
+   ========================================================= */
+
+.page-admin{
+  background: var(--bg);
+}
+
+/* TOP NAV (igual vibe que nav-user: fixed + blur) */
+.petsit-nav-admin.navbar{
+  position: fixed;
+  top:0; left:0; right:0;
+  z-index:1030;
+  background: rgba(231,236,233,.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0,0,0,.06);
+  transition: background .25s ease, box-shadow .25s ease;
+}
+
+.petsit-nav-admin.navbar.is-scrolled{
+  background: rgba(231,236,233,.72);
+  box-shadow: 0 8px 22px rgba(0,0,0,.08);
+}
+
+/* Brand */
+.petsit-nav-admin .navbar-brand{
+  display:flex; align-items:center; gap:.5rem;
+}
+.petsit-nav-admin .navbar-brand img{height:44px;}
+.petsit-nav-admin .brand-name{height:28px;}
+
+.petsit-nav-admin .admin-pill{
+  display:inline-flex; align-items:center; gap:.45rem;
+  padding:.40rem .75rem;
+  border-radius:999px;
+  background: rgba(255,255,255,.55);
+  border: 1px solid rgba(15,106,103,.18);
+  color: var(--text);
+  font-weight:700;
+  letter-spacing:.04rem;
+  text-transform: uppercase;
+  font-size:.75rem;
+  white-space:nowrap;
+  box-shadow: var(--shadow-sm);
+}
+
+.petsit-nav-admin .admin-actions{
+  display:flex; align-items:center; gap:.5rem;
+}
+
+.petsit-nav-admin .icon-btn{
+  width:42px; height:42px;
+  border-radius:14px;
+  border:1px solid rgba(0,0,0,.08);
+  background: rgba(255,255,255,.70);
+  display:grid; place-items:center;
+  color: var(--brand);
+  box-shadow: 0 6px 16px rgba(0,0,0,.06);
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.petsit-nav-admin .icon-btn:hover{
+  transform: translateY(-1px);
+  background: rgba(255,255,255,.88);
+  box-shadow: 0 10px 22px rgba(0,0,0,.10);
+}
+
+/* User chip (clon vibe nav-user pero admin) */
+.petsit-nav-admin .admin-chip{
+  background: rgba(255,255,255,.55);
+  border: 1px solid rgba(15,106,103,.18);
+  padding: .40rem .85rem;
+  border-radius: 999px;
+  font-weight: 750;
+  font-size: .82rem;
+  letter-spacing: .04rem;
+  color: var(--brand);
+  box-shadow: 0 6px 16px rgba(0,0,0,.06);
+  transition: transform .15s ease, box-shadow .15s ease, background .15s ease, border-color .15s ease;
+  white-space: nowrap;
+}
+.petsit-nav-admin .admin-chip:hover{
+  background: rgba(255,255,255,.75);
+  border-color: rgba(15,106,103,.30);
+  box-shadow: 0 10px 22px rgba(0,0,0,.10);
+  transform: translateY(-1px);
+}
+
+.petsit-nav-admin .dropdown-menu.admin-menu{
+  border:1px solid rgba(37,90,54,.08);
+  border-radius:16px;
+  padding:.45rem;
+  min-width:230px;
+  box-shadow:0 18px 40px rgba(17,57,30,.12);
+  background:rgba(255,255,255,.92);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  overflow:hidden;
+}
+.petsit-nav-admin .dropdown-item{
+  border-radius:12px;
+  padding:.65rem .75rem;
+  font-weight:700;
+  color:#374151;
+  transition:background .15s ease, transform .12s ease;
+}
+.petsit-nav-admin .dropdown-item i{
+  font-size:1.05rem;
+  color: var(--brand);
+  opacity:.95;
+}
+.petsit-nav-admin .dropdown-item:hover{
+  background: rgba(15,106,103,.08);
+  transform: translateX(1px);
+}
+.petsit-nav-admin .dropdown-item.text-danger i{color:#b42318;}
+.petsit-nav-admin .dropdown-item.text-danger:hover{background:rgba(180,35,24,.08);}
+
+/* =========================================================
+   ADMIN SHELL (sidebar + content)
+   ========================================================= */
+
+.admin-shell{
+  display:grid;
+  grid-template-columns: 280px 1fr;
+  gap: 0;
+  min-height: calc(100vh - var(--nav-h));
+}
+
+.admin-aside{
+  background: rgba(255,255,255,.75);
+  border-right:1px solid rgba(0,0,0,.06);
+}
+
+.admin-aside-inner{
+  position: sticky;
+  top: var(--nav-h);
+  height: calc(100vh - var(--nav-h));
+  padding: 1rem;
+  display:flex;
+  flex-direction:column;
+  gap: 1rem;
+}
+
+.admin-aside-title{
+  font-weight:800;
+  color: var(--brand-600);
+  letter-spacing:.06rem;
+  text-transform: uppercase;
+  font-size:.78rem;
+}
+
+.admin-nav{
+  display:flex;
+  flex-direction:column;
+  gap:.25rem;
+}
+
+.admin-nav a{
+  display:flex;
+  align-items:center;
+  gap:.65rem;
+  padding:.65rem .75rem;
+  border-radius:16px;
+  text-decoration:none;
+  color:#374151;
+  border:1px solid transparent;
+  font-weight:700;
+}
+.admin-nav a i{font-size:1.05rem; color: var(--brand); opacity:.95;}
+.admin-nav a:hover{
+  background: rgba(15,106,103,.08);
+  border-color: rgba(0,0,0,.05);
+}
+.admin-nav a.active{
+  background: rgba(15,106,103,.12);
+  border-color: rgba(15,106,103,.18);
+  color: var(--text);
+}
+
+.admin-aside-foot{margin-top:auto;}
+.admin-health{
+  border:1px solid rgba(0,0,0,.06);
+  border-radius:18px;
+  padding:.9rem;
+  background: #fff;
+  box-shadow: var(--shadow-md);
+}
+.admin-health .k{font-size:.78rem; font-weight:800; color: var(--brand-600); text-transform:uppercase; letter-spacing:.06rem;}
+.admin-health .v{font-weight:800; color: var(--text);}
+.admin-health .m{margin-top:.35rem; color: rgba(0,0,0,.60); font-size:.9rem;}
+
+/* Responsive: sidebar off en mobile */
+@media (max-width: 991.98px){
+  .admin-shell{grid-template-columns: 1fr;}
+  .admin-aside{display:none;}
+  .petsit-nav-admin .navbar-brand img{height:40px;}
+  .petsit-nav-admin .brand-name{height:24px;}
+}

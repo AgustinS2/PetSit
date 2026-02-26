@@ -18,35 +18,39 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
   <!-- Estilos -->
-  <link th:href="@{/css/style.css}" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/core.css}">
+  <link rel="stylesheet" th:href="@{/css/nav-base.css}">
+  <link rel="stylesheet" th:href="@{/css/public.css}">
 
   <!-- Favicons -->
-  <link rel="icon" href="/assets/favicon/favicon.ico" sizes="any">
-  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
-  <link rel="manifest" href="/assets/favicon/site.webmanifest">
+  <link rel="icon" th:href="@{/assets/favicon/favicon.ico}" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" th:href="@{/assets/favicon/favicon-32x32.png}">
+  <link rel="icon" type="image/png" sizes="16x16" th:href="@{assets/favicon/favicon-16x16.png}">
+  <link rel="apple-touch-icon" sizes="180x180" th:href="@{assets/favicon/apple-touch-icon.png}">
+  <link rel="manifest" th:href="@{/assets/favicon/site.webmanifest}">
   <meta name="theme-color" content="#0f6a67">
 </head>
-<body>
+
+<body class="page-about">
 
   <!-- NAVBAR -->
   <header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-nav border-bottom" aria-label="Navegación principal">
+    <nav class="navbar navbar-expand-lg navbar-light bg-nav border-bottom">
       <div class="container-fluid px-3 px-md-4">
-        <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/petsit/index2}" aria-label="Inicio">
+        <!-- LOGO -->
+        <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/petsit/index}" aria-label="Inicio">
           <img src="/assets/img/icons/logo.png" alt="Logo PetSit" height="56">
           <img src="/assets/img/Petsit.png" alt="Marca PetSit" class="brand-name">
         </a>
-
+        <!-- TOGGLER -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
                 aria-controls="mainNav" aria-expanded="false" aria-label="Abrir menú">
           <span class="navbar-toggler-icon"></span>
         </button>
-
+        <!-- NAV -->
         <div class="collapse navbar-collapse justify-content-center" id="mainNav">
           <ul class="navbar-nav mx-auto nav-center gap-lg-4">
-            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/index2}" aria-current="page">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/index}" aria-current="page">Inicio</a></li>
             <li class="nav-item"><a class="nav-link active" th:href="@{/petsit/home/nosotros}">¿Quiénes somos?</a></li>
             <li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/contacto}">Contactanos</a></li>
             <li class="nav-item"><a class="nav-link" th:href="@{/petsit/refugios/list}">Refugios</a></li>
@@ -54,19 +58,23 @@
             <li class="nav-item"><a class="nav-link" th:href="@{/petsit/mascotas/list}">Perdidos</a></li>
             <li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/login}">Iniciar sesión</a></li>
           </ul>
+          <div class="nav-login ms-lg-2">
+            <a th:href="@{/petsit/home/login}" class="user-chip">INICIAR SESIÓN</a>
+          </div>
         </div>
+
       </div>
     </nav>
   </header>
 
   <!-- HERO / NOSOTROS -->
-  <section class="qs-hero hero-sticker about-hero" id="nosotros">
-    <div class="container hero-container">
-      <div class="row align-items-center">
+  <section class="qs-hero about-hero" id="nosotros">
+    <div class="container qs-hero__container">
+      <div class="row align-items-center gy-4">
         <div class="col-lg-6">
           <span class="about-kicker">Nosotros</span>
           <h1 class="about-title">Ayudamos a que mascotas y familias se reencuentren</h1>
-          <div class="about-accent"></div>
+          <div class="about-accent" aria-hidden="true"></div>
 
           <p class="about-copy">
             Somos estudiantes de la <strong>Escuela Da Vinci</strong> y nos apasionan los animales.
@@ -79,12 +87,16 @@
             y promover la <strong>tenencia responsable</strong> con herramientas simples y confiables.
           </p>
 
-          <a href="#equipo" class="about-btn">Conocé el equipo</a>
+          <a href="#equipo" class="about-btn">
+            Conocé el equipo <i class="bi bi-arrow-down-short" aria-hidden="true"></i>
+          </a>
         </div>
 
-        <!-- Imagen-->
-        <div class="col-lg-6 position-relative">
-          <img src="assets/img/perro-hero.png" class="hero-dog" alt="" aria-hidden="true">
+        <!-- Imagen -->
+        <div class="col-lg-6">
+          <div class="qs-hero__art" aria-hidden="true">
+            <img th:src="@{/assets/img/perro-hero.png}" class="hero-dog" alt="">
+          </div>
         </div>
       </div>
     </div>
@@ -99,12 +111,15 @@
 
       <!-- Valores -->
       <section class="mb-4 mb-md-5" aria-labelledby="valoresTitle">
-        <h2 id="valoresTitle" class="visually-hidden">Valores</h2>
+        <h2 id="valoresTitle" class="qs-section-title">Nuestros pilares</h2>
+        <div class="about-accent" aria-hidden="true"></div>
+        <p class="qs-intro">Lo que guía cada decisión en PetSit.</p>
+
         <div class="row g-4">
           <div class="col-12 col-sm-6 col-lg-3">
             <div class="qs-card h-100 p-4 text-center">
               <div class="qs-icon mb-2">
-                <img src="assets/img/icons/nuestra-mision.png" alt="Nuestra misión" class="qs-icon-img">
+                <img th:src="@{/assets/img/icons/nuestra-mision.png}" alt="" class="qs-icon-img" aria-hidden="true">
               </div>
               <h3 class="qs-h3">Misión</h3>
               <p>Impulsar el bienestar animal y la reunificación rápida de mascotas, promoviendo una comunidad solidaria y responsable.</p>
@@ -114,7 +129,7 @@
           <div class="col-12 col-sm-6 col-lg-3">
             <div class="qs-card h-100 p-4 text-center">
               <div class="qs-icon mb-2">
-                <img src="assets/img/icons/nuestra-vision.png" alt="Nuestra visión" class="qs-icon-img">
+                <img th:src="@{/assets/img/icons/nuestra-vision.png}" alt="" class="qs-icon-img" aria-hidden="true">
               </div>
               <h3 class="qs-h3">Visión</h3>
               <p>Una sociedad donde ninguna mascota se quede sin hogar y el cuidado responsable sea parte de la cultura.</p>
@@ -124,7 +139,7 @@
           <div class="col-12 col-sm-6 col-lg-3">
             <div class="qs-card h-100 p-4 text-center">
               <div class="qs-icon mb-2">
-                <img src="assets/img/icons/etica-empresarial.png" alt="Ética empresarial" class="qs-icon-img">
+                <img th:src="@{/assets/img/icons/etica-empresarial.png}" alt="" class="qs-icon-img" aria-hidden="true">
               </div>
               <h3 class="qs-h3">Ética</h3>
               <p>Transparencia, responsabilidad y foco en el interés de los animales en cada decisión.</p>
@@ -134,7 +149,7 @@
           <div class="col-12 col-sm-6 col-lg-3">
             <div class="qs-card h-100 p-4 text-center">
               <div class="qs-icon mb-2">
-                <img src="assets/img/icons/objetivo.png" alt="Nuestro objetivo" class="qs-icon-img">
+                <img th:src="@{/assets/img/icons/objetivo.png}" alt="" class="qs-icon-img" aria-hidden="true">
               </div>
               <h3 class="qs-h3">Objetivo</h3>
               <p>Crear una comunidad comprometida con la protección, la adopción responsable y la reunificación de mascotas con sus familias.</p>
@@ -144,65 +159,81 @@
       </section>
 
       <!-- Nuestros Servicios -->
-      <section class="services py-2 py-md-3" aria-labelledby="serviciosTitle">
-        <h2 id="serviciosTitle" class="about-title">Nuestros servicios</h2>
-        <div class="about-accent"></div>
-        <p class="qs-intro mb-4">Todo lo que necesitás para cuidar y localizar a tus mascotas.</p>
+      <section class="qs-services py-2 py-md-3 page-about" aria-labelledby="serviciosTitle">
+        <h2 id="serviciosTitle" class="qs-section-title">Nuestros servicios</h2>
+        <div class="about-accent" aria-hidden="true"></div>
+        <p class="qs-intro mb-4">
+          Todo lo que necesitás para cuidar y localizar a tus mascotas.
+        </p>
 
         <div class="row g-4 justify-content-center">
+
           <div class="col-sm-6 col-lg-4">
-            <div class="service-card h-100 text-center">
-              <img src="assets/img/icons/qr.png" class="service-img" alt="Registro y código QR">
-              <h3 class="h5 mt-3">Registro y QR</h3>
-              <p>Código QR único con datos de contacto para volver a casa más rápido.</p>
+            <div class="service-card h-100">
+              <div class="service-icon" aria-hidden="true"><i class="bi bi-qr-code"></i></div>
+              <div class="service-body">
+                <h3 class="h5">Registro y QR</h3>
+                <p>Código QR único con datos de contacto para volver a casa más rápido.</p>
+              </div>
             </div>
           </div>
 
           <div class="col-sm-6 col-lg-4">
-            <div class="service-card h-100 text-center">
-              <img src="assets/img/icons/buscar-refugio.png" class="service-img" alt="Búsqueda de refugios">
-              <h3 class="h5 mt-3">Refugios</h3>
-              <p>Conocé refugios cercanos.</p>
+            <div class="service-card h-100">
+              <div class="service-icon" aria-hidden="true"><i class="bi bi-house-heart"></i></div>
+              <div class="service-body">
+                <h3 class="h5">Refugios</h3>
+                <p>Conocé refugios cercanos.</p>
+              </div>
             </div>
           </div>
 
           <div class="col-sm-6 col-lg-4">
-            <div class="service-card h-100 text-center">
-              <img src="assets/img/icons/veterinario.png" class="service-img" alt="Clínicas veterinarias">
-              <h3 class="h5 mt-3">Veterinarias</h3>
-              <p>Clínicas cercanas, guardias y visitas a domicilio.</p>
+            <div class="service-card h-100">
+              <div class="service-icon" aria-hidden="true"><i class="bi bi-hospital"></i></div>
+              <div class="service-body">
+                <h3 class="h5">Veterinarias</h3>
+                <p>Clínicas cercanas, guardias y visitas a domicilio.</p>
+              </div>
             </div>
           </div>
 
           <div class="col-sm-6 col-lg-4">
-            <div class="service-card h-100 text-center">
-              <img src="assets/img/icons/reportar-mascota.png" class="service-img" alt="Reportar mascotas perdidas">
-              <h3 class="h5 mt-3">Mascotas perdidas</h3>
-              <p>Publicá o buscá avisos para reencontrarse cuanto antes.</p>
+            <div class="service-card h-100">
+              <div class="service-icon" aria-hidden="true"><i class="bi bi-exclamation-triangle"></i></div>
+              <div class="service-body">
+                <h3 class="h5">Mascotas perdidas</h3>
+                <p>Publicá o buscá avisos para reencontrarse cuanto antes.</p>
+              </div>
             </div>
           </div>
 
           <div class="col-sm-6 col-lg-4">
-            <div class="service-card h-100 text-center">
-              <img src="assets/img/icons/mis-mascotas.png" class="service-img" alt="Adopciones responsables">
-              <h3 class="h5 mt-3">Adopciones</h3>
-              <p>Adoptá con responsabilidad y encontrá tu nuevo compañero.</p>
+            <div class="service-card h-100">
+              <div class="service-icon" aria-hidden="true"><i class="bi bi-heart"></i></div>
+              <div class="service-body">
+                <h3 class="h5">Adopciones</h3>
+                <p>Adoptá con responsabilidad y encontrá tu nuevo compañero.</p>
+              </div>
             </div>
           </div>
+
+
         </div>
       </section>
 
+
       <!-- Equipo -->
-      <section class="team-tiles" id="equipo" aria-labelledby="equipoTitle">
-        <h2 id="equipoTitle" class="about-title">Nuestro equipo</h2>
-        <div class="about-accent"></div>
-        <p class="qs-intro mb-4">El equipo detrás de PetSit: personas que diseñan, construyen y cuidan la experiencia.</p>
+      <section class="team-tiles mt-5" id="equipo" aria-labelledby="equipoTitle">
+        <h2 id="equipoTitle" class="qs-section-title">Nuestro equipo</h2>
+        <div class="about-accent" aria-hidden="true"></div>
+        <p class="qs-intro mb-4">Personas que diseñan, construyen y cuidan la experiencia.</p>
 
         <div class="team-tiles__grid">
           <article class="member-card mod-teal">
-            <div class="member-card__accent"></div>
+            <div class="member-card__accent" aria-hidden="true"></div>
             <div class="member-card__avatar">
-              <img src="assets/img/equipo/agustin.jpg" alt="Agustín Segovia">
+              <img th:src="@{/assets/img/equipo/agustin.jpg}" alt="Agustín Segovia">
             </div>
             <p class="member-card__bio">Lidera la estrategia técnica y garantiza una base sólida y segura para la plataforma.</p>
             <div class="member-card__footer">
@@ -212,9 +243,9 @@
           </article>
 
           <article class="member-card mod-green">
-            <div class="member-card__accent"></div>
+            <div class="member-card__accent" aria-hidden="true"></div>
             <div class="member-card__avatar">
-              <img src="assets/img/equipo/maia.jpg" alt="Maia Cohen">
+              <img th:src="@{/assets/img/equipo/maia.jpg}" alt="Maia Cohen">
             </div>
             <p class="member-card__bio">Optimiza la eficiencia del back-end y coordina hitos para entregar funcionalidades clave.</p>
             <div class="member-card__footer">
@@ -224,9 +255,9 @@
           </article>
 
           <article class="member-card mod-blue">
-            <div class="member-card__accent"></div>
+            <div class="member-card__accent" aria-hidden="true"></div>
             <div class="member-card__avatar">
-              <img src="assets/img/equipo/mati.jpg" alt="Matías Bernal">
+              <img th:src="@{/assets/img/equipo/mati.jpg}" alt="Matías Bernal">
             </div>
             <p class="member-card__bio">Asegura la seguridad y la documentación clara del proyecto; apoya acciones de marketing técnico.</p>
             <div class="member-card__footer">
@@ -236,9 +267,9 @@
           </article>
 
           <article class="member-card mod-orange">
-            <div class="member-card__accent"></div>
+            <div class="member-card__accent" aria-hidden="true"></div>
             <div class="member-card__avatar">
-              <img src="assets/img/equipo/kei.jpg" alt="Keila Degregorio">
+              <img th:src="@{/assets/img/equipo/kei.jpg}" alt="Keila Degregorio">
             </div>
             <p class="member-card__bio">Define la identidad visual y UX; lidera el front-end y la estrategia de marketing del producto.</p>
             <div class="member-card__footer">
@@ -260,8 +291,8 @@
           <h2 class="visually-hidden">Enlaces del sitio</h2>
           <h6 class="fw-bold text-uppercase">Más información</h6>
           <ul class="list-unstyled">
-            <li><a th:href="@{contacto.html}" class="footer-link">Contactanos</a></li>
-            <li><a th:href="@{quienes-somos.html}" class="footer-link">Sobre nosotros</a></li>
+            <li><a th:href="@{/petsit/contacto}" class="footer-link">Contactanos</a></li>
+            <li><a th:href="@{/petsit/quienes-somos}" class="footer-link">Sobre nosotros</a></li>
           </ul>
         </div>
 
@@ -288,5 +319,10 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
-</body>
+  <script>
+    const nav = document.querySelector('.navbar');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('is-scrolled', window.scrollY > 12);
+    });
+  </script>
 </html>

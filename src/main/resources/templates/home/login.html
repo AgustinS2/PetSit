@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PetSit – Iniciar sesión</title>
 
   <!-- Bootstrap + Icons + Fuente -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
   <link href="https://fonts.googleapis.com/css2?family=Caudex:wght@400;700&display=swap" rel="stylesheet">
 
-  <!-- CSS global -->
-  <link th:href="@{/css/style.css}" rel="stylesheet">
+  <!-- Estilos -->
+  <link rel="stylesheet" th:href="@{/css/core.css}">
+  <link rel="stylesheet" th:href="@{/css/nav-base.css}">
+  <link rel="stylesheet" th:href="@{/css/public.css}">
 
   <!-- Favicons -->
   <link rel="icon" th:href="@{/assets/favicon/favicon.ico}" sizes="any">
@@ -22,131 +24,172 @@
   <link rel="manifest" th:href="@{/assets/favicon/site.webmanifest}">
   <meta name="theme-color" content="#0f6a67">
 </head>
+
 <body class="login-page">
 
-  <!-- NAVBAR -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-nav border-bottom">
-    <div class="container-fluid px-3 px-md-4">
-      <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/petsit/index2}" aria-label="Inicio">
-        <img th:src="@{/assets/img/icons/logo.png}" alt="Logo PetSit" height="56">
-        <img th:src="@{/assets/img/Petsit.png}" alt="PetSit nombre" class="brand-name">
-      </a>
 
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
-              aria-controls="mainNav" aria-expanded="false" aria-label="Abrir menú">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-light bg-nav border-bottom">
+  <div class="container-fluid px-3 px-md-4">
 
-      <div class="collapse navbar-collapse justify-content-center" id="mainNav">
-          <ul class="navbar-nav mx-auto nav-center gap-lg-4">
-            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/index}" aria-current="page">Inicio</a></li>
-            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/nosotros}">¿Quiénes somos?</a></li>
-            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/contacto}">Contactanos</a></li>
-            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/refugios/list}">Refugios</a></li>
-            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/veterinarias/list}">Veterinarias</a></li>
-            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/mascotas/list}">Perdidos</a></li>
-            <li class="nav-item"><a class="nav-link active" th:href="@{/petsit/home/login}">Iniciar sesión</a></li>
-          </ul>
-        </div>
+    <!-- LOGO -->
+    <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/petsit/index}">
+      <img th:src="@{/assets/img/icons/logo.png}" alt="Logo PetSit">
+      <img th:src="@{/assets/img/Petsit.png}" alt="PetSit" class="brand-name">
+    </a>
+
+    <!-- TOGGLER -->
+    <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse" data-bs-target="#mainNav"
+            aria-controls="mainNav" aria-expanded="false" aria-label="Abrir menú">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- NAV -->
+    <div class="collapse navbar-collapse" id="mainNav">
+
+      <ul class="navbar-nav ms-auto nav-links">
+        <li class="nav-item"><a class="nav-link active" th:href="@{/petsit/index}" aria-current="page">Inicio</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/nosotros}">¿Quiénes somos?</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/contacto}">Contactanos</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/petsit/refugios/index}">Refugios</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/petsit/alertas/mapa}">Mapa</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/petsit/veterinarias/index}">Veterinarias</a></li>
+      </ul>
+
+      <!-- LOGIN -->
+      <div class="nav-login ms-lg-2">
+        <a th:href="@{/petsit/home/login}" class="user-chip">INICIAR SESIÓN</a>
+      </div>
+
     </div>
-  </nav>
+  </div>
+</nav>
 
-  <!-- CONTENIDO -->
-  <main class="login-wrap">
-    <section class="login-card" role="dialog" aria-labelledby="loginTitle">
-      <img src="/assets/img/Login-logo.png" alt="PetSit" class="login-logo">
-      <h1 id="loginTitle" class="visually-hidden">Iniciar sesión</h1>
 
-      <!-- Form sin validación -->
-      <form id="loginForm" class="login-form" novalidate>
-        <div class="mb-3">
-          <label for="email" class="form-label">Email</label>
-          <input id="email" type="email" class="login-input form-control" placeholder="tu@correo.com">
-        </div>
+<!-- CONTENIDO -->
+<main class="login-wrap">
+  <section class="login-card" role="dialog" aria-labelledby="loginTitle">
+    <img th:src="@{/assets/img/Login-logo.png}" alt="PetSit" class="login-logo">
+    <h1 id="loginTitle" class="visually-hidden">Iniciar sesión</h1>
 
-        <div class="mb-3">
-          <label for="password" class="form-label">Contraseña</label>
-          <div class="input-group">
-            <input id="password" type="password" class="login-input form-control" placeholder="••••••••">
-            <button type="button" id="togglePass"
-                    style="border:none; background:transparent; padding:0 0.75rem; color:#0f4f4f;"
-                    aria-label="Mostrar u ocultar contraseña">
-              <i class="bi bi-eye"></i>
-            </button>
-          </div>
-        </div>
+    <!-- Form sin validación -->
+    <form id="loginForm" class="login-form" novalidate>
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input id="email" type="email" class="login-input form-control" placeholder="tu@correo.com">
+      </div>
 
-        <div class="form-check mb-3">
-          <input class="form-check-input" type="checkbox" id="rememberMe">
-          <label class="form-check-label" for="rememberMe">Recordarme</label>
-        </div>
-
-        <button type="submit" class="login-btn w-100 mt-2">Iniciar sesión</button>
-
-        <div class="login-links text-center mt-3">
-          <a th:href="@{/petsit/home/recuperarpass}">Recuperar contraseña</a>
-          <span class="text-muted">·</span>
-          <a th:href="@{/petsit/home/index.html#registro}">Crear cuenta</a>
-        </div>
-      </form>
-
-      <!-- Perros decorativos -->
-      <img th:src="@{/assets/img/login2.png}" class="login-dog login-dog-left"  alt="" loading="lazy" aria-hidden="true">
-      <img th:src="@{/assets/img/login1.png}" class="login-dog login-dog-right" alt="" loading="lazy" aria-hidden="true">
-    </section>
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="footer mt-5">
-    <div class="container py-4">
-      <div class="row text-white">
-        <div class="col-md-4 mb-3">
-          <h6 class="fw-bold text-uppercase">Más información</h6>
-          <ul class="list-unstyled">
-            <li><a th:href="@{/petsit/home/contacto}" class="footer-link">Contactanos</a></li>
-            <li><a th:href="@{/petsit/home/nosotros}" class="footer-link">Sobre nosotros</a></li>
-          </ul>
-        </div>
-
-        <div class="col-md-4 mb-3">
-          <h6 class="fw-bold text-uppercase">Legal</h6>
-          <ul class="list-unstyled">
-            <li><a href="#" class="footer-link">Políticas de privacidad</a></li>
-            <li><a href="#" class="footer-link">Términos de servicio</a></li>
-          </ul>
-        </div>
-
-        <div class="col-md-4 mb-3">
-          <h6 class="fw-bold text-uppercase">Seguinos</h6>
-          <a href="#" class="footer-social me-2"><i class="bi bi-facebook"></i></a>
-          <a href="#" class="footer-social me-2"><i class="bi bi-instagram"></i></a>
-          <a href="#" class="footer-social"><i class="bi bi-twitter"></i></a>
+      <div class="mb-3">
+        <label for="password" class="form-label">Contraseña</label>
+        <div class="input-wrap">
+          <input id="password" type="password" class="login-input form-control" placeholder="••••••••">
+          <button type="button" id="togglePass"
+                  style="border:none; background:transparent; padding:0 0.75rem; color:#0f4f4f;"
+                  aria-label="Mostrar u ocultar contraseña">
+            <i class="bi bi-eye"></i>
+          </button>
         </div>
       </div>
 
-      <div class="text-center small mt-3 text-white">
-        Copyright 2025 © Escuela Da Vinci | Keila Degregorio | Maia Cohen | Matias Bernal | Agustin Segovia
+      <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" id="rememberMe">
+        <label class="form-check-label" for="rememberMe">Recordarme</label>
+      </div>
+
+      <button type="submit" class="login-btn w-100 mt-2">Iniciar sesión</button>
+
+      <div class="login-links text-center mt-3">
+        <a th:href="@{/petsit/home/recuperarpass}">Recuperar contraseña</a>
+        <span class="text-muted">·</span>
+        <a th:href="@{/petsit/home/registro}">Crear cuenta</a>
+      </div>
+    </form>
+
+    <!-- Perros decorativos -->
+    <img th:src="@{/assets/img/login2.png}" class="login-dog login-dog-left"  alt="" loading="lazy" aria-hidden="true">
+    <img th:src="@{/assets/img/login1.png}" class="login-dog login-dog-right" alt="" loading="lazy" aria-hidden="true">
+  </section>
+</main>
+
+<!-- FOOTER -->
+<footer class="footer mt-5">
+  <div class="container py-4">
+    <div class="row text-white">
+      <div class="col-md-4 mb-3">
+        <h6 class="fw-bold text-uppercase">Más información</h6>
+        <ul class="list-unstyled">
+          <li><a th:href="@{/petsit/home/contacto}" class="footer-link">Contactanos</a></li>
+          <li><a th:href="@{/petsit/home/nosotros}" class="footer-link">Sobre nosotros</a></li>
+        </ul>
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <h6 class="fw-bold text-uppercase">Legal</h6>
+        <ul class="list-unstyled">
+          <li><a href="#" class="footer-link">Políticas de privacidad</a></li>
+          <li><a href="#" class="footer-link">Términos de servicio</a></li>
+        </ul>
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <h6 class="fw-bold text-uppercase">Seguinos</h6>
+        <a href="#" class="footer-social me-2"><i class="bi bi-facebook"></i></a>
+        <a href="#" class="footer-social me-2"><i class="bi bi-instagram"></i></a>
+        <a href="#" class="footer-social"><i class="bi bi-twitter"></i></a>
       </div>
     </div>
-  </footer>
 
-  <!-- JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    // Mostrar / ocultar contraseña
-    const $pass = document.getElementById('password');
-    const $toggle = document.getElementById('togglePass');
-    $toggle.addEventListener('click', () => {
-      const isText = $pass.type === 'text';
-      $pass.type = isText ? 'password' : 'text';
-      $toggle.innerHTML = isText ? '<i class="bi bi-eye"></i>' : '<i class="bi bi-eye-slash"></i>';
-    });
+    <div class="text-center small mt-3 text-white">
+      Copyright 2025 © Escuela Da Vinci | Keila Degregorio | Maia Cohen | Matias Bernal | Agustin Segovia
+    </div>
+  </div>
+</footer>
 
-    // Redirigir directamente al menú de usuario
-    document.getElementById('loginForm').addEventListener('submit', e => {
-      e.preventDefault();
-      window.location.href = '/petsit/usuarios/index';
+<!-- JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Mostrar / ocultar contraseña
+  const $pass = document.getElementById('password');
+  const $toggle = document.getElementById('togglePass');
+  $toggle.addEventListener('click', () => {
+    const isText = $pass.type === 'text';
+    $pass.type = isText ? 'password' : 'text';
+    $toggle.innerHTML = isText ? '<i class="bi bi-eye"></i>' : '<i class="bi bi-eye-slash"></i>';
+  });
+
+  // LOGIN ÚNICO (stub sin backend)
+  // Regla: si el mail termina en @petsit.com o es admin@petsit.com -> admin
+  // (Cuando haya backend: reemplazar esto por la respuesta real del servidor)
+  document.getElementById('loginForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const email = (document.getElementById('email').value || '').trim().toLowerCase();
+
+    const isAdmin =
+            email === 'admin@petsit.com' ||
+            email.endsWith('@petsit.com');
+
+    sessionStorage.setItem('petsit_role', isAdmin ? 'admin' : 'user');
+    window.location.href = '/petsit/usuarios/index';
+    //window.location.href = isAdmin
+    //  ? '/petsit/admin-panel/index'
+    // : '/petsit/usuarios/index';
+  });
+</script>
+
+
+<script>
+  document.querySelectorAll('#mainNav a').forEach(a=>{
+    a.addEventListener('click', () => {
+      const nav = document.getElementById('mainNav');
+      if (nav.classList.contains('show')) {
+        bootstrap.Collapse.getOrCreateInstance(nav).hide();
+      }
     });
-  </script>
+  });
+</script>
+
+
 </body>
 </html>

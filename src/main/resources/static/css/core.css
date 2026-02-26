@@ -1,0 +1,151 @@
+/* =========================================================
+   TOKENS + BASE (GLOBAL)
+   ========================================================= */
+:root{
+    --brand:#0f6a67;
+    --brand-600:#0c5553;
+    --brand-soft:#e9f3f1;
+
+    --text:#0f4f4f;
+    --muted:#6b7280;
+    --bg:#eef1ef;
+    --card-bg:#fff;
+    --card-stroke:rgba(0,0,0,.06);
+
+    --shadow-sm:0 4px 12px rgba(0,0,0,.05);
+    --shadow-md:0 6px 18px rgba(0,0,0,.08);
+    --shadow-lg:0 18px 36px rgba(0,0,0,.08);
+
+    --brand-width:clamp(140px,16vw,240px);
+    --gap-left:clamp(.6rem,3vw,2.4rem);
+    --gap-right:clamp(.6rem,3vw,2.4rem);
+
+    --blob-teal:rgba(15,106,103,.16);
+    --blob-teal-strong:rgba(15,106,103,.24);
+    --blob-sand:rgba(240,222,200,.35);
+    --blob-cream:rgba(253,247,240,.9);
+
+    /* altura estimada navbar sticky */
+    --nav-h:72px;
+    /* ✅ Bootstrap tokens (para que deje de ser azul) */
+    --bs-primary: var(--brand);
+    --bs-primary-rgb: 15,106,103;
+
+    /* ✅ Focus ring global (por si Bootstrap te sigue metiendo azul) */
+    --bs-focus-ring-color: rgba(15,106,103,.25);
+
+
+}
+
+
+html{scroll-behavior:smooth;}
+
+body{
+    margin:0;
+    padding-top:var(--nav-h);
+    background:var(--bg);
+    color:#2b2b2b;
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+}
+
+img{max-width:100%;display:block;}
+a{color:inherit;}
+a:hover{text-decoration:none;}
+
+
+/* =========================================================
+   MODAL BACKDROP (GLOBAL)
+   ========================================================= */
+.modal-backdrop.show{
+    opacity:1;
+    background:rgba(10,30,30,.45);
+    backdrop-filter:blur(3px);
+    -webkit-backdrop-filter:blur(3px);
+}
+
+
+
+/* =========================================================
+   FOOTER (GLOBAL)
+   ========================================================= */
+.footer{background:#005f61;text-align:center;padding:1.5rem 0;}
+.footer h6{margin-bottom:.75rem;color:#fff;text-transform:uppercase;font-weight:700;}
+.footer-link{color:#e0e0e0;font-size:.9rem;margin:0 .5rem;display:inline-block;}
+.footer-link:hover{color:#fff;text-decoration:underline;}
+.footer-social{font-size:1.4rem;color:#e0e0e0;margin:0 .4rem;}
+.footer-social:hover{color:#fff;}
+.footer .text-center{margin-top:1rem;}
+
+/* =========================================================
+   BUTTONS (Bootstrap overrides) — GLOBAL
+   ========================================================= */
+.btn-primary{
+    --bs-btn-bg:var(--brand);
+    --bs-btn-border-color:var(--brand);
+    --bs-btn-hover-bg:var(--brand-600);
+    --bs-btn-hover-border-color:var(--brand-600);
+    --bs-btn-active-bg:#0b4f4d;
+    --bs-btn-active-border-color:#0b4f4d;
+    --bs-btn-disabled-bg:#9fc8c6;
+    --bs-btn-disabled-border-color:#9fc8c6;
+
+    color:#fff;
+    border-radius:999px;
+    font-weight:700;
+    box-shadow:0 6px 18px rgba(15,106,103,.20);
+}
+
+.btn-primary:focus{box-shadow:0 0 0 .25rem rgba(15,106,103,.20);}
+.btn-outline-secondary{border-radius:999px;}
+
+/* =========================
+   UTILIDADES – BLOBS (GLOBAL)
+   ========================= */
+.with-blob{position:relative;z-index:0;}
+.with-blob > img,
+.with-blob .img{position:relative;z-index:2;}
+
+.blob{
+    position:absolute;
+    z-index:1;
+    width:var(--w,360px);
+    height:var(--h,260px);
+    left:var(--x,0);
+    top:var(--y,0);
+    background:var(--c,var(--blob-teal));
+    transform:rotate(var(--rot,0deg));
+    filter:blur(var(--blur,0px));
+    border-radius:58% 42% 60% 40% / 48% 52% 44% 56%;
+}
+
+.blob--a{clip-path:polygon(50% 0%,67% 7%,83% 21%,92% 40%,86% 61%,70% 76%,50% 83%,33% 78%,18% 67%,9% 49%,14% 28%,30% 11%);}
+.blob--b{clip-path:polygon(44% 0%,63% 5%,80% 18%,90% 37%,90% 56%,79% 73%,61% 83%,41% 86%,24% 79%,12% 63%,9% 42%,19% 22%,31% 10%);}
+.blob--c{clip-path:polygon(53% 2%,69% 10%,82% 25%,89% 41%,86% 60%,75% 75%,59% 84%,41% 86%,26% 80%,15% 66%,10% 49%,15% 30%,28% 14%);}
+
+.blob--teal{background:var(--blob-teal);}
+.blob--teal-strong{background:var(--blob-teal-strong);}
+.blob--sand{background:var(--blob-sand);}
+.blob--cream{background:var(--blob-cream);}
+
+@media (max-width:991.98px){
+    .blob{
+        width:calc(var(--w,360px)*.78);
+        height:calc(var(--h,260px)*.78);
+    }
+}
+@media (max-width:575.98px){
+    .blob{
+        width:calc(var(--w,360px)*.66);
+        height:calc(var(--h,260px)*.66);
+    }
+}
+
+.form-check-input:checked{
+    background-color: var(--brand) !important;
+    border-color: var(--brand) !important;
+}
+
+.form-check-input:focus{
+    border-color: var(--brand) !important;
+    box-shadow: 0 0 0 .25rem rgba(15,106,103,.25) !important;
+}

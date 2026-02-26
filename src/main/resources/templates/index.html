@@ -1,27 +1,304 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org">
+	  xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="utf-8" />
-<link rel="stylesheet" th:href="@{/css/styles.css}" />
-<title>PetSit</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>PetSit – Inicio</title>
+	<meta name="description" content="PetSit reúne mascotas perdidas con sus familias y conecta con refugios y veterinarias.">
+
+	<!-- Bootstrap -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- Fuente Caudex -->
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Caudex:wght@400;700&display=swap" rel="stylesheet">
+
+	<!-- Iconos Bootstrap -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+	<!-- Estilos -->
+	<link rel="stylesheet" th:href="@{/css/core.css}">
+	<link rel="stylesheet" th:href="@{/css/nav-base.css}">
+	<link rel="stylesheet" th:href="@{/css/public.css}">
+
+	<!-- Favicons -->
+	<link rel="icon" th:href="@{/assets/favicon/favicon.ico}" sizes="any">
+	<link rel="icon" type="image/png" sizes="32x32" th:href="@{/assets/favicon/favicon-32x32.png}">
+	<link rel="icon" type="image/png" sizes="16x16" th:href="@{assets/favicon/favicon-16x16.png}">
+	<link rel="apple-touch-icon" sizes="180x180" th:href="@{assets/favicon/apple-touch-icon.png}">
+	<link rel="manifest" th:href="@{/assets/favicon/site.webmanifest}">
+	<meta name="theme-color" content="#0f6a67">
 </head>
-<body>
-	<div align="center">
-		<h1>PetSit</h1>
-		<h2>Menú Principal</h2>
-		<h3>2024</h3>
+
+<body class="page-home">
+
+<!-- NAVBAR -->
+<header>
+	<nav class="navbar navbar-expand-lg navbar-light bg-nav border-bottom">
+		<div class="container-fluid px-3 px-md-4">
+
+			<!-- LOGO -->
+			<a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/petsit/index}">
+				<img th:src="@{/assets/img/icons/logo.png}" alt="Logo PetSit" height="56">
+				<img th:src="@{/assets/img/Petsit.png}" alt="Marca PetSit" class="brand-name">
+			</a>
+
+			<!-- TOGGLER -->
+			<button class="navbar-toggler" type="button"
+					data-bs-toggle="collapse" data-bs-target="#mainNav"
+					aria-controls="mainNav" aria-expanded="false" aria-label="Abrir menú">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<!-- NAV -->
+			<div class="collapse navbar-collapse" id="mainNav">
+
+				<ul class="navbar-nav ms-auto nav-links">
+					<li class="nav-item"><a class="nav-link active" th:href="@{/petsit/index}" aria-current="page">Inicio</a></li>
+					<li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/nosotros}">¿Quiénes somos?</a></li>
+					<li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/contacto}">Contactanos</a></li>
+					<li class="nav-item"><a class="nav-link" th:href="@{/petsit/refugios/index}">Refugios</a></li>
+					<li class="nav-item"><a class="nav-link" th:href="@{/petsit/alertas/mapa}">Mapa</a></li>
+					<li class="nav-item"><a class="nav-link" th:href="@{/petsit/veterinarias/index}">Veterinarias</a></li>
+				</ul>
+
+				<!-- LOGIN -->
+				<div class="nav-login ms-lg-2">
+					<a th:href="@{/petsit/home/login}" class="user-chip">INICIAR SESIÓN</a>
+				</div>
+
+			</div>
+		</div>
+	</nav>
+</header>
+
+<!-- HERO (emocional, sin card) -->
+<main class="home-hero" role="main" aria-labelledby="homeHeroTitle">
+	<div class="container">
+		<div class="row align-items-center gy-5">
+
+			<!-- Texto -->
+			<div class="col-lg-6">
+				<div class="home-hero__text">
+					<p class="home-hero__kicker">
+						<i class="bi bi-heart-fill" aria-hidden="true"></i>
+						Una red para volver a casa
+					</p>
+
+					<h1 id="homeHeroTitle" class="home-hero__title">
+						<span>No buscás sola. </span>
+						Buscamos juntos.
+					</h1>
+
+					<p class="home-hero__lead">
+						PetSit conecta personas, refugios y veterinarias para acelerar reencuentros.
+						Reportá, compartí y encontrá ayuda real cerca tuyo.
+					</p>
+
+					<div class="home-hero__actions">
+						<a href="#como-funciona" class="btn btn-primary home-btn home-btn--primary">
+							<i class="bi bi-compass" aria-hidden="true"></i>
+							Ver cómo funciona
+						</a>
+
+						<a th:href="@{/petsit/home/registro}" class="btn home-btn home-btn--ghost">
+							<i class="bi bi-person-plus" aria-hidden="true"></i>
+							Crear cuenta
+						</a>
+					</div>
+
+					<div class="home-hero__trust" aria-label="Beneficios">
+						<div class="trust-pill"><i class="bi bi-check2-circle"></i> Reporte rápido</div>
+						<div class="trust-pill"><i class="bi bi-check2-circle"></i> Ubicación aproximada</div>
+						<div class="trust-pill"><i class="bi bi-check2-circle"></i> Comunidad cerca</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Imagen -->
+			<div class="col-lg-6 text-end">
+				<div class="home-hero__visual">
+					<span class="home-blob home-blob--teal" aria-hidden="true"></span>
+					<span class="home-blob home-blob--sand" aria-hidden="true"></span>
+					<img th:src="@{/assets/img/dog-index.png}" width="980" height="760" alt="Perro con juguete" class="home-dog">
+				</div>
+			</div>
+
+		</div>
 	</div>
-	<br />
-	<form action="#" th:action="@{/petsit/usuarios/index}" method="get">
-	<button type="submit">Grabar</button>
-	</form>
-	<!-- Boton del mapa -->
-	<form action="#" th:action="@{/alertas/mapa}" method="get">
-		<button type="submit">🗺️ Ver Mapa de Alertas</button>
-	</form>
-	<form action="#" th:action="@{/petsit/index2}" method="get">
-			<button type="submit">Ir a inicio</button>
-	</form>
+</main>
+
+<!-- SECCIÓN: cómo funciona -->
+<section id="como-funciona" class="home-section">
+	<div class="container">
+		<div class="home-section__head">
+			<p class="home-eyebrow">Hecho para acompañar</p>
+			<h2 class="home-h2">¿Cómo te ayuda PetSit?</h2>
+			<p class="home-sub">
+				Tres pasos simples para que la ayuda llegue más rápido y a las personas correctas.
+			</p>
+		</div>
+
+		<div class="row g-4">
+			<div class="col-md-4">
+				<article class="home-step">
+					<div class="home-step__icon" aria-hidden="true">
+						<img src="assets/img/icons/index/reportar.png" alt="">
+					</div>
+					<h3 class="home-step__title">1) Reportá</h3>
+					<p class="home-step__text">
+						Cargá la información importante y una foto. Cuanto más claro el aviso, más fácil ayudar.
+					</p>
+				</article>
+			</div>
+
+			<div class="col-md-4">
+				<article class="home-step">
+					<div class="home-step__icon" aria-hidden="true">
+						<img src="assets/img/icons/index/ubica.png" alt="">
+					</div>
+					<h3 class="home-step__title">2) Ubicá</h3>
+					<p class="home-step__text">
+						Indicá la zona aproximada para que quienes están cerca puedan prestar atención.
+					</p>
+				</article>
+			</div>
+
+			<div class="col-md-4">
+				<article class="home-step">
+					<div class="home-step__icon" aria-hidden="true">
+						<img src="assets/img/icons/index/conectar.png" alt="">
+					</div>
+					<h3 class="home-step__title">3) Conectá</h3>
+					<p class="home-step__text">
+						Refugios, veterinarias y personas cerca tuyo ayudan a difundir y actuar más rápido.
+					</p>
+				</article>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- SECCIÓN: accesos rápidos -->
+<section class="home-section home-section--soft">
+	<div class="container">
+		<div class="home-section__head">
+			<p class="home-eyebrow">Accedé directo</p>
+			<h2 class="home-h2">Acciones rápidas</h2>
+			<p class="home-sub">
+				Elegí lo que necesitás hacer ahora.
+			</p>
+		</div>
+
+		<div class="row g-4 justify-content-center">
+			<div class="col-sm-6 col-lg-4">
+				<a class="home-action" th:href="@{/petsit/mapa}">
+					<div class="home-action__avatar" aria-hidden="true">
+						<i class="bi bi-map-fill"></i>
+					</div>
+					<h3 class="home-action__title">Mapa de reportes</h3>
+					<p class="home-action__text">Mirá mascotas perdidas y encontradas cerca tuyo.</p>
+					<span class="home-action__cta">Abrir mapa <i class="bi bi-arrow-right"></i></span>
+				</a>
+			</div>
+
+			<div class="col-sm-6 col-lg-4">
+				<a class="home-action" th:href="@{/petsit/refugios/list}">
+					<div class="home-action__avatar" aria-hidden="true">
+						<i class="bi bi-house-heart-fill"></i>
+					</div>
+					<h3 class="home-action__title">Refugios</h3>
+					<p class="home-action__text">Encontrá refugios y conocé a quiénes ayudan.</p>
+					<span class="home-action__cta">Ver refugios <i class="bi bi-arrow-right"></i></span>
+				</a>
+			</div>
+
+			<div class="col-sm-6 col-lg-4">
+				<a class="home-action" th:href="@{/petsit/veterinarias/list}">
+					<div class="home-action__avatar" aria-hidden="true">
+						<i class="bi bi-hospital-fill"></i>
+					</div>
+					<h3 class="home-action__title">Veterinarias</h3>
+					<p class="home-action__text">Veterinarias cercanas y guardias disponibles.</p>
+					<span class="home-action__cta">Ver veterinarias <i class="bi bi-arrow-right"></i></span>
+				</a>
+			</div>
+		</div>
+	</div>
+</section>
+
+
+<!-- CTA SUMATE -->
+<section class="home-cta">
+	<div class="container">
+		<div class="home-cta__box">
+
+			<div class="home-cta__content">
+				<h2 class="home-cta__title">Sumate a PetSit</h2>
+				<p class="home-cta__lead">
+					Tu reporte puede ser justo lo que alguien necesitaba ver hoy.
+				</p>
+
+				<div class="home-cta__actions">
+					<a th:href="@{/petsit/home/registro}" class="btn home-btn home-btn--primary">Crear cuenta</a>
+					<a th:href="@{/petsit/usuarios/login}" class="btn home-btn home-btn--ghost">Ya tengo cuenta</a>
+				</div>
+			</div>
+
+			<div class="home-cta__media" aria-hidden="true">
+				<!-- PNG con fondo transparente recomendado -->
+				<img src="assets/img/index.png" alt="">
+			</div>
+
+		</div>
+	</div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer mt-5">
+	<div class="container py-4">
+		<div class="row text-white">
+			<div class="col-md-4 mb-3">
+				<h2 class="visually-hidden">Enlaces del sitio</h2>
+				<h6 class="fw-bold text-uppercase">Más información</h6>
+				<ul class="list-unstyled">
+					<li><a th:href="@{/petsit/contacto}" class="footer-link">Contactanos</a></li>
+					<li><a th:href="@{/petsit/nosotros}" class="footer-link">Sobre nosotros</a></li>
+				</ul>
+			</div>
+
+			<div class="col-md-4 mb-3">
+				<h6 class="fw-bold text-uppercase">Legal</h6>
+				<ul class="list-unstyled">
+					<li><a href="#" class="footer-link">Políticas de privacidad</a></li>
+					<li><a href="#" class="footer-link">Términos de servicio</a></li>
+				</ul>
+			</div>
+
+			<div class="col-md-4 mb-3">
+				<h6 class="fw-bold text-uppercase">Seguinos</h6>
+				<a href="#" class="footer-social me-2" aria-label="Facebook"><i class="bi bi-facebook" aria-hidden="true"></i></a>
+				<a href="#" class="footer-social me-2" aria-label="Instagram"><i class="bi bi-instagram" aria-hidden="true"></i></a>
+				<a href="#" class="footer-social" aria-label="Twitter/X"><i class="bi bi-twitter" aria-hidden="true"></i></a>
+			</div>
+		</div>
+
+		<div class="text-center small mt-3 text-white">
+			Copyright 2025 © Escuela Da Vinci | Keila Degregorio | Maia Cohen | Matias Bernal | Agustin Segovia
+		</div>
+	</div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
+
+<script>
+	const nav = document.querySelector('.navbar');
+	window.addEventListener('scroll', () => {
+		nav.classList.toggle('is-scrolled', window.scrollY > 12);
+	});
+</script>
+
 </body>
 </html>

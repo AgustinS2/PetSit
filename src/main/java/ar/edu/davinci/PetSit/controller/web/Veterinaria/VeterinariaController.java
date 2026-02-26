@@ -26,7 +26,7 @@ public class VeterinariaController {
 
     @GetMapping("/index")
 	    public String indexVeterinaria() {
-	        return "veterinarias/list_veterinarias"; // Renderiza templates/index2.html
+	        return "veterinarias/list_veterinarias";
 	}
 
 

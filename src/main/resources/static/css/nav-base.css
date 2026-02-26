@@ -1,0 +1,88 @@
+/* =========================================================
+   NAVBAR (GLOBAL)
+   ========================================================= */
+.bg-nav{background:#e7ece9;}
+
+.navbar{
+    position:fixed;
+    top:0;left:0;right:0;
+    z-index:1030;
+    background:rgba(231,236,233,.95);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(0,0,0,.06);
+    transition:background .25s ease, box-shadow .25s ease, transform .25s ease;
+}
+
+.navbar.is-scrolled{
+    background:rgba(231,236,233,.72);
+    box-shadow:0 8px 22px rgba(0,0,0,.08);
+}
+
+/* Brand */
+.navbar-brand{display:flex;align-items:center;gap:.5rem;}
+.navbar-brand img{height:44px;}
+.brand-name{height:28px;}
+
+/* Links */
+.nav-links{gap:.45rem;}
+
+@media (min-width:992px){
+    .navbar-nav.nav-links{
+        display:flex;
+        flex-direction:row;
+        align-items:center;
+        gap:.45rem;
+    }
+}
+
+@media (max-width:991.98px){
+    .navbar-nav.nav-links{
+        display:flex;
+        flex-direction:column;
+        align-items:stretch;
+        gap:.25rem;
+    }
+}
+
+.navbar .nav-link{
+    font-weight:600;
+    text-transform:uppercase;
+    font-size:.82rem;
+    letter-spacing:.03rem;
+    padding:.4rem .6rem;
+    border-radius:999px;
+    color:#374151;
+    white-space:nowrap;
+    transition:.2s;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link.active{
+    background:rgba(19,78,74,.10);
+    color:#134e4a;
+}
+
+/* Login chip + user dropdown */
+.nav-login{flex:0 0 auto;}
+
+.navbar .user-chip{
+    background:rgba(255,255,255,.55);
+    border:1px solid rgba(15,106,103,.18);
+    padding:.40rem .85rem;
+    border-radius:999px;
+    font-weight:650;
+    font-size:.82rem;
+    letter-spacing:.06rem;
+    color:var(--brand);
+    box-shadow:0 6px 16px rgba(0,0,0,.06);
+    transition:transform .15s ease, box-shadow .15s ease, background .15s ease, border-color .15s ease;
+    white-space:nowrap;
+}
+
+.navbar .user-chip:hover{
+    background:rgba(255,255,255,.75);
+    border-color:rgba(15,106,103,.30);
+    box-shadow:0 10px 22px rgba(0,0,0,.10);
+    transform:translateY(-1px);
+}

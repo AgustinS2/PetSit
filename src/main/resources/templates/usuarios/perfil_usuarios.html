@@ -74,7 +74,7 @@
             <li><hr class="dropdown-divider"></li>
             <li>
               <a class="dropdown-item text-danger d-flex align-items-center gap-2"
-                 id="logoutBtn" th:href="@{/petsit/index2}">
+                 id="logoutBtn" th:href="@{/petsit/index}">
                 <i class="bi bi-box-arrow-right"></i> Cerrar sesión
               </a>
             </li>
@@ -444,7 +444,7 @@
     alert('Función de edición en desarrollo');
   });
   document.getElementById('logoutBtnProfile').addEventListener('click', () => {
-    if (confirm('¿Cerrar sesión?')) location.href = '/petsit/index2';
+    if (confirm('¿Cerrar sesión?')) location.href = '/petsit/index';
   });
 </script>
 

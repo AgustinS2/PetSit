@@ -27,7 +27,7 @@ public class RefugioController extends PetSitApp {
 
     @GetMapping("/index")
 	    public String indexRefugio() {
-	        return "refugios/list_refugios"; // Renderiza templates/index2.html
+	        return "refugios/list_refugios"; //
 	}
 
     @GetMapping("/list")
