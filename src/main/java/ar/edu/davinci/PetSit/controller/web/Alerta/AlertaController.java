@@ -58,7 +58,7 @@ public class AlertaController {
         return "redirect:/alertas/list";
     }
 
-    @GetMapping("/edit/{id}")
+    @GetMapping("/edit/{id:\\d+}")
     public ModelAndView editAlertaForm(@PathVariable("id") Long id) {
         LOGGER.info("GET - editAlertaForm - /alertas/edit/{id}");
         ModelAndView mav = new ModelAndView("alertas/edit_alerta");
@@ -71,7 +71,7 @@ public class AlertaController {
         return mav;
     }
 
-    @GetMapping("/delete/{id}")
+    @GetMapping("/delete/{id:\\d+}")
     public String deleteAlerta(@PathVariable("id") Long id) {
         LOGGER.info("GET - deleteAlerta - /alertas/delete/{id}");
         alertaService.delete(id);

@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PetSit – Adoptar</title>
+
+    <!-- Bootstrap / Iconos / Fuentes -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Caudex:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Estilos -->
+    <link rel="stylesheet" th:href="@{/css/core.css}">
+    <link rel="stylesheet" th:href="@{/css/nav-user.css}">
+    <link rel="stylesheet" th:href="@{/css/user.css}">
+
+    <!-- Favicons -->
+    <link rel="icon" th:href="@{/assets/favicon/favicon.ico}" sizes="any">
+</head>
+
+<body class="in-app page-adopt">
+
+<!-- NAVBAR INTERNO -->
+<nav class="navbar navbar-expand-lg navbar-light bg-nav border-bottom petsit-nav-user" aria-label="Menú interno">
+    <div class="container-fluid px-3 px-md-4">
+
+        <a id="brandLink" class="navbar-brand d-flex align-items-center gap-2 app-home"
+           th:href="@{/petsit/usuarios/index}" aria-label="Inicio de usuario">
+            <img th:src="@{/assets/img/icons/logo.png}" alt="Logo PetSit" height="56">
+            <img th:src="@{/assets/img/Petsit.png}" alt="PetSit" class="brand-name">
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#mainNav" aria-controls="mainNav"
+                aria-expanded="false" aria-label="Abrir menú">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNav">
+
+            <ul id="appNavList" class="navbar-nav mx-auto nav-center gap-lg-3">
+                <li class="nav-item"><a class="nav-link" th:href="@{/petsit/mascotas/mis-mascotas}">Mis mascotas</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/usuarioveterinarias}">Veterinarias</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/usuariorefugio}">Refugios</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/usuarioadoptar}">Adoptar</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/usuariomapa}">Mapa</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/mis-solicitudes}">Solicitudes</a></li>
+
+
+                <!-- MOBILE ONLY -->
+                <li class="nav-item d-lg-none"><hr class="dropdown-divider my-2"></li>
+
+                <li class="nav-item d-lg-none">
+                    <a class="nav-link d-flex align-items-center gap-2" th:href="@{/petsit/usuarios/perfil}">
+                        <i class="bi bi-person-gear"></i> Mi perfil
+                    </a>
+                </li>
+
+                <!-- ✅ Notificaciones (mobile) -->
+                <li class="nav-item d-lg-none">
+                    <a class="nav-link d-flex align-items-center gap-2" href="#" id="openNotificationsMobile">
+                        <i class="bi bi-bell"></i> Notificaciones
+                        <span id="notifDotMobile"
+                              class="ms-1 d-inline-block p-1 bg-danger border border-light rounded-circle d-none"
+                              aria-hidden="true"></span>
+                    </a>
+                </li>
+
+                <li class="nav-item d-lg-none">
+                    <a class="nav-link d-flex align-items-center gap-2 text-danger"
+                       id="logoutBtnMobile" th:href="@{/petsit/}">
+                        <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                    </a>
+                </li>
+            </ul>
+
+
+            <!-- DROPDOWN DESKTOP -->
+            <ul class="navbar-nav ms-auto align-items-center d-none d-lg-flex">
+                <li class="nav-item dropdown">
+                    <a class="nav-link user-chip dropdown-toggle d-flex align-items-center gap-2" href="#"
+                       role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <span class="user-avatar position-relative">
+                <img th:src="@{/assets/img/icons/usuario.png}" alt="Avatar usuario">
+                <span id="notifDotDesktop"
+                      class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle d-none"
+                      aria-hidden="true"></span>
+              </span>
+                        <span id="navUser">Usuario</span>
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-end user-menu">
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center gap-2" th:href="@{/petsit/usuarios/perfil}">
+                                <i class="bi bi-person-gear"></i> Mi perfil
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center gap-2" href="#" id="openNotifications">
+                                <i class="bi bi-bell"></i> Notificaciones
+                            </a>
+                        </li>
+
+                        <li><hr class="dropdown-divider"></li>
+
+                        <li>
+                            <a class="dropdown-item text-danger d-flex align-items-center gap-2" id="logoutBtn" th:href="@{/petsit/}">
+                                <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+        </div><!-- /collapse -->
+    </div><!-- /container-fluid -->
+</nav>
+
+<!-- HERO -->
+<section class="hero-sticker adopt-hero">
+    <div class="container py-4 py-md-5">
+
+        <div class="mb-2">
+            <h1 class="about-title mb-1">Adoptar</h1>
+            <div class="about-accent"></div>
+        </div>
+
+        <p class="adopt-subtitle mb-3">
+            Encontrá tu nuevo compañero. Filtrá por tipo, zona o nombre y <b>enviá una solicitud</b> al refugio.
+        </p>
+
+        <div class="row g-2 align-items-center">
+            <div class="col-lg-5">
+                <div class="search-input-wrap adopt-search">
+                    <i class="bi bi-search"></i>
+                    <input id="qAdopt" type="search" class="form-control adopt-input"
+                           placeholder="Buscar por nombre, zona o señas" autocomplete="off">
+                </div>
+            </div>
+
+            <div class="col-lg-7 d-flex flex-wrap gap-2 justify-content-lg-end adopt-filters">
+                <select id="fTipo" class="form-select form-select-sm adopt-select" aria-label="Filtrar por tipo">
+                    <option value="">Tipo: todos</option>
+                    <option>Perro</option>
+                    <option>Gato</option>
+                </select>
+
+                <select id="fZona" class="form-select form-select-sm adopt-select" aria-label="Filtrar por zona">
+                    <option value="">Zona: todas</option>
+                    <option>Palermo</option>
+                    <option>Caballito</option>
+                    <option>Villa Devoto</option>
+                    <option>Belgrano</option>
+                    <option>Colegiales</option>
+                    <option>Almagro</option>
+                    <option>Villa Urquiza</option>
+                    <option>Recoleta</option>
+                </select>
+
+                <select id="fOrden" class="form-select form-select-sm adopt-select" aria-label="Ordenar resultados">
+                    <option value="recent">Más recientes</option>
+                    <option value="zona">Por zona (A–Z)</option>
+                    <option value="nombre">Por nombre (A–Z)</option>
+                </select>
+            </div>
+        </div>
+
+    </div>
+
+    <svg class="hero-wave" viewBox="0 0 1440 80" preserveAspectRatio="none">
+        <path fill="#eef1ef"
+              d="M0,32L60,37.3C120,43,240,53,360,58.7C480,64,600,64,720,58.7C840,53,960,43,1080,32C1200,21,1320,11,1380,5.3L1440,0V80H0Z"></path>
+    </svg>
+</section>
+
+<!-- GRID -->
+<main class="container py-4">
+    <div id="adoptInfo" class="adopt-info small mb-2"></div>
+    <div id="adoptGrid" class="row g-4"></div>
+    <div id="adoptEmpty" class="empty-state d-none mt-3">No se encontraron mascotas con esos filtros.</div>
+</main>
+
+<!-- MODAL ADOPTAR -->
+<div class="modal fade petsit-modal" id="adoptModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content adopt-modal">
+
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-heart-pulse me-2"></i>Mascota en adopción
+                </h5>
+                <button class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="adopt-modal-split">
+
+                    <div class="adopt-modal-photo">
+                        <img id="amImg" alt="Foto de la mascota">
+                    </div>
+
+                    <div class="adopt-modal-info">
+                        <div class="d-flex align-items-start justify-content-between gap-2">
+                            <div>
+                                <h3 id="amName" class="adopt-modal-name mb-1"></h3>
+                                <div class="text-muted small" id="amTipo"></div>
+                            </div>
+                            <span class="adopt-chip" id="amChip">Adopción</span>
+                        </div>
+
+                        <div class="adopt-detail mt-3">
+                            <div><i class="bi bi-geo-alt me-1"></i><span id="amZona"></span></div>
+                            <div><i class="bi bi-house-heart me-1"></i><span id="amRefugio"></span></div>
+                            <div><i class="bi bi-calendar3 me-1"></i><span id="amEdad"></span></div>
+                            <div><i class="bi bi-clipboard-data me-1"></i><span id="amPeso"></span></div>
+                            <div><i class="bi bi-file-earmark-text me-1"></i><span id="amSenas"></span></div>
+                        </div>
+
+                        <div class="pet-traits mt-3">
+                            <h6 class="mb-2">Ficha rápida</h6>
+                            <ul id="traitsList" class="trait-list list-unstyled m-0"></ul>
+                        </div>
+
+                        <!-- ✅ Botón: abre form -->
+                        <a href="#" id="amContact" class="btn btn-primary mt-3 w-100">Enviar solicitud</a>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- ✅ MODAL: Enviar solicitud -->
+<div class="modal fade" id="adoptionRequestModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content petsit-request-form-modal">
+
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-send me-2"></i> Enviar solicitud de adopción
+                </h5>
+                <button class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="reqform-head">
+                    <div>
+                        <div class="reqform-kicker">SOLICITUD</div>
+                        <h6 class="reqform-title mb-1">
+                            Mascota: <span id="reqPetName">—</span>
+                        </h6>
+                        <div class="text-muted small">
+                            Refugio: <span id="reqShelter">—</span>
+                        </div>
+                    </div>
+                    <span class="reqform-pill"><i class="bi bi-clock"></i> Pendiente</span>
+                </div>
+
+                <form id="adoptionRequestForm" class="reqform-grid" novalidate>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Nombre y apellido</label>
+                            <input class="form-control" name="fullName" required placeholder="Ej: Keila Degregorio">
+                            <div class="invalid-feedback">Completá tu nombre.</div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Email</label>
+                            <input class="form-control" type="email" name="email" required placeholder="tu@email.com">
+                            <div class="invalid-feedback">Ingresá un email válido.</div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Teléfono</label>
+                            <input class="form-control" name="phone" required placeholder="Ej: 11 1234 5678">
+                            <div class="invalid-feedback">Completá un teléfono.</div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Zona / Barrio</label>
+                            <input class="form-control" name="zone" required placeholder="Ej: Villa Devoto">
+                            <div class="invalid-feedback">Completá tu zona.</div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Tipo de vivienda</label>
+                            <select class="form-select" name="homeType" required>
+                                <option value="" selected disabled>Elegí una opción</option>
+                                <option>Departamento</option>
+                                <option>Casa</option>
+                                <option>PH</option>
+                            </select>
+                            <div class="invalid-feedback">Elegí un tipo de vivienda.</div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">¿Tenés otras mascotas?</label>
+                            <select class="form-select" name="otherPets" required>
+                                <option value="" selected disabled>Elegí una opción</option>
+                                <option>No</option>
+                                <option>Sí, perro</option>
+                                <option>Sí, gato</option>
+                                <option>Sí, perro y gato</option>
+                            </select>
+                            <div class="invalid-feedback">Elegí una opción.</div>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label fw-bold">Mensaje para el refugio</label>
+                            <textarea class="form-control" name="message" rows="4" required
+                                      placeholder="Contales por qué querés adoptar, tu rutina, etc."></textarea>
+                            <div class="invalid-feedback">Escribí un mensaje.</div>
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="petId" id="reqPetId">
+                    <input type="hidden" name="petName" id="reqPetNameHidden">
+                    <input type="hidden" name="shelter" id="reqShelterHidden">
+
+                    <div class="reqform-actions mt-3 d-flex gap-2 justify-content-end">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-brand-cta">
+                            Enviar solicitud <i class="bi bi-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: NOTIFICACIONES -->
+<div class="modal fade notifications-modal" id="notificationsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-bell me-2"></i> Notificaciones
+                </h5>
+                <button class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="notifications-actions">
+                    <button class="btn btn-sm btn-outline-secondary" id="selectAllBtn">Seleccionar todas</button>
+
+                    <div class="actions-right">
+                        <button class="btn btn-sm btn-outline-primary" id="markReadBtn">Marcar como leídas</button>
+                        <button class="btn btn-sm btn-outline-danger" id="deleteBtn">Borrar</button>
+                        <button class="btn btn-sm btn-danger" id="deleteAllBtn">Borrar todas</button>
+                    </div>
+                </div>
+
+                <div id="notificationsList" class="list-group notifications-list"></div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer mt-5">
+    <div class="container py-4">
+        <div class="row text-white">
+            <div class="col-md-4 mb-3">
+                <h6 class="fw-bold text-uppercase">Más información</h6>
+                <ul class="list-unstyled">
+                    <li><a th:href="@{/petsit/usuarios/usuariocontacto}" class="footer-link">Contactanos</a></li>
+                    <li><a th:href="@{/petsit/usuarios/usuarioquienessomos}" class="footer-link">Sobre nosotros</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4 mb-3">
+                <h6 class="fw-bold text-uppercase">Legal</h6>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="footer-link">Políticas de privacidad</a></li>
+                    <li><a href="#" class="footer-link">Términos de servicio</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4 mb-3">
+                <h6 class="fw-bold text-uppercase">Seguinos</h6>
+                <a href="#" class="footer-social me-2"><i class="bi bi-facebook"></i></a>
+                <a href="#" class="footer-social me-2"><i class="bi bi-instagram"></i></a>
+                <a href="#" class="footer-social"><i class="bi bi-twitter"></i></a>
+            </div>
+        </div>
+        <div class="text-center small mt-3 text-white">
+            Copyright 2025 © Escuela Da Vinci | Keila Degregorio | Maia Cohen | Matias Bernal | Agustin Segovia
+        </div>
+    </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // Navbar sombreado al scrollear (opcional)
+        const nav = document.querySelector('.navbar');
+        window.addEventListener('scroll', () => {
+            nav?.classList.toggle('is-scrolled', window.scrollY > 12);
+        });
+
+        /* =========================
+           HELPERS
+           ========================= */
+        function toast(msg){
+            const t = document.createElement('div');
+            t.textContent = msg;
+            t.style.cssText = `
+        position:fixed; bottom:18px; left:50%; transform:translateX(-50%);
+        background:rgba(0,0,0,.85); color:#fff; padding:.5rem .75rem; border-radius:12px;
+        z-index:20000; font-size:.9rem; box-shadow:0 6px 18px rgba(0,0,0,.2)`;
+            document.body.appendChild(t);
+            setTimeout(()=>t.remove(), 1800);
+        }
+
+        function safeJSONParse(value, fallback){
+            try { return JSON.parse(value) ?? fallback; }
+            catch { return fallback; }
+        }
+
+        function escapeHtml(str){
+            return (str ?? '').toString()
+                .replaceAll('&','&amp;')
+                .replaceAll('<','&lt;')
+                .replaceAll('>','&gt;')
+                .replaceAll('"','&quot;')
+                .replaceAll("'","&#039;");
+        }
+
+        /* =============================
+           Datos de adopción
+           ============================= */
+        const ADOPT = [
+            { id:'gato1', nombre:'Luna', tipo:'Gato', zona:'Villa Devoto', senas:'Tranquila y mimosera. Usa arenero.', refugio:'Lost & Found', contact:'+54 11 4567-8901', img:'assets/img/adoptar/gato1.jpg', fecha:'2025-09-06', edad:'10 meses', peso:'3.6 kg', traits:{ energia:2, gente:5, gatos:3, depto:5, arenero:5 } },
+            { id:'gato2', nombre:'Mishi', tipo:'Gato', zona:'Belgrano', senas:'Castrado. Sociable con visitas.', refugio:'Animal Care', contact:'+54 11 4777-1212', img:'assets/img/adoptar/gato2.jpg', fecha:'2025-09-05', edad:'2 años', peso:'4.4 kg', traits:{ energia:4, gente:4, gatos:2, depto:5, arenero:5 } },
+            { id:'gato3', nombre:'Simba', tipo:'Gato', zona:'Colegiales', senas:'Curioso, activo. Le gustan juguetes.', refugio:'America Dog & Cat Hotel', contact:'+54 11 4555-1111', img:'assets/img/adoptar/gato3.jpg', fecha:'2025-09-04', edad:'1 año', peso:'4.0 kg', traits:{ energia:5, gente:3, gatos:3, depto:4, arenero:5 } },
+            { id:'gato4', nombre:'Copito', tipo:'Gato', zona:'Recoleta', senas:'Pelo largo. Cepillado recomendado.', refugio:'Friends', contact:'+54 11 4511-9090', img:'assets/img/adoptar/gato4.jpg', fecha:'2025-09-03', edad:'3 años', peso:'4.8 kg', traits:{ energia:2, gente:4, gatos:3, depto:5, arenero:5 } },
+            { id:'perro1', nombre:'Toby', tipo:'Perro', zona:'Palermo', senas:'Ideal familia. Aprende rápido.', refugio:'Petland', contact:'+54 11 4000-8888', img:'assets/img/adoptar/perro1.jpg', fecha:'2025-09-02', edad:'3 años', peso:'18 kg', traits:{ energia:4, gente:5, perros:4, depto:3, entreno:4 } },
+            { id:'perro2', nombre:'Greta', tipo:'Perro', zona:'Colegiales', senas:'Tranquila, buen manejo con correa.', refugio:'America Dog & Cat Hotel', contact:'+54 11 4701-3344', img:'assets/img/adoptar/perro2.jpg', fecha:'2025-09-02', edad:'5 años', peso:'22 kg', traits:{ energia:2, gente:4, perros:3, depto:3, entreno:4 } },
+            { id:'perro3', nombre:'Duna', tipo:'Perro', zona:'Caballito', senas:'Energía moderada. Se adapta rápido.', refugio:'Greenville', contact:'+54 11 4555-2020', img:'assets/img/adoptar/perro3.jpg', fecha:'2025-09-01', edad:'2 años', peso:'12 kg', traits:{ energia:3, gente:4, perros:3, depto:5, entreno:3 } },
+            { id:'perro4', nombre:'Rocky', tipo:'Perro', zona:'Villa Urquiza', senas:'Cariñoso con niños. Tamaño grande.', refugio:'The Pets Hotel', contact:'+54 11 4999-3030', img:'assets/img/adoptar/perro4.jpg', fecha:'2025-09-01', edad:'4 años', peso:'32 kg', traits:{ energia:4, gente:5, perros:3, depto:2, entreno:3 } },
+            { id:'perro5', nombre:'Bruno', tipo:'Perro', zona:'Belgrano', senas:'Dormilón y simpático. Tamaño mediano.', refugio:'Vida Animal', contact:'+54 11 4666-7070', img:'assets/img/adoptar/perro5.jpg', fecha:'2025-08-31', edad:'6 años', peso:'20 kg', traits:{ energia:1, gente:4, perros:3, depto:4, entreno:3 } },
+            { id:'perro6', nombre:'Max', tipo:'Perro', zona:'Caballito', senas:'Ágil y obediente. Le gustan paseos.', refugio:'Greenville', contact:'+54 11 4555-2020', img:'assets/img/adoptar/perro6.jpg', fecha:'2025-08-30', edad:'1 año', peso:'14 kg', traits:{ energia:5, gente:4, perros:4, depto:3, entreno:4 } }
+        ];
+
+        const TRAITS_BY_TYPE = {
+            Perro: [
+                { key:'energia',  label:'Nivel de energía',        icon:'lightning-charge' },
+                { key:'gente',    label:'Sociable con personas',   icon:'people' },
+                { key:'perros',   label:'Con otros perros',        icon:'hand-thumbs-up' },
+                { key:'depto',    label:'Apto departamento',       icon:'house-door' },
+                { key:'entreno',  label:'Entrenamiento básico',    icon:'journal-check' }
+            ],
+            Gato: [
+                { key:'energia',  label:'Nivel de energía',        icon:'lightning-charge' },
+                { key:'gente',    label:'Sociable con personas',   icon:'people' },
+                { key:'gatos',    label:'Con otros gatos',         icon:'hand-thumbs-up' },
+                { key:'depto',    label:'Apto departamento',       icon:'house-door' },
+                { key:'arenero',  label:'Uso de arenero',          icon:'check2-circle' }
+            ]
+        };
+
+        // Selectores
+        const $grid  = document.getElementById('adoptGrid');
+        const $empty = document.getElementById('adoptEmpty');
+        const $info  = document.getElementById('adoptInfo');
+
+        const $q     = document.getElementById('qAdopt');
+        const $tipo  = document.getElementById('fTipo');
+        const $zona  = document.getElementById('fZona');
+        const $ord   = document.getElementById('fOrden');
+
+        const fmtDate = d => new Date(d).toLocaleDateString('es-AR', { day:'2-digit', month:'2-digit', year:'numeric' });
+        const fallback = 'https://images.unsplash.com/photo-1558944351-c8f7a309f1d2?q=80&w=1200&auto=format&fit=crop';
+
+        // Modales
+        const adoptModalEl = document.getElementById('adoptModal');
+        const adoptModal = adoptModalEl ? new bootstrap.Modal(adoptModalEl) : null;
+
+        const reqModalEl = document.getElementById('adoptionRequestModal');
+        const reqModal = reqModalEl ? new bootstrap.Modal(reqModalEl) : null;
+
+        // Estado actual
+        let currentPet = null;
+
+        function renderTraits(p){
+            const list = document.getElementById('traitsList');
+            if (!list) return;
+            list.innerHTML = '';
+
+            const defs = TRAITS_BY_TYPE[p.tipo] || [];
+            defs.forEach(t=>{
+                const score = Math.max(0, Math.min((p.traits && p.traits[t.key]) ?? 0, 5));
+                const li = document.createElement('li');
+                li.className = 'trait';
+                li.innerHTML = `
+          <span class="trait-label">
+            <i class="bi bi-${t.icon} me-1"></i>${t.label}
+          </span>
+          <div class="trait-meter" data-score="${score}">
+            <span></span>
+          </div>
+        `;
+                list.appendChild(li);
+            });
+
+            list.querySelectorAll('.trait-meter').forEach(m=>{
+                const s = +m.dataset.score || 0;
+                m.style.setProperty('--w', (s/5*100)+'%');
+                m.setAttribute('role','progressbar');
+                m.setAttribute('aria-valuemin','0');
+                m.setAttribute('aria-valuemax','5');
+                m.setAttribute('aria-valuenow', s);
+            });
+        }
+
+        function openModal(p){
+            if(!adoptModal) return;
+
+            currentPet = p;
+
+            const imgEl = document.getElementById('amImg');
+            imgEl.src = p.img;
+            imgEl.alt = `Foto de ${p.nombre}`;
+            imgEl.onerror = () => imgEl.src = fallback;
+
+            document.getElementById('amName').textContent    = p.nombre;
+            document.getElementById('amTipo').textContent    = p.tipo;
+            document.getElementById('amZona').textContent    = p.zona   || '—';
+            document.getElementById('amRefugio').textContent = p.refugio|| '—';
+            document.getElementById('amEdad').textContent    = p.edad   || '—';
+            document.getElementById('amPeso').textContent    = p.peso   || '—';
+            document.getElementById('amSenas').textContent   = p.senas  || '—';
+
+            renderTraits(p);
+            adoptModal.show();
+        }
+
+        function render(list){
+            $grid.innerHTML = '';
+
+            if(!list.length){
+                $empty.classList.remove('d-none');
+                $info.textContent = '';
+                return;
+            }
+            $empty.classList.add('d-none');
+
+            const frag = document.createDocumentFragment();
+
+            list.forEach(p=>{
+                const col = document.createElement('div');
+                col.className = 'col-sm-6 col-lg-4 d-flex';
+
+                const card = document.createElement('article');
+                card.className = 'adopt-card h-100';
+                card.setAttribute('tabindex', '0');
+                card.setAttribute('role', 'button');
+                card.setAttribute('aria-label', `Ver datos de ${p.nombre}`);
+
+                card.addEventListener('click', () => openModal(p));
+                card.addEventListener('keydown', (e) => {
+                    if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(p); }
+                });
+
+                const media = document.createElement('div');
+                media.className = 'adopt-media';
+
+                const img = document.createElement('img');
+                img.className = 'adopt-img';
+                img.src = p.img;
+                img.alt = p.nombre;
+                img.onerror = () => img.src = fallback;
+                media.appendChild(img);
+
+                const body = document.createElement('div');
+                body.className = 'adopt-body';
+
+                body.innerHTML = `
+          <div class="adopt-head">
+            <h3 class="adopt-card-name">${escapeHtml(p.nombre)}</h3>
+            <span class="adopt-pill">${escapeHtml(p.tipo)}</span>
+          </div>
+
+          <div class="adopt-meta">
+            <div><i class="bi bi-geo-alt me-1"></i>${escapeHtml(p.zona)}</div>
+            <div><i class="bi bi-calendar-event me-1"></i>${escapeHtml(fmtDate(p.fecha))}</div>
+          </div>
+
+          <div class="adopt-ref">
+            <i class="bi bi-house-heart me-1"></i>${escapeHtml(p.refugio)}
+          </div>
+
+          <button type="button" class="btn btn-outline-secondary mt-auto">Ver datos</button>
+        `;
+
+                const btn = body.querySelector('button');
+                btn.addEventListener('click', (e) => { e.stopPropagation(); openModal(p); });
+
+                card.append(media, body);
+                col.append(card);
+                frag.append(col);
+            });
+
+            $grid.append(frag);
+            $info.textContent = `${list.length} mascota(s) para adoptar`;
+        }
+
+        function apply(){
+            const q = ($q.value || '').toLowerCase().trim();
+            let list = ADOPT.slice();
+
+            if(q){
+                list = list.filter(p =>
+                    (p.nombre||'').toLowerCase().includes(q) ||
+                    (p.zona||'').toLowerCase().includes(q) ||
+                    (p.senas||'').toLowerCase().includes(q) ||
+                    (p.refugio||'').toLowerCase().includes(q)
+                );
+            }
+
+            if($tipo.value) list = list.filter(p => p.tipo === $tipo.value);
+            if($zona.value) list = list.filter(p => p.zona === $zona.value);
+
+            if($ord.value === 'recent') list.sort((a,b)=> b.fecha.localeCompare(a.fecha));
+            if($ord.value === 'zona')   list.sort((a,b)=> (a.zona||'').localeCompare(b.zona||''));
+            if($ord.value === 'nombre') list.sort((a,b)=> (a.nombre||'').localeCompare(b.nombre||''));
+
+            render(list);
+        }
+
+        [$q,$tipo,$zona,$ord].forEach(el => el.addEventListener('input', apply));
+        apply();
+
+        /* =========================
+           ✅ ABRIR FORM (tapa el modal de abajo)
+           ========================= */
+        const btnSend = document.getElementById('amContact');
+        const formEl  = document.getElementById('adoptionRequestForm');
+
+        btnSend?.addEventListener('click', (e) => {
+            e.preventDefault();
+            if(!reqModal) return;
+            if(!currentPet) return toast('No hay mascota seleccionada');
+
+            // Completar encabezado
+            document.getElementById('reqPetName').textContent = currentPet.nombre || '—';
+            document.getElementById('reqShelter').textContent = currentPet.refugio || '—';
+
+            // Hidden inputs
+            document.getElementById('reqPetId').value = currentPet.id || '';
+            document.getElementById('reqPetNameHidden').value = currentPet.nombre || '';
+            document.getElementById('reqShelterHidden').value = currentPet.refugio || '';
+
+            // Reset form
+            formEl?.reset();
+            formEl?.classList.remove('was-validated');
+
+            // 🔥 clave: cerrar detalle y recién ahí abrir form
+            adoptModal?.hide();
+            adoptModalEl?.addEventListener('hidden.bs.modal', function once(){
+                adoptModalEl.removeEventListener('hidden.bs.modal', once);
+                reqModal.show();
+            });
+        });
+
+        // Si cerrás el form, volvemos al detalle (opcional)
+        reqModalEl?.addEventListener('hidden.bs.modal', () => {
+            if(currentPet) adoptModal?.show();
+        });
+
+        /* =========================
+           ✅ GUARDAR SOLICITUD (localStorage)
+           ========================= */
+        const KEY_REQ = 'petsit_requests';
+        function loadRequests(){ return safeJSONParse(localStorage.getItem(KEY_REQ), []); }
+        function saveRequests(arr){ localStorage.setItem(KEY_REQ, JSON.stringify(arr)); }
+
+        formEl?.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            if(!formEl.checkValidity()){
+                formEl.classList.add('was-validated');
+                return;
+            }
+
+            const fd = new FormData(formEl);
+            const now = Date.now();
+
+            const request = {
+                id: crypto.randomUUID(),
+                petId: fd.get('petId'),
+                petName: fd.get('petName'),
+                shelter: fd.get('shelter'),
+                petImg: currentPet.img,
+                petType: currentPet.tipo,
+                petZone: currentPet.zona,
+                sentDate: new Date(now).toLocaleDateString('es-AR'),
+                status: 'Pendiente',
+                user: { /* ... */ },
+                message: fd.get('message'),
+                updatedAt: now
+            };
+
+
+            const all = loadRequests();
+            all.unshift(request);
+            saveRequests(all);
+
+            reqModal?.hide();
+            toast('Solicitud enviada ✅');
+        });
+
+        /* =========================
+           NOTIFICACIONES (modal + acciones)
+           ========================= */
+        (function initNotifications(){
+
+            const modalEl = document.getElementById('notificationsModal');
+            const listEl  = document.getElementById('notificationsList');
+            if(!modalEl || !listEl || typeof bootstrap === 'undefined') return;
+
+            const KEY_NOTIFS = 'petsit_notifications';
+
+            function seed(){
+                const existing = safeJSONParse(localStorage.getItem(KEY_NOTIFS), null);
+                if(existing && Array.isArray(existing)) return;
+
+                const now = Date.now();
+                const demo = [
+                    { id: crypto.randomUUID(), title:'Refugio cercano', body:'Se publicó un nuevo animal en adopción.', read:false, ts: now - 1000*60*60*5, checked:false },
+                    { id: crypto.randomUUID(), title:'Recordatorio', body:'Actualizá la ficha de tu mascota.', read:true, ts: now - 1000*60*60*24, checked:false },
+                    { id: crypto.randomUUID(), title:'Novedad en veterinarias', body:'Agregamos nuevas clínicas en tu zona.', read:false, ts: now - 1000*60*45, checked:false }
+                ];
+                localStorage.setItem(KEY_NOTIFS, JSON.stringify(demo));
+            }
+
+            function load(){ return safeJSONParse(localStorage.getItem(KEY_NOTIFS), []); }
+            function save(arr){ localStorage.setItem(KEY_NOTIFS, JSON.stringify(arr)); }
+            function fmt(ts){
+                try{ return new Date(ts).toLocaleString('es-AR', { dateStyle:'short', timeStyle:'short' }); }
+                catch{ return ''; }
+            }
+
+            const notificationsModal = new bootstrap.Modal(modalEl);
+
+            const btnSelectAll = document.getElementById('selectAllBtn');
+            const btnMarkRead  = document.getElementById('markReadBtn');
+            const btnDelete    = document.getElementById('deleteBtn');
+            const btnDeleteAll = document.getElementById('deleteAllBtn');
+
+            function renderNotifs(){
+                const notifs = load().sort((a,b)=>b.ts-a.ts);
+                listEl.innerHTML = '';
+
+                if(!notifs.length){
+                    listEl.innerHTML = `<div class="p-3 text-muted">No tenés notificaciones.</div>`;
+                    updateDots();
+                    return;
+                }
+
+                const frag = document.createDocumentFragment();
+
+                notifs.forEach(n=>{
+                    const item = document.createElement('div');
+                    item.className = `notif-item ${n.read ? 'is-read' : ''}`;
+
+                    item.innerHTML = `
+            <div class="notif-check">
+              <input class="form-check-input notif-check-input" type="checkbox" data-id="${n.id}" ${n.checked ? 'checked' : ''}>
+            </div>
+
+            <div>
+              <p class="notif-title">${escapeHtml(n.title)}</p>
+              <p class="notif-desc">${escapeHtml(n.body)}</p>
+              ${n.read ? '' : `<span class="notif-badge">Nuevo</span>`}
+            </div>
+
+            <div class="notif-meta">${escapeHtml(fmt(n.ts))}</div>
+          `;
+
+                    const cb = item.querySelector('.notif-check-input');
+                    cb.addEventListener('change', ()=>{
+                        const all = load();
+                        const idx = all.findIndex(x => x.id === n.id);
+                        if(idx >= 0){
+                            all[idx].checked = cb.checked;
+                            save(all);
+                        }
+                    });
+
+                    frag.appendChild(item);
+                });
+
+                listEl.appendChild(frag);
+                updateDots();
+            }
+
+            function getSelectedIds(){
+                return new Set(
+                    Array.from(document.querySelectorAll('.notif-check-input:checked'))
+                        .map(x => x.dataset.id)
+                );
+            }
+
+            const dotDesktop = document.getElementById('notifDotDesktop');
+            const dotMobile  = document.getElementById('notifDotMobile');
+
+            function updateDots(){
+                const notifs = load();
+                const hasUnread = notifs.some(n => !n.read);
+                [dotDesktop, dotMobile].forEach(dot=>{
+                    if(!dot) return;
+                    dot.classList.toggle('d-none', !hasUnread);
+                });
+            }
+
+            document.getElementById('openNotifications')?.addEventListener('click', (e)=>{
+                e.preventDefault();
+                renderNotifs();
+                notificationsModal.show();
+            });
+
+            document.getElementById('openNotificationsMobile')?.addEventListener('click', (e)=>{
+                e.preventDefault();
+                renderNotifs();
+                notificationsModal.show();
+            });
+
+            btnSelectAll?.addEventListener('click', ()=>{
+                const all = load();
+                const allChecked = all.length && all.every(n => n.checked);
+                all.forEach(n => n.checked = !allChecked);
+                save(all);
+                renderNotifs();
+            });
+
+            btnMarkRead?.addEventListener('click', ()=>{
+                const ids = getSelectedIds();
+                if(!ids.size) return toast('Seleccioná al menos una notificación');
+
+                const all = load().map(n => ids.has(n.id) ? ({...n, read:true, checked:false}) : n);
+                save(all);
+                renderNotifs();
+                toast('Marcadas como leídas');
+            });
+
+            btnDelete?.addEventListener('click', ()=>{
+                const ids = getSelectedIds();
+                if(!ids.size) return toast('Seleccioná al menos una notificación');
+
+                const all = load().filter(n => !ids.has(n.id));
+                save(all);
+                renderNotifs();
+                toast('Notificación(es) borrada(s)');
+            });
+
+            btnDeleteAll?.addEventListener('click', ()=>{
+                if(!confirm('¿Borrar todas las notificaciones?')) return;
+                save([]);
+                renderNotifs();
+                toast('Borradas todas');
+            });
+
+            modalEl.addEventListener('hidden.bs.modal', updateDots);
+
+            seed();
+            updateDots();
+        })();
+
+    });
+</script>
+
+</body>
+</html>

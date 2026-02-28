@@ -40,12 +40,7 @@ public class UsuarioController extends PetSitApp {
 	        return "usuarios/perfil_usuarios"; // Renderiza templates/"""".html
 	}
 
-    @GetMapping("/index")
-	    public String indexUsuario() {
-	        return "usuarios/user_index"; // Renderiza templates/"""".html
-	}
-
-	@GetMapping(path = "/usuarios/list")
+	@GetMapping(path = "/list")
 	public String showUsuarioPage(Model model) {
 		LOGGER.info("GET - showUsuarioPage - /usuarios/list");
 		
@@ -59,7 +54,7 @@ public class UsuarioController extends PetSitApp {
 		return "usuarios/list_usuarios";
 	}
 	
-	@GetMapping(path = "/usuarios/new")
+	@GetMapping(path = "/new")
 	public String showNewUsuarioPage(Model model) {
 	LOGGER.info("GET - showNewUsuarioPage - /usuarios/new");
 	Usuario usuario = new Usuario();
@@ -69,13 +64,13 @@ public class UsuarioController extends PetSitApp {
 	return "usuarios/new_usuarios";
 	}
 	
-	@GetMapping(path = "/usuarios/index")
+	@GetMapping(path = "/index")
 	public String indexUsuario(Model model) {
 	LOGGER.info("GET - indexUsuario - /usuarios/index");
 	return "usuarios/user_index";
 	}
 	
-	@PostMapping(value = "/usuarios/save")
+	@PostMapping(value = "/save")
 	public String saveUsuario(@ModelAttribute("usuario") Usuario usuario) {
 	LOGGER.info("POST - saveUsuario - /usuarios/save");
 	
@@ -95,7 +90,7 @@ public class UsuarioController extends PetSitApp {
 
 	}
 	
-	@RequestMapping(value = "/usuarios/edit/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/edit/{id:\\d+}", method = RequestMethod.GET)
 	public ModelAndView showEditUsuarioPage(@PathVariable(name = "id") Long usuarioId) {
 	LOGGER.info("GET - showEditUsuarioPage - /usuarios/edit/{id}");
 	LOGGER.info("usuario: " + usuarioId);
@@ -113,11 +108,47 @@ public class UsuarioController extends PetSitApp {
 	return mav;
 	}
 	
-	@RequestMapping(value = "/usuarios/delete/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/delete/{id:\\d+}", method = RequestMethod.GET)
 	public String deleteUsuario(@PathVariable(name = "id") Long usuarioId) {
 	LOGGER.info("GET - deleteUsuario - /usuarios/delete/{id}");
 	LOGGER.info("usuario: " + usuarioId);
 	usuarioService.delete(usuarioId);
 	return "redirect:/petsit/usuarios/list";
 	}
+
+	@GetMapping("/usuarioadoptar")
+	public String usuarioAdoptar() {
+		return "usuarios/usuarioadoptar";
+	}
+
+	@GetMapping("/usuariocontacto")
+	public String usuarioContacto() {
+		return "usuarios/usuariocontacto";
+	}
+
+	@GetMapping("/usuariomapa")
+	public String usuarioMapa() {
+		return "usuarios/usuariomapa";
+	}
+
+	@GetMapping("/usuarioquienessomos")
+	public String usuarioQuienesSomos() {
+		return "usuarios/usuarioquienessomos";
+	}
+
+	@GetMapping("/usuariorefugio")
+	public String usuarioRefugio() {
+		return "usuarios/usuariorefugio";
+	}
+
+	@GetMapping("/usuarioveterinarias")
+	public String usuarioVeterinarias() {
+		return "usuarios/usuarioveterinarias";
+	}
+
+	@GetMapping("/mis-solicitudes")
+	public String mis_solicitudes() {
+		return "usuarios/mis-solicitudes";
+	}
+
 }

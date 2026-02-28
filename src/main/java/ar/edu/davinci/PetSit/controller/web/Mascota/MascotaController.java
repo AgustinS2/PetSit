@@ -26,17 +26,17 @@ public class MascotaController {
 
     @GetMapping("/mis-mascotas")
 	    public String misMascotas() {
-	        return "mascotas/mis_mascotas"; // Renderiza templates/"""".html
+	        return "mascotas/mis_mascotas";
 	}
     
     @GetMapping("/adoptar")
 	    public String adoptar() {
-	        return "mascotas/adoptar_mascotas"; // Renderiza templates/"""".html
+	        return "mascotas/adoptar_mascotas";
 	}
 
     @GetMapping("/document")
 	    public String document() {
-	        return "mascotas/document_mascotas"; // Renderiza templates/"""".html
+	        return "mascotas/document_mascotas";
 	}
 
     @GetMapping("/list")
@@ -73,7 +73,7 @@ public class MascotaController {
         return "redirect:/mascotas/list";
     }
 
-    @GetMapping("/edit/{id}")
+    @GetMapping("/edit/{id:\\d+}")
     public ModelAndView editMascotaForm(@PathVariable("id") Long id) {
         LOGGER.info("GET - editMascotaForm - /mascotas/edit/{id}");
         ModelAndView mav = new ModelAndView("mascotas/edit_mascota");
@@ -86,7 +86,7 @@ public class MascotaController {
         return mav;
     }
 
-    @GetMapping("/delete/{id}")
+    @GetMapping("/delete/{id:\\d+}")
     public String deleteMascota(@PathVariable("id") Long id) {
         LOGGER.info("GET - deleteMascota - /mascotas/delete/{id}");
         mascotaService.delete(id);

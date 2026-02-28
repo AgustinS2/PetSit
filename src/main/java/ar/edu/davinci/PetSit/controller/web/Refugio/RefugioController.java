@@ -64,7 +64,7 @@ public class RefugioController extends PetSitApp {
         return "redirect:/refugios/list";
     }
 
-    @GetMapping("/edit/{id}")
+    @GetMapping("/edit/{id:\\d+}")
     public ModelAndView editRefugioForm(@PathVariable("id") Long id) {
         LOGGER.info("GET - editRefugioForm - /refugios/edit/{id}");
         ModelAndView mav = new ModelAndView("refugios/edit_refugio");
@@ -77,7 +77,7 @@ public class RefugioController extends PetSitApp {
         return mav;
     }
 
-    @GetMapping("/delete/{id}")
+    @GetMapping("/delete/{id:\\d+}")
     public String deleteRefugio(@PathVariable("id") Long id) {
         LOGGER.info("GET - deleteRefugio - /refugios/delete/{id}");
         refugioService.delete(id);

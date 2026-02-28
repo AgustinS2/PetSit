@@ -21,7 +21,7 @@ public class HomeController extends PetSitApp {
 	
 	@GetMapping("/home/registro")
 	    public String registro() {
-	        return "home/registro"; // Renderiza templates/registro.html
+	        return "home/registro";
 	    }
 	@GetMapping("/home/login")
 	    public String login() {
