@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="es">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -11,41 +12,56 @@
   <link href="https://fonts.googleapis.com/css2?family=Caudex:wght@400;700&display=swap" rel="stylesheet">
 
   <!-- CSS global -->
-  <link th:href="@{/css/style.css}" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/core.css}">
+  <link rel="stylesheet" th:href="@{/css/nav-base.css}">
+  <link rel="stylesheet" th:href="@{/css/public.css}">
 
   <!-- Favicons -->
-  <link rel="icon" href="/assets/favicon/favicon.ico" sizes="any">
-  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
-  <link rel="manifest" href="/assets/favicon/site.webmanifest">
+  <link rel="icon" th:href="@{/assets/favicon/favicon.ico}" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" th:href="@{/assets/favicon/favicon-32x32.png}">
+  <link rel="icon" type="image/png" sizes="16x16" th:href="@{/assets/favicon/favicon-16x16.png}">
+  <link rel="apple-touch-icon" sizes="180x180" th:href="@{/assets/favicon/apple-touch-icon.png}">
+  <link rel="manifest" th:href="@{/assets/favicon/site.webmanifest}">
   <meta name="theme-color" content="#0f6a67">
 </head>
+
 <body class="reset-page">
 
-  <!-- NAVBAR -->
+<!-- NAVBAR -->
+<header>
   <nav class="navbar navbar-expand-lg navbar-light bg-nav border-bottom">
     <div class="container-fluid px-3 px-md-4">
-      <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{index.html}" aria-label="Inicio">
-        <img th:src="@{/assets/img/icons/logo.png}" alt="Logo PetSit" height="56">
-        <img th:src="@{/assets/img/Petsit.png}" alt="PetSit nombre" class="brand-name">
+
+      <!-- LOGO -->
+      <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/petsit/index}">
+        <img th:src="@{/assets/img/icons/logo.png}" alt="Logo PetSit">
+        <img th:src="@{/assets/img/Petsit.png}" alt="PetSit" class="brand-name">
       </a>
 
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+      <!-- TOGGLER -->
+      <button class="navbar-toggler" type="button"
+              data-bs-toggle="collapse" data-bs-target="#mainNav"
               aria-controls="mainNav" aria-expanded="false" aria-label="Abrir menú">
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <div class="collapse navbar-collapse justify-content-center" id="mainNav">
-        <ul class="navbar-nav mx-auto nav-center gap-lg-4">
-          <li class="nav-item"><a class="nav-link" th:href="@{/petsit/index}">Inicio</a></li>
+      <!-- NAV -->
+      <div class="collapse navbar-collapse" id="mainNav">
+
+        <ul class="navbar-nav ms-auto nav-links">
+          <li class="nav-item"><a class="nav-link active" th:href="@{/petsit/index}" aria-current="page">Inicio</a></li>
           <li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/nosotros}">¿Quiénes somos?</a></li>
           <li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/contacto}">Contactanos</a></li>
-		  <li class="nav-item"><a class="nav-link" th:href="@{/petsit/refugios/list}">Refugios</a></li>
-		  <li class="nav-item"><a class="nav-link" th:href="@{/petsit/veterinarias/list}">Veterinarias</a></li>
-		  <li class="nav-item"><a class="nav-link" th:href="@{/petsit/mascotas/list}">Perdidos</a></li>
-		  <li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/login}">Iniciar sesión</a></li>
+          <li class="nav-item"><a class="nav-link" th:href="@{/petsit/refugios/index}">Refugios</a></li>
+          <li class="nav-item"><a class="nav-link" th:href="@{/petsit/alertas/mapa}">Mapa</a></li>
+          <li class="nav-item"><a class="nav-link" th:href="@{/petsit/veterinarias/index}">Veterinarias</a></li>
         </ul>
+
+        <!-- LOGIN -->
+        <div class="nav-login ms-lg-2">
+          <a th:href="@{/petsit/home/login}" class="user-chip">INICIAR SESIÓN</a>
+        </div>
+
       </div>
     </div>
   </nav>
@@ -53,47 +69,82 @@
   <!-- CONTENIDO -->
   <main class="reset-wrap py-4 py-md-5">
     <section class="reset-card" role="dialog" aria-labelledby="resetTitle">
+
       <h1 id="resetTitle" class="reset-title">Recuperar contraseña</h1>
-      <p class="reset-lead">
-        Ingresá tu email y escribí una nueva contraseña para tu cuenta PetSit.
-      </p>
 
-      <form id="resetForm" class="reset-form" novalidate>
-        <div class="mb-3">
-          <label for="resetEmail" class="form-label">Email</label>
-          <input id="resetEmail" type="email" class="reset-input form-control" placeholder="tu@correo.com">
-        </div>
+      <!-- ALERTAS -->
+      <div id="alertBox" class="reset-alert d-none" role="alert"></div>
 
-        <div class="mb-3">
-          <label for="newPass" class="form-label">Contraseña nueva</label>
-          <div class="input-group">
-            <input id="newPass" type="password" class="reset-input form-control" placeholder="••••••••">
-            <button type="button" id="toggleNew"
-                    style="border:none; background:transparent; padding:0 0.75rem; color:#0f4f4f;"
-                    aria-label="Mostrar u ocultar contraseña">
-              <i class="bi bi-eye"></i>
-            </button>
+      <!-- ===== MODO 1: SOLICITAR RESET (sin token) ===== -->
+      <div id="requestMode">
+        <p class="reset-lead">
+          Ingresá tu email y te vamos a enviar un link para restablecer tu contraseña.
+        </p>
+
+        <form id="requestForm" class="reset-form" novalidate>
+          <div class="mb-3">
+            <label for="requestEmail" class="form-label">Email</label>
+            <input id="requestEmail" type="email" class="reset-input form-control" placeholder="tu@correo.com" required>
+            <div class="invalid-feedback">Ingresá un email válido.</div>
           </div>
-        </div>
 
-        <div class="mb-3">
-          <label for="newPass2" class="form-label">Repetir contraseña</label>
-          <div class="input-group">
-            <input id="newPass2" type="password" class="reset-input form-control" placeholder="••••••••">
-            <button type="button" id="toggleNew2"
-                    style="border:none; background:transparent; padding:0 0.75rem; color:#0f4f4f;"
-                    aria-label="Mostrar u ocultar contraseña">
-              <i class="bi bi-eye"></i>
-            </button>
+          <button type="submit" class="reset-btn w-100 mt-2" id="btnSendLink">
+            Enviar link de recuperación
+          </button>
+
+          <div class="reset-links text-center mt-3">
+            <a th:href="@{/petsit/home/login}">Volver a iniciar sesión</a>
           </div>
-        </div>
 
-        <button type="submit" class="reset-btn w-100 mt-2">Guardar</button>
 
-        <div class="reset-links text-center mt-3">
-          <a th:href="@{/petsit/home/login}">¿Volver a iniciar sesión?</a>
-        </div>
-      </form>
+        </form>
+      </div>
+
+      <!-- ===== MODO 2: CAMBIAR PASSWORD (con token) ===== -->
+      <div id="resetMode" class="d-none">
+        <p class="reset-lead">
+          Creá una nueva contraseña para tu cuenta.
+        </p>
+
+        <form id="resetForm" class="reset-form" novalidate>
+          <input type="hidden" id="tokenField" />
+
+          <div class="mb-3">
+            <label for="newPass" class="form-label">Contraseña nueva</label>
+            <div class="input-wrap">
+              <input id="newPass" type="password" class="reset-input form-control" placeholder="••••••••" required minlength="8">
+              <button type="button" id="toggleNew" class="toggle-pass" aria-label="Mostrar u ocultar contraseña">
+                <i class="bi bi-eye"></i>
+              </button>
+              <div class="invalid-feedback">
+                Mínimo 8 caracteres. Ideal: combinar letras y números.
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="newPass2" class="form-label">Repetir contraseña</label>
+            <div class="input-wrap">
+              <input id="newPass2" type="password" class="reset-input form-control" placeholder="••••••••" required minlength="8">
+              <button type="button" id="toggleNew2" class="toggle-pass" aria-label="Mostrar u ocultar contraseña">
+                <i class="bi bi-eye"></i>
+              </button>
+              <div class="invalid-feedback">
+                Las contraseñas no coinciden.
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" class="reset-btn w-100 mt-2" id="btnSave">
+            Guardar nueva contraseña
+          </button>
+
+          <div class="reset-links text-center mt-3">
+            <a th:href="@{/petsit/home/login}">Volver a iniciar sesión</a>
+          </div>
+        </form>
+      </div>
+
     </section>
   </main>
 
@@ -104,8 +155,8 @@
         <div class="col-md-4 mb-3">
           <h6 class="fw-bold text-uppercase">Más información</h6>
           <ul class="list-unstyled">
-            <li><a th:href="@{contacto.html}" class="footer-link">Contactanos</a></li>
-            <li><a th:href="@{quienes-somos.html}" class="footer-link">Sobre nosotros</a></li>
+            <li><a th:href="@{/petsit/home/contacto}" class="footer-link">Contactanos</a></li>
+            <li><a th:href="@{/petsit/home/nosotros}" class="footer-link">Sobre nosotros</a></li>
           </ul>
         </div>
 
@@ -134,10 +185,21 @@
   <!-- JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // Mostrar / ocultar contraseña
+    // Helpers UI
+    const alertBox = document.getElementById('alertBox');
+    const showAlert = (type, msg) => {
+      alertBox.classList.remove('d-none', 'success', 'error');
+      alertBox.classList.add(type === 'success' ? 'success' : 'error');
+      alertBox.textContent = msg;
+    };
+    const hideAlert = () => alertBox.classList.add('d-none');
+
+    // Toggle password
     const toggle = (btnId, inputId) => {
       const btn = document.getElementById(btnId);
       const input = document.getElementById(inputId);
+      if (!btn || !input) return;
+
       btn.addEventListener('click', () => {
         const isText = input.type === 'text';
         input.type = isText ? 'password' : 'text';
@@ -147,10 +209,89 @@
     toggle('toggleNew', 'newPass');
     toggle('toggleNew2', 'newPass2');
 
-    // Al guardar, redirige a login.html
-    document.getElementById('resetForm').addEventListener('submit', e => {
+    // Modo según token
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('token');
+
+    const requestMode = document.getElementById('requestMode');
+    const resetMode = document.getElementById('resetMode');
+    const tokenField = document.getElementById('tokenField');
+
+    if (token && token.trim()) {
+      requestMode.classList.add('d-none');
+      resetMode.classList.remove('d-none');
+      tokenField.value = token.trim();
+    }
+
+    // Validación email simple
+    const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email).toLowerCase());
+
+    // ===== PASO 1: solicitar link =====
+    document.getElementById('requestForm')?.addEventListener('submit', (e) => {
       e.preventDefault();
-      window.location.href = 'login';
+      hideAlert();
+
+      const emailInput = document.getElementById('requestEmail');
+      const email = (emailInput.value || '').trim();
+
+      // Bootstrap-like validation
+      if (!isValidEmail(email)) {
+        emailInput.classList.add('is-invalid');
+        return;
+      }
+      emailInput.classList.remove('is-invalid');
+
+      // Acá iría un fetch real:
+      // fetch('/api/auth/forgot-password', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email}) })
+
+      showAlert('success', '¡Listo! Te enviamos un link de recuperación.');
+
+      // Demo UX: simulo ir al link con token
+      setTimeout(() => {
+        window.location.href = `${window.location.pathname}?token=DEMO123`;
+      }, 800);
+    });
+
+    // ===== PASO 2: cambiar contraseña =====
+    document.getElementById('resetForm')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      hideAlert();
+
+      const pass1 = document.getElementById('newPass');
+      const pass2 = document.getElementById('newPass2');
+
+      const p1 = pass1.value || '';
+      const p2 = pass2.value || '';
+
+      let ok = true;
+
+      // Reglas mínimas
+      if (p1.length < 8) {
+        pass1.classList.add('is-invalid');
+        ok = false;
+      } else {
+        pass1.classList.remove('is-invalid');
+      }
+
+      if (p2 !== p1 || p2.length < 8) {
+        pass2.classList.add('is-invalid');
+        ok = false;
+      } else {
+        pass2.classList.remove('is-invalid');
+      }
+
+      if (!ok) return;
+
+      const token = tokenField.value;
+
+      // Acá iría un fetch real:
+      // fetch('/api/auth/reset-password', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({token, password:p1}) })
+
+      showAlert('success', 'Contraseña actualizada. Te redirigimos para iniciar sesión.');
+
+      setTimeout(() => {
+        window.location.href = 'login.html';
+      }, 900);
     });
   </script>
 </body>

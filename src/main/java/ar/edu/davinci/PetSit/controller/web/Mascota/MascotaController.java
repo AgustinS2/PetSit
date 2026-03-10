@@ -1,5 +1,7 @@
 package ar.edu.davinci.PetSit.controller.web.Mascota;
 
+import ar.edu.davinci.PetSit.domain.Usuario;
+import ar.edu.davinci.PetSit.service.Usuario.UsuarioService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,9 @@ import org.springframework.web.servlet.ModelAndView;
 import ar.edu.davinci.PetSit.domain.Mascota;
 import ar.edu.davinci.PetSit.exceptions.BusinessException;
 import ar.edu.davinci.PetSit.service.Mascota.MascotaService;
+import java.security.Principal;
+import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 @RequestMapping("/petsit/mascotas")
@@ -23,6 +28,9 @@ public class MascotaController {
 
     @Autowired
     private MascotaService mascotaService;
+
+    @Autowired
+    private UsuarioService usuarioService;
 
     @GetMapping("/mis-mascotas")
 	    public String misMascotas() {
@@ -47,6 +55,18 @@ public class MascotaController {
         model.addAttribute("listMascotas", mascotas.getContent());
         model.addAttribute("pageNumber", mascotas.getPageable().getPageNumber());
         model.addAttribute("totalPages", mascotas.getTotalPages());
+        return "mascotas/list_mascotas";
+    }
+
+    @GetMapping("/mis-mascotas")
+    public String misMascotas(Model model, Principal principal) {
+
+        Usuario usuario = usuarioService.findByCorreo(principal.getName());
+
+        List<Mascota> mascotas = mascotaService.listByUsuario(usuario.getId());
+
+        model.addAttribute("listMascotas", mascotas);
+
         return "mascotas/list_mascotas";
     }
 
