@@ -32,10 +32,6 @@ public class MascotaController {
     @Autowired
     private UsuarioService usuarioService;
 
-    @GetMapping("/mis-mascotas")
-	    public String misMascotas() {
-	        return "mascotas/mis_mascotas";
-	}
     
     @GetMapping("/adoptar")
 	    public String adoptar() {
@@ -59,11 +55,11 @@ public class MascotaController {
     }
 
     @GetMapping("/mis-mascotas")
-    public String misMascotas(Model model, Principal principal) {
+    public String misMascotas(Model model, Principal principal) throws BusinessException {
 
         Usuario usuario = usuarioService.findByCorreo(principal.getName());
 
-        List<Mascota> mascotas = mascotaService.listByUsuario(usuario.getId());
+        List<Mascota> mascotas = mascotaService.findByDueno(usuario);
 
         model.addAttribute("listMascotas", mascotas);
 

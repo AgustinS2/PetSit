@@ -127,7 +127,7 @@
           </p>
         </header>
 
-        <form class="auth-form" action="#" method="post" novalidate>
+		<form class="auth-form" th:action="@{/petsit/usuarios/usuarios/save}" th:object="${usuario}" method="post">
 
           <!-- Nombre + Apellido -->
           <div class="row g-3">
@@ -136,7 +136,7 @@
                 <label for="nombre" class="auth-label">Nombre</label>
                 <input
                         id="nombre"
-                        name="nombre"
+                        th:field="*{nombre}"
                         type="text"
                         class="auth-input"
                         placeholder="Tu nombre"
@@ -150,7 +150,7 @@
                 <label for="apellido" class="auth-label">Apellido</label>
                 <input
                         id="apellido"
-                        name="apellido"
+                        th:field="*{apellido}"
                         type="text"
                         class="auth-input"
                         placeholder="Tu apellido"
@@ -165,7 +165,7 @@
             <label for="telefono" class="auth-label">Teléfono</label>
             <input
                     id="telefono"
-                    name="telefono"
+                    th:field="*{telefono}"
                     type="tel"
                     class="auth-input"
                     placeholder="+54 9 11 1234 5678"
@@ -179,7 +179,7 @@
             <label for="email" class="auth-label">Email</label>
             <input
                     id="email"
-                    name="email"
+                    th:field="*{correo}"
                     type="email"
                     class="auth-input"
                     placeholder="tu@correo.com"
@@ -193,7 +193,7 @@
             <div class="auth-pass">
               <input
                       id="pass"
-                      name="password"
+                      th:field="*{contrasena}"
                       type="password"
                       class="auth-input"
                       placeholder="••••••••"
@@ -232,7 +232,7 @@
               </button>
             </div>
           </div>
-
+			
           <!-- Botón -->
           <button type="submit" class="auth-btn-primary">Crear cuenta</button>
 

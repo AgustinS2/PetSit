@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import ar.edu.davinci.PetSit.domain.Mascota;
+import ar.edu.davinci.PetSit.domain.Usuario;
 import ar.edu.davinci.PetSit.exceptions.BusinessException;
 import ar.edu.davinci.PetSit.repository.MascotaRepository;
 
@@ -78,6 +79,11 @@ public class MascotaServiceImpl implements MascotaService {
         LOGGER.debug("Pageable: offset: " + pageable.getOffset() + ", pageSize: " +
                 pageable.getPageSize() + ", pageNumber: " + pageable.getPageNumber());
         return repository.findAll(pageable);
+    }
+
+    @Override
+    public List<Mascota> findByDueno(Usuario dueno) {
+        return repository.findByDueno(dueno);
     }
 
     @Override
