@@ -74,38 +74,45 @@
     <h1 id="loginTitle" class="visually-hidden">Iniciar sesión</h1>
 
     <!-- Form sin validación -->
-    <form id="loginForm" class="login-form" novalidate>
-      <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
-        <input id="email" type="email" class="login-input form-control" placeholder="tu@correo.com">
-      </div>
+	<form th:action="@{/login}" method="post" id="loginForm" class="login-form">
+	        <div class="mb-3">
+	          <label for="email" class="form-label">Email</label>
+	          <input id="email" name="username" type="email" class="login-input form-control" placeholder="tu@correo.com">
+	        </div>
 
-      <div class="mb-3">
-        <label for="password" class="form-label">Contraseña</label>
-        <div class="input-wrap">
-          <input id="password" type="password" class="login-input form-control" placeholder="••••••••">
-          <button type="button" id="togglePass"
-                  style="border:none; background:transparent; padding:0 0.75rem; color:#0f4f4f;"
-                  aria-label="Mostrar u ocultar contraseña">
-            <i class="bi bi-eye"></i>
-          </button>
-        </div>
-      </div>
+	        <div class="mb-3">
+	          <label for="password" class="form-label">Contraseña</label>
+	          <div class="input-group">
+	            <input id="password" type="password" name="password" class="login-input form-control" placeholder="••••••••">
+	            <button type="button" id="togglePass"
+	                    style="border:none; background:transparent; padding:0 0.75rem; color:#0f4f4f;"
+	                    aria-label="Mostrar u ocultar contraseña">
+	              <i class="bi bi-eye"></i>
+	            </button>
+	          </div>
+	        </div>
 
-      <div class="form-check mb-3">
-        <input class="form-check-input" type="checkbox" id="rememberMe">
-        <label class="form-check-label" for="rememberMe">Recordarme</label>
-      </div>
+	        <div class="form-check mb-3">
+	          <input class="form-check-input" type="checkbox" id="rememberMe">
+	          <label class="form-check-label" for="rememberMe">Recordarme</label>
+	        </div>
 
-      <button type="submit" class="login-btn w-100 mt-2">Iniciar sesión</button>
+	        <button type="submit" class="login-btn w-100 mt-2">Iniciar sesión</button>
+	        <div th:if="${errorMsg}" class="text-danger mt-2" th:text="${errorMsg}"></div>
+	        <div th:if="${logoutMsg}" class="text-success mt-2" th:text="${logoutMsg}"></div>
+	        <div class="login-links text-center mt-3">
+	          <a th:href="@{/petsit/home/recuperarpass}">Recuperar contraseña</a>
+	          <span class="text-muted">·</span>
+	          <a th:href="@{/petsit/home/registro}">Crear cuenta</a>
+	        </div>
+	      </form>
+		  <div th:if="${param.error}" class="text-danger mt-2">
+		    Email o contraseña incorrectos.
+		  </div>
 
-      <div class="login-links text-center mt-3">
-        <a th:href="@{/petsit/home/recuperarpass}">Recuperar contraseña</a>
-        <span class="text-muted">·</span>
-        <a th:href="@{/petsit/home/registro}">Crear cuenta</a>
-      </div>
-    </form>
-
+		  <div th:if="${param.logout}" class="text-success mt-2">
+		    Sesión cerrada correctamente.
+		  </div>
     <!-- Perros decorativos -->
     <img th:src="@{/assets/img/login2.png}" class="login-dog login-dog-left"  alt="" loading="lazy" aria-hidden="true">
     <img th:src="@{/assets/img/login1.png}" class="login-dog login-dog-right" alt="" loading="lazy" aria-hidden="true">
@@ -158,24 +165,6 @@
     $toggle.innerHTML = isText ? '<i class="bi bi-eye"></i>' : '<i class="bi bi-eye-slash"></i>';
   });
 
-  // LOGIN ÚNICO (stub sin backend)
-  // Regla: si el mail termina en @petsit.com o es admin@petsit.com -> admin
-  // (Cuando haya backend: reemplazar esto por la respuesta real del servidor)
-  document.getElementById('loginForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    const email = (document.getElementById('email').value || '').trim().toLowerCase();
-
-    const isAdmin =
-            email === 'admin@petsit.com' ||
-            email.endsWith('@petsit.com');
-
-    sessionStorage.setItem('petsit_role', isAdmin ? 'admin' : 'user');
-    window.location.href = '/petsit/usuarios/index';
-    //window.location.href = isAdmin
-    //  ? '/petsit/admin-panel/index'
-    // : '/petsit/usuarios/index';
-  });
 </script>
 
 

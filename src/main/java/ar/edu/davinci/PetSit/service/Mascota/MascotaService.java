@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import ar.edu.davinci.PetSit.domain.Mascota;
+import ar.edu.davinci.PetSit.domain.Usuario;
 import ar.edu.davinci.PetSit.exceptions.BusinessException;
 
 public interface MascotaService {
@@ -23,6 +24,8 @@ public interface MascotaService {
     List<Mascota> list();
 
     Page<Mascota> list(Pageable pageable);
+
+    List<Mascota> findByDueno(Usuario dueno);
 
     long count();
 }

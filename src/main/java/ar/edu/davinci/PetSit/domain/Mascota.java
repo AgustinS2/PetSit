@@ -1,6 +1,7 @@
 package ar.edu.davinci.PetSit.domain;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -47,6 +48,12 @@ public class Mascota implements Serializable {
     @ManyToOne
     @JoinColumn(name = "msc_dueno_id")
     private Usuario dueno;
+
+    @Column(name = "msc_sexo")
+    private String sexo;
+
+    @Column(name = "msc_fecha_nacimiento")
+    private LocalDate fechaNacimiento;
 
 }
 

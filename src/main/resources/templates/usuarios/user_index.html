@@ -95,7 +95,7 @@
                       class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle d-none"
                       aria-hidden="true"></span>
               </span>
-            <span id="navUser">Usuario</span>
+            <span id="navUser" th:text="${usuario.nombre}"></span>
           </a>
 
           <ul class="dropdown-menu dropdown-menu-end user-menu">
@@ -141,7 +141,7 @@
           </span>
 
         <h1 class="user-hero-title">
-          Bienvenido, <span id="hUser">Usuario</span>
+          Bienvenido, <span id="hUser" th:text="${usuario.nombre}">Usuario</span>
         </h1>
 
         <p class="user-hero-lead">
@@ -311,32 +311,6 @@
   });
 </script>
 
-<script>
-  (() => {
-    // 1) Nombre del usuario: ?name=... || localStorage || fallback
-    const params = new URLSearchParams(window.location.search);
-    const queryName = params.get('name');
-    const storedName = localStorage.getItem('userName');
-    const name = (queryName && queryName.trim()) || (storedName && storedName.trim()) || 'Usuario';
-
-    if (queryName) localStorage.setItem('userName', name);
-
-    const setText = (id) => {
-      const el = document.getElementById(id);
-      if (el) el.textContent = name;
-    };
-    setText('navUser');
-    setText('hUser');
-
-    // 2) Logout (desktop y mobile)
-    const doLogout = () => {
-      localStorage.removeItem('auth');
-      localStorage.removeItem('userName');
-    };
-    document.getElementById('logoutBtn')?.addEventListener('click', doLogout);
-    document.getElementById('logoutBtnMobile')?.addEventListener('click', doLogout);
-  })();
-</script>
 
 <!-- ✅ NOTIFICACIONES (misma lógica que el resto) -->
 <script>

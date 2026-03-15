@@ -22,4 +22,7 @@ public interface UsuarioService {
 	long count();
 	
 	List<TipoUsuario> getTipoUsuarios();
+
+	Usuario findByCorreo(String correo) throws BusinessException;
+
 }

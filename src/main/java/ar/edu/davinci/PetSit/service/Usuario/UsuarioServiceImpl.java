@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ar.edu.davinci.PetSit.domain.Usuario;
 import ar.edu.davinci.PetSit.domain.TipoUsuario;
@@ -19,27 +20,49 @@ private final Logger LOGGER = LoggerFactory.getLogger(UsuarioServiceImpl.class);
 private final UsuarioRepository repository;
 
 @Autowired
+private PasswordEncoder passwordEncoder; 
+
+@Autowired
 public UsuarioServiceImpl(final UsuarioRepository repository) {
 this.repository = repository;
 }
 
 @Override
 public Usuario save(final Usuario usuario) throws BusinessException {
-LOGGER.debug("Grabamos el usuario: " + usuario.toString());
-if (usuario.getId() == null) {
-return repository.save(usuario);
-}
+    LOGGER.debug("Grabamos el usuario: " + usuario.toString());
+    if (usuario.getId() == null) {
+            
+        // Encriptamos la contraseña antes de guardar
+        String rawPassword = usuario.getContrasena();
+        String encodedPassword = passwordEncoder.encode(rawPassword);
+        usuario.setContrasena(encodedPassword);
+            
+        return repository.save(usuario);
+    }
 
-throw new BusinessException("No se puede crear el usuario con un id específico.");
+    throw new BusinessException("No se puede crear el usuario con un id específico.");
 }
 
 @Override
 public Usuario update(final Usuario usuario) throws BusinessException {
-LOGGER.debug("Modificamos el usuario: " + usuario.toString());
-if (usuario.getId() != null) {
-return repository.save(usuario);
-}
-throw new BusinessException("No se puede modificar un usuario que aún no fue creada.");
+    LOGGER.debug("Modificamos el usuario: " + usuario.toString());
+    
+    if (usuario.getId() != null) {
+        // Obtenemos el usuario actual desde la base de datos
+        Usuario usuarioExistente = repository.findById(usuario.getId())
+                .orElseThrow(() -> new BusinessException(
+                        "No se puede modificar un usuario que no existe."));
+
+        // Si la contraseña fue modificada, la encriptamos
+        if (!usuario.getContrasena().equals(usuarioExistente.getContrasena())) {
+            String encodedPassword = passwordEncoder.encode(usuario.getContrasena());
+            usuario.setContrasena(encodedPassword);
+        }
+
+        return repository.save(usuario);
+    }
+
+    throw new BusinessException("No se puede modificar un usuario que aún no fue creado.");
 }
 
 @Override
@@ -87,4 +110,18 @@ return repository.count();
 public List<TipoUsuario> getTipoUsuarios() {
 return TipoUsuario.getTipoUsuarios();
 }
+/*
+@Override
+public Usuario findByCorreo(String correo) throws BusinessException {
+    return repository.findByCorreo(correo)
+            .orElseThrow(() -> new BusinessException("No se encontró el usuario con correo: " + correo));
+}
+*/
+@Override
+public Usuario findByCorreo(String correo) throws BusinessException {
+    return repository.findByCorreo(correo)
+            .orElseThrow(() -> new BusinessException("Usuario no encontrado"));
+}
+
+
 }
