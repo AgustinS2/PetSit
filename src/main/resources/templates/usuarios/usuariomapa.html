@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PetSit – Mapa</title>
+    <meta name="description" content="Mapa interactivo de mascotas perdidas y encontradas.">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Fuente Caudex -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caudex:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Iconos Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+    <!-- Leaflet + Cluster -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"/>
+
+    <!-- Estilos globales -->
+    <link rel="stylesheet" th:href="@{/css/core.css}">
+    <link rel="stylesheet" th:href="@{/css/nav-user.css}">
+    <link rel="stylesheet" th:href="@{/css/user.css}">
+    <link rel="stylesheet" th:href="@{/css/public.css}">
+
+    <!-- Favicons -->
+    <link rel="icon" th:href="@{/assets/favicon/favicon.ico}" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" th:href="@{/assets/favicon/favicon-32x32.png}">
+    <link rel="icon" type="image/png" sizes="16x16" th:href="@{/assets/favicon/favicon-16x16.png}">
+    <link rel="apple-touch-icon" sizes="180x180" th:href="@{/assets/favicon/apple-touch-icon.png}">
+    <link rel="manifest" th:href="@{/assets/favicon/site.webmanifest}">
+
+</head>
+
+<body class="map-page-body">
+
+<!-- NAVBAR INTERNO -->
+<nav class="navbar navbar-expand-lg navbar-light bg-nav border-bottom petsit-nav-user" aria-label="Menú interno">
+    <div class="container-fluid px-3 px-md-4">
+
+        <a id="brandLink" class="navbar-brand d-flex align-items-center gap-2 app-home"
+           th:href="@{/petsit/usuarios/index}" aria-label="Inicio de usuario">
+            <img th:src="@{/assets/img/icons/logo.png}" alt="Logo PetSit" height="56">
+            <img th:src="@{/assets/img/Petsit.png}" alt="PetSit" class="brand-name">
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#mainNav" aria-controls="mainNav"
+                aria-expanded="false" aria-label="Abrir menú">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNav">
+
+            <ul id="appNavList" class="navbar-nav mx-auto nav-center gap-lg-3">
+                <li class="nav-item"><a class="nav-link" th:href="@{/petsit/mascotas/mis-mascotas}">Mis mascotas</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/usuarioveterinarias}">Veterinarias</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/usuariorefugio}">Refugios</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/usuarioadoptar}">Adoptar</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/usuariomapa}">Mapa</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/mis-solicitudes}">Solicitudes</a></li>
+
+
+                <!-- MOBILE ONLY -->
+                <li class="nav-item d-lg-none"><hr class="dropdown-divider my-2"></li>
+
+                <li class="nav-item d-lg-none">
+                    <a class="nav-link d-flex align-items-center gap-2" th:href="@{/petsit/usuarios/perfil}">
+                        <i class="bi bi-person-gear"></i> Mi perfil
+                    </a>
+                </li>
+
+                <!-- ✅ MOBILE: NOTIFICACIONES -->
+                <li class="nav-item d-lg-none">
+                    <a class="nav-link d-flex align-items-center gap-2" href="#" id="openNotificationsMobile">
+                        <i class="bi bi-bell"></i> Notificaciones
+                        <span id="notifDotMobile"
+                              class="ms-1 d-inline-block p-1 bg-danger border border-light rounded-circle d-none"
+                              aria-hidden="true"></span>
+                    </a>
+                </li>
+
+                <li class="nav-item d-lg-none">
+                    <a class="nav-link d-flex align-items-center gap-2 text-danger" id="logoutBtnMobile"  th:href="@{/petsit/}">
+                        <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                    </a>
+                </li>
+            </ul>
+
+            <!-- DROPDOWN DESKTOP -->
+            <ul class="navbar-nav ms-auto align-items-center d-none d-lg-flex">
+                <li class="nav-item dropdown">
+                    <a class="nav-link user-chip dropdown-toggle d-flex align-items-center gap-2"
+                       href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <span class="user-avatar position-relative">
+                <img th:src="@{/assets/img/icons/usuario.png}" alt="Avatar usuario">
+                  <!-- ✅ DESKTOP DOT -->
+                <span id="notifDotDesktop"
+                      class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle d-none"
+                      aria-hidden="true"></span>
+              </span>
+                        <span id="navUser">Usuario</span>
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-end user-menu">
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center gap-2" th:href="@{/petsit/usuarios/perfil}">
+                                <i class="bi bi-person-gear"></i> Mi perfil
+                            </a>
+                        </li>
+
+                        <!-- ✅ DESKTOP: NOTIFICACIONES -->
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center gap-2" href="#" id="openNotifications">
+                                <i class="bi bi-bell"></i> Notificaciones
+                            </a>
+                        </li>
+
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item text-danger d-flex align-items-center gap-2" id="logoutBtn" th:href="@{/petsit/}">
+                                <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</nav>
+
+<!-- MAIN -->
+<main class="map-page">
+
+    <!-- Topbar -->
+    <section class="map-topbar" aria-label="Filtros del mapa">
+        <div class="container-fluid px-3 px-md-4">
+
+            <div class="map-filters" id="mapFilters">
+
+                <div class="map-search">
+                    <i class="bi bi-search" aria-hidden="true"></i>
+                    <input id="q" type="search" class="form-control" placeholder="Buscar por nombre, zona o señas" aria-label="Buscar reportes">
+                </div>
+
+                <select id="tipo" class="form-select">
+                    <option value="TODOS">Tipo: todos</option>
+                    <option value="PERDIDO">Tipo: perdidos</option>
+                    <option value="ENCONTRADO">Tipo: encontrados</option>
+                </select>
+
+                <select id="zona" class="form-select">
+                    <option value="TODAS">Zona: todas</option>
+                </select>
+
+                <select id="orden" class="form-select">
+                    <option value="RECIENTES">Más recientes</option>
+                    <option value="ANTIGUOS">Más antiguos</option>
+                </select>
+
+                <!-- Reportar -->
+                <div class="dropdown map-report-wrap">
+                    <button class="btn btn-primary dropdown-toggle map-report-btn" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false" id="mapReportBtn">
+                        <i class="bi bi-plus-lg me-1"></i> Reportar
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-end map-report-menu" aria-labelledby="mapReportBtn">
+                        <li>
+                            <button class="dropdown-item" type="button" id="reportLostBtn" onclick="openReportLost()">
+                                <i class="bi bi-exclamation-circle-fill me-2 text-danger"></i> Perdido
+                            </button>
+                        </li>
+                        <li>
+                            <button class="dropdown-item" type="button" id="reportFoundBtn" onclick="openReportFound()">
+                                <i class="bi bi-check-circle-fill me-2 text-success"></i> Encontrado
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- MAPA -->
+    <section class="map-canvas">
+        <div id="map"></div>
+    </section>
+
+</main>
+
+<!-- =========================
+     MODAL: DETALLE REPORTE
+     ========================= -->
+<div id="petModal" class="pet-modal" aria-hidden="true">
+    <div class="pet-card" role="dialog" aria-modal="true">
+        <button class="close-x" id="closeModal" aria-label="Cerrar">✕</button>
+
+        <div class="pet-card-header" id="modalTitle">Mascota</div>
+
+        <div class="pet-body">
+            <div class="pet-photo">
+                <div class="photo-bg"></div>
+                <img id="modalImg" alt="Foto mascota" />
+            </div>
+
+            <div class="pet-info">
+
+                <div class="pet-head">
+                    <div class="pet-title">
+                        <h2 class="pet-name" id="modalName">—</h2>
+                        <div class="pet-sub" id="modalSub">—</div>
+                    </div>
+
+                    <div class="pet-chips">
+                        <span id="modalBadge" class="chip chip-lost">PERDIDO</span>
+                        <span id="modalReporterChip" class="chip chip-reporter">Reportó: —</span>
+                    </div>
+                </div>
+
+                <div class="pet-meta">
+                    <div class="meta-row">
+                        <i class="bi bi-geo-alt-fill meta-ico"></i>
+                        <div><strong>Zona:</strong> <span id="modalZone">—</span></div>
+                    </div>
+
+                    <div class="meta-row">
+                        <i class="bi bi-calendar-event meta-ico"></i>
+                        <div><strong>Fecha:</strong> <span id="modalDate">—</span></div>
+                    </div>
+
+                    <div class="meta-row">
+                        <i class="bi bi-person-check-fill meta-ico"></i>
+                        <div><strong>Reportado por:</strong> <span id="modalReporter">—</span></div>
+                    </div>
+
+                    <div class="meta-row">
+                        <i class="bi bi-card-text meta-ico"></i>
+                        <div id="modalDesc">—</div>
+                    </div>
+                </div>
+
+                <div class="pet-actions">
+                    <button class="btn-petsit primary" id="callBtn">
+                        <i class="bi bi-telephone-fill me-2"></i>Llamar
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- =========================
+     MODAL: REPORTAR
+     ========================= -->
+<div class="modal fade petsit-modal" id="reportModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content petsit-report">
+
+            <button type="button" class="petsit-x" data-bs-dismiss="modal" aria-label="Cerrar">✕</button>
+
+            <div class="petsit-report-wrap">
+
+                <div class="report-topbar">
+                    <div class="topbar-left">
+                        <h4 id="reportFormTitle" class="mb-1">Reportar mascota perdida</h4>
+                        <p id="reportAsideSub" class="mb-0">Mientras más datos, más chances de que vuelva a casa.</p>
+                    </div>
+                    <div class="topbar-right">
+                        <span class="form-chip is-lost" id="reportChip">PERDIDO</span>
+                    </div>
+                </div>
+
+                <section class="petsit-report-form">
+                    <form id="reportForm" class="form-body" novalidate>
+
+                        <div class="form-row" id="foundModeWrap" style="display:none;">
+                            <label class="form-label">¿Qué situación es?</label>
+                            <div class="segmented">
+                                <input type="radio" class="btn-check" name="foundMode" id="foundKeep" value="TENGO" checked>
+                                <label class="btn-seg" for="foundKeep"><i class="bi bi-house-heart"></i> La tengo conmigo</label>
+
+                                <input type="radio" class="btn-check" name="foundMode" id="foundSaw" value="VI">
+                                <label class="btn-seg" for="foundSaw"><i class="bi bi-eye"></i> Solo la vi</label>
+                            </div>
+                        </div>
+
+                        <div class="report-2col">
+
+                            <div class="col-left">
+                                <div class="form-row">
+                                    <label class="form-label">Foto (opcional)</label>
+                                    <div class="upload-row">
+                                        <input class="form-control petsit-input" type="file" id="foto" accept="image/*">
+                                        <div class="upload-preview" id="fotoPreview" aria-hidden="true">
+                                            <img id="fotoImg" alt="Preview">
+                                        </div>
+                                    </div>
+                                    <small class="form-help">Ideal: de frente o cuerpo entero, con buena luz.</small>
+                                </div>
+
+                                <div class="grid-2">
+                                    <div class="form-row">
+                                        <label class="form-label">Nombre (opcional)</label>
+                                        <input type="text" class="form-control petsit-input" id="nombre" placeholder="Ej: Milo">
+                                    </div>
+
+                                    <div class="form-row">
+                                        <label class="form-label">Especie *</label>
+                                        <select class="form-select petsit-input" id="especie" required>
+                                            <option value="" selected disabled>Elegí una</option>
+                                            <option value="Perro">Perro</option>
+                                            <option value="Gato">Gato</option>
+                                            <option value="Otro">Otro</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="grid-2">
+                                    <div class="form-row">
+                                        <label class="form-label">Raza (opcional)</label>
+                                        <input type="text" class="form-control petsit-input" id="raza" placeholder="Ej: Mestizo">
+                                    </div>
+
+                                    <div class="form-row">
+                                        <label class="form-label">Tamaño (opcional)</label>
+                                        <select class="form-select petsit-input" id="tamano">
+                                            <option value="" selected>—</option>
+                                            <option value="Chico">Chico</option>
+                                            <option value="Mediano">Mediano</option>
+                                            <option value="Grande">Grande</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="grid-2">
+                                    <div class="form-row">
+                                        <label class="form-label">Barrio / Zona *</label>
+                                        <input type="text" class="form-control petsit-input" id="zonaForm" placeholder="Ej: Palermo" required>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <label class="form-label">Fecha *</label>
+                                        <input type="date" class="form-control petsit-input" id="fecha" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-right">
+                                <div class="form-row">
+                                    <label class="form-label">Dirección aproximada (opcional)</label>
+                                    <div class="pin-row">
+                                        <input type="text" class="form-control petsit-input" id="direccion" placeholder="Ej: Av. Santa Fe 1234">
+                                        <button type="button" class="btn btn-outline-secondary petsit-pin" id="pickOnMapBtn">
+                                            <i class="bi bi-pin-map"></i> Marcar en mapa
+                                        </button>
+                                    </div>
+                                    <small class="form-help">Se mostrará como ubicación aproximada.</small>
+                                    <input type="hidden" id="lat">
+                                    <input type="hidden" id="lng">
+                                </div>
+
+                                <div class="form-row">
+                                    <label class="form-label">Señas / descripción *</label>
+                                    <textarea class="form-control petsit-input" id="descripcionForm" rows="6"
+                                              placeholder="Ej: collar verde, mancha blanca en el pecho, responde a su nombre…"
+                                              required></textarea>
+                                </div>
+
+                                <div class="grid-2">
+                                    <div class="form-row">
+                                        <label class="form-label">Teléfono / WhatsApp *</label>
+                                        <input type="tel" class="form-control petsit-input" id="telefono"
+                                               placeholder="+54 11 4444-4444" required>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <label class="form-label">Preferencia (opcional)</label>
+                                        <select class="form-select petsit-input" id="contactoPref">
+                                            <option value="LLAMAR" selected>Llamadas</option>
+                                            <option value="WHATSAPP">WhatsApp</option>
+                                            <option value="AMBOS">Ambos</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary petsit-submit" id="reportSubmitBtn">
+                                <i class="bi bi-send me-2"></i> Publicar reporte
+                            </button>
+
+                            <button type="button" class="btn btn-light petsit-cancel" data-bs-dismiss="modal">
+                                Cancelar
+                            </button>
+
+                            <div class="form-legal">
+                                Al publicar aceptás que la info de contacto se muestre dentro del reporte.
+                            </div>
+                        </div>
+
+                        <input type="hidden" id="estado" value="PERDIDO">
+                        <input type="hidden" id="rolReportante" value="DUENO">
+                    </form>
+                </section>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ✅ MODAL: Notificaciones -->
+<div class="modal fade notifications-modal" id="notificationsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-bell me-2"></i> Notificaciones
+                </h5>
+                <button class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="notifications-actions">
+                    <button class="btn btn-sm btn-outline-secondary" id="selectAllBtn">Seleccionar todas</button>
+
+                    <div class="actions-right">
+                        <button class="btn btn-sm btn-outline-primary" id="markReadBtn">Marcar como leídas</button>
+                        <button class="btn btn-sm btn-outline-danger" id="deleteBtn">Borrar</button>
+                        <button class="btn btn-sm btn-danger" id="deleteAllBtn">Borrar todas</button>
+                    </div>
+                </div>
+
+                <div id="notificationsList" class="list-group notifications-list"></div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer mt-5">
+    <div class="container py-4">
+        <div class="row text-white">
+            <div class="col-md-4 mb-3">
+                <h6 class="fw-bold text-uppercase">Más información</h6>
+                <ul class="list-unstyled">
+                    <li><a th:href="@{/petsit/usuarios/usuariocontacto}" class="footer-link">Contactanos</a></li>
+                    <li><a th:href="@{/petsit/usuarios/usuarioquienessomos}" class="footer-link">Sobre nosotros</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4 mb-3">
+                <h6 class="fw-bold text-uppercase">Legal</h6>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="footer-link">Políticas de privacidad</a></li>
+                    <li><a href="#" class="footer-link">Términos de servicio</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4 mb-3">
+                <h6 class="fw-bold text-uppercase">Seguinos</h6>
+                <a href="#" class="footer-social me-2"><i class="bi bi-facebook"></i></a>
+                <a href="#" class="footer-social me-2"><i class="bi bi-instagram"></i></a>
+                <a href="#" class="footer-social"><i class="bi bi-twitter"></i></a>
+            </div>
+        </div>
+        <div class="text-center small mt-3 text-white">
+            Copyright 2025 © Escuela Da Vinci | Keila Degregorio | Maia Cohen | Matias Bernal | Agustin Segovia
+        </div>
+    </div>
+</footer>
+
+<!-- JS: Leaflet + Cluster -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+
+<!-- Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    function setMapTopbarHeight(){
+        const topbar = document.querySelector('.map-page .map-topbar');
+        if(!topbar) return;
+
+        const h = Math.ceil(topbar.getBoundingClientRect().height);
+        document.querySelector('.map-page')?.style.setProperty('--map-topbar-h', h + 'px');
+    }
+
+    window.addEventListener('load', setMapTopbarHeight);
+    window.addEventListener('resize', setMapTopbarHeight);
+    document.addEventListener('shown.bs.collapse', setMapTopbarHeight);
+    document.addEventListener('hidden.bs.collapse', setMapTopbarHeight);
+</script>
+
+<script>
+    const nav = document.querySelector('.navbar');
+    window.addEventListener('scroll', () => {
+        nav?.classList.toggle('is-scrolled', window.scrollY > 12);
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        /* =========================
+           USER NAME + LOGOUT
+           ========================= */
+        const name = localStorage.getItem('userName') || 'Usuario';
+        ['navUser','hUser'].forEach(id => {
+            const n = document.getElementById(id);
+            if(n) n.textContent = name;
+        });
+
+        function doLogout(){
+            localStorage.removeItem('auth');
+            localStorage.removeItem('userName');
+            window.location.href = 'index.html';
+        }
+        document.getElementById('logoutBtn')?.addEventListener('click', (e) => { e.preventDefault(); doLogout(); });
+        document.getElementById('logoutBtnMobile')?.addEventListener('click', (e) => { e.preventDefault(); doLogout(); });
+
+        /* =========================
+           HELPERS (para notifs)
+           ========================= */
+        function toast(msg){
+            const t = document.createElement('div');
+            t.textContent = msg;
+            t.style.cssText = `
+          position:fixed; bottom:18px; left:50%; transform:translateX(-50%);
+          background:rgba(0,0,0,.85); color:#fff; padding:.5rem .75rem; border-radius:12px;
+          z-index:1060; font-size:.9rem; box-shadow:0 6px 18px rgba(0,0,0,.2)`;
+            document.body.appendChild(t);
+            setTimeout(()=>t.remove(), 1800);
+        }
+
+        function safeJSONParse(value, fallback){
+            try { return JSON.parse(value) ?? fallback; }
+            catch { return fallback; }
+        }
+
+        function escapeHtml(str){
+            return (str ?? '').toString()
+                .replaceAll('&','&amp;')
+                .replaceAll('<','&lt;')
+                .replaceAll('>','&gt;')
+                .replaceAll('"','&quot;')
+                .replaceAll("'","&#039;");
+        }
+
+        /* =========================
+           NOTIFICACIONES (modal + acciones)
+           ========================= */
+        (function initNotifications(){
+
+            const modalEl = document.getElementById('notificationsModal');
+            const listEl  = document.getElementById('notificationsList');
+            if(!modalEl || !listEl || typeof bootstrap === 'undefined') return;
+
+            const KEY_NOTIFS = 'petsit_notifications';
+
+            function seed(){
+                const existing = safeJSONParse(localStorage.getItem(KEY_NOTIFS), null);
+                if(existing && Array.isArray(existing)) return;
+
+                const now = Date.now();
+                const demo = [
+                    { id: crypto.randomUUID(), title:'Refugio cercano', body:'Se publicó un nuevo animal en adopción.', read:false, ts: now - 1000*60*60*5, checked:false },
+                    { id: crypto.randomUUID(), title:'Recordatorio', body:'Actualizá la ficha de tu mascota.', read:true, ts: now - 1000*60*60*24, checked:false },
+                    { id: crypto.randomUUID(), title:'Novedad en veterinarias', body:'Agregamos nuevas clínicas en tu zona.', read:false, ts: now - 1000*60*45, checked:false }
+                ];
+                localStorage.setItem(KEY_NOTIFS, JSON.stringify(demo));
+            }
+
+            function load(){ return safeJSONParse(localStorage.getItem(KEY_NOTIFS), []); }
+            function save(arr){ localStorage.setItem(KEY_NOTIFS, JSON.stringify(arr)); }
+            function fmt(ts){
+                try{ return new Date(ts).toLocaleString('es-AR', { dateStyle:'short', timeStyle:'short' }); }
+                catch{ return ''; }
+            }
+
+            const notificationsModal = new bootstrap.Modal(modalEl);
+
+            const btnSelectAll = document.getElementById('selectAllBtn');
+            const btnMarkRead  = document.getElementById('markReadBtn');
+            const btnDelete    = document.getElementById('deleteBtn');
+            const btnDeleteAll = document.getElementById('deleteAllBtn');
+
+            function render(){
+                const notifs = load().sort((a,b)=>b.ts-a.ts);
+                listEl.innerHTML = '';
+
+                if(!notifs.length){
+                    listEl.innerHTML = `<div class="p-3 text-muted">No tenés notificaciones.</div>`;
+                    updateDots();
+                    return;
+                }
+
+                const frag = document.createDocumentFragment();
+
+                notifs.forEach(n=>{
+                    const item = document.createElement('div');
+                    item.className = `notif-item ${n.read ? 'is-read' : ''}`;
+
+                    item.innerHTML = `
+              <div class="notif-check">
+                <input class="form-check-input notif-check-input" type="checkbox" data-id="${n.id}" ${n.checked ? 'checked' : ''}>
+              </div>
+
+              <div>
+                <p class="notif-title">${escapeHtml(n.title)}</p>
+                <p class="notif-desc">${escapeHtml(n.body)}</p>
+                ${n.read ? '' : `<span class="notif-badge">Nuevo</span>`}
+              </div>
+
+              <div class="notif-meta">${escapeHtml(fmt(n.ts))}</div>
+            `;
+
+                    const cb = item.querySelector('.notif-check-input');
+                    cb.addEventListener('change', ()=>{
+                        const all = load();
+                        const idx = all.findIndex(x => x.id === n.id);
+                        if(idx >= 0){
+                            all[idx].checked = cb.checked;
+                            save(all);
+                        }
+                    });
+
+                    frag.appendChild(item);
+                });
+
+                listEl.appendChild(frag);
+                updateDots();
+            }
+
+            function getSelectedIds(){
+                return new Set(
+                    Array.from(document.querySelectorAll('.notif-check-input:checked'))
+                        .map(x => x.dataset.id)
+                );
+            }
+
+            const dotDesktop = document.getElementById('notifDotDesktop');
+            const dotMobile  = document.getElementById('notifDotMobile');
+
+            function updateDots(){
+                const notifs = load();
+                const hasUnread = notifs.some(n => !n.read);
+                [dotDesktop, dotMobile].forEach(dot=>{
+                    if(!dot) return;
+                    dot.classList.toggle('d-none', !hasUnread);
+                });
+            }
+
+            document.getElementById('openNotifications')?.addEventListener('click', (e)=>{
+                e.preventDefault();
+                render();
+                notificationsModal.show();
+            });
+
+            document.getElementById('openNotificationsMobile')?.addEventListener('click', (e)=>{
+                e.preventDefault();
+                render();
+                notificationsModal.show();
+            });
+
+            btnSelectAll?.addEventListener('click', ()=>{
+                const all = load();
+                const allChecked = all.length && all.every(n => n.checked);
+                all.forEach(n => n.checked = !allChecked);
+                save(all);
+                render();
+            });
+
+            btnMarkRead?.addEventListener('click', ()=>{
+                const ids = getSelectedIds();
+                if(!ids.size) return toast('Seleccioná al menos una notificación');
+
+                const all = load().map(n => ids.has(n.id) ? ({...n, read:true, checked:false}) : n);
+                save(all);
+                render();
+                toast('Marcadas como leídas');
+            });
+
+            btnDelete?.addEventListener('click', ()=>{
+                const ids = getSelectedIds();
+                if(!ids.size) return toast('Seleccioná al menos una notificación');
+
+                const all = load().filter(n => !ids.has(n.id));
+                save(all);
+                render();
+                toast('Notificación(es) borrada(s)');
+            });
+
+            btnDeleteAll?.addEventListener('click', ()=>{
+                if(!confirm('¿Borrar todas las notificaciones?')) return;
+                save([]);
+                render();
+                toast('Borradas todas');
+            });
+
+            modalEl.addEventListener('hidden.bs.modal', updateDots);
+
+            seed();
+            updateDots();
+        })();
+
+        // =======================
+        // DATA DEMO
+        // =======================
+        const REPORTS = [
+            { id:201, estado:"PERDIDO", rolReportante:"DUENO", nombre:"Milo",  especie:"Perro", raza:"Mestizo", zona:"Palermo",   fecha:"2025-09-05", descripcion:"Responde a su nombre. Tenía collar verde y arnés negro.", lat:-34.5875, lng:-58.4103, foto:"assets/img/mapa/Milo.jpg", contactoTel:"+5491100000000" },
+            { id:202, estado:"ENCONTRADO", rolReportante:"ENCONTRADOR", nombre:"Nube", especie:"Gato", raza:"Ragdoll", zona:"Belgrano", fecha:"2025-09-06", descripcion:"Apareció en la entrada del edificio, mimoso y limpio. Parece doméstico.", lat:-34.5622, lng:-58.4587, foto:"assets/img/mapa/Nube.jpg", contactoTel:"+5491162345678" },
+            { id:203, estado:"PERDIDO", rolReportante:"DUENO", nombre:"Nina", especie:"Gata", raza:"Scottish Fold", zona:"Recoleta", fecha:"2025-09-02", descripcion:"Ojos ámbar. Se asusta con ruidos. Se escapó del departamento.", lat:-34.5879, lng:-58.3930, foto:"assets/img/mapa/Nina.jpg", contactoTel:"+5491155566677" },
+            { id:204, estado:"PERDIDO", rolReportante:"ENCONTRADOR", nombre:"Sin nombre", especie:"Perro", raza:"Mestizo", zona:"Boedo", fecha:"2025-09-07", descripcion:"Lo vi sin correa, blanco y negro, oreja parada. No se deja agarrar.", lat:-34.6286, lng:-58.4173, foto:"assets/img/mapa/Sin nombre1.jpg", contactoTel:"+5491165656565" },
+            { id:205, estado:"PERDIDO", rolReportante:"DUENO", nombre:"Koko", especie:"Gato", raza:"Siamés", zona:"Caballito", fecha:"2025-09-03", descripcion:"Ojos azules. Tiene una manchita en la nariz. Se escapó por la ventana.", lat:-34.6189, lng:-58.4444, foto:"assets/img/mapa/Koko.jpg", contactoTel:"+5491199999999" },
+            { id:206, estado:"ENCONTRADO", rolReportante:"ENCONTRADOR", nombre:"Lola", especie:"Perra", raza:"Shih Tzu", zona:"Almagro", fecha:"2025-09-07", descripcion:"La encontré sin correa, tranquila. Tiene collar pero sin chapita.", lat:-34.6061, lng:-58.4203, foto:"assets/img/mapa/Lola.jpg", contactoTel:"+5491144442222" },
+            { id:207, estado:"PERDIDO", rolReportante:"DUENO", nombre:"Roma", especie:"Perra", raza:"Border Collie", zona:"Colegiales", fecha:"2025-09-08", descripcion:"Muy sociable. Collar celeste con chapita. Se soltó de la correa.", lat:-34.5753, lng:-58.4474, foto:"assets/img/mapa/Roma.jpg", contactoTel:"+5491132109876" },
+            { id:208, estado:"ENCONTRADO", rolReportante:"ENCONTRADOR", nombre:"Toby", especie:"Perro", raza:"Beagle", zona:"San Telmo", fecha:"2025-09-01", descripcion:"Lo vi cerca de Defensa y Chile. Con collar negro, olfateando todo.", lat:-34.6162, lng:-58.3712, foto:"assets/img/mapa/Toby.jpg", contactoTel:"+5491177778888" },
+            { id:212, estado:"ENCONTRADO", rolReportante:"ENCONTRADOR", nombre:"Pipo", especie:"Perro", raza:"Bulldog Francés", zona:"Lanús", fecha:"2025-09-04", descripcion:"Lo tengo en casa un rato. Sin collar. Está cansado pero bien.", lat:-34.7083, lng:-58.3906, foto:"assets/img/mapa/Pipo.jpg", contactoTel:"+5491170018899" },
+            { id:301, estado:"PERDIDO", rolReportante:"DUENO", nombre:"Sombra", especie:"Perro", raza:"Mestizo", zona:"Saavedra", fecha:"2025-09-08", descripcion:"Negro con manchita blanca en el pecho. Orejas caídas. Asustadizo.", lat:-34.5539, lng:-58.4894, foto:"assets/img/mapa/Sombra.jpg", contactoTel:"+5491141212121" },
+            { id:303, estado:"ENCONTRADO", rolReportante:"ENCONTRADOR", nombre:"Bruno", especie:"Perro", raza:"Rottweiler", zona:"Flores", fecha:"2025-09-06", descripcion:"Está tranquilo, parece cuidado. Lo vi cerca de una plaza, sin guía.", lat:-34.6282, lng:-58.4602, foto:"assets/img/mapa/Bruno.jpg", contactoTel:"+5491159595959" },
+            { id:304, estado:"PERDIDO", rolReportante:"DUENO", nombre:"Lía", especie:"Perra", raza:"Podenco", zona:"Núñez", fecha:"2025-09-05", descripcion:"Orejas grandes. Se asustó con los autos. No parece callejera.", lat:-34.5487, lng:-58.4564, foto:"assets/img/mapa/Lia.jpg", contactoTel:"+5491130303030" },
+            { id:305, estado:"PERDIDO", rolReportante:"ENCONTRADOR", nombre:"Sin nombre", especie:"Perro", raza:"Mestizo", zona:"Villa Urquiza", fecha:"2025-09-06", descripcion:"Lo vi corriendo por la vereda, sin correa. Se asustó con un colectivo.", lat:-34.5733, lng:-58.4867, foto:"assets/img/mapa/Sin nombre2.jpg", contactoTel:"+5491133344455" }
+        ];
+
+        // =======================
+        // MAP INIT
+        // =======================
+        const map = L.map("map", { zoomControl:true }).setView([-34.6037, -58.3816], 12);
+
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            attribution: '&copy; OpenStreetMap'
+        }).addTo(map);
+
+        const cluster = L.markerClusterGroup({
+            showCoverageOnHover:false,
+            spiderfyOnMaxZoom:true
+        });
+        map.addLayer(cluster);
+
+        function pinSvg(color){
+            return `
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+          <path fill="${color}" d="M12 2c-3.31 0-6 2.69-6 6c0 4.5 6 14 6 14s6-9.5 6-14c0-3.31-2.69-6-6-6z"/>
+          <circle cx="12" cy="8" r="2.5" fill="white" opacity="0.92"/>
+        </svg>`;
+        }
+
+        const iconLost  = L.divIcon({ className:"", html: pinSvg("#ef4444"), iconSize:[32,32], iconAnchor:[16,30] });
+        const iconFound = L.divIcon({ className:"", html: pinSvg("#10b981"), iconSize:[32,32], iconAnchor:[16,30] });
+
+        const $q     = document.getElementById("q");
+        const $tipo  = document.getElementById("tipo");
+        const $zona  = document.getElementById("zona");
+        const $orden = document.getElementById("orden");
+
+        const normalize = s => (s || "").toString().trim().toLowerCase();
+
+        function fillZones(data){
+            const zones = [...new Set(data.map(x => x.zona).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+            $zona.innerHTML = `<option value="TODAS">Zona: todas</option>` + zones.map(z => `<option value="${z}">${z}</option>`).join("");
+        }
+
+        function applyFilters(data){
+            const q = normalize($q.value);
+            const tipo = $tipo.value;
+            const zona = $zona.value;
+            const orden = $orden.value;
+
+            let out = data.filter(r => {
+                const matchQ = !q || [r.nombre, r.zona, r.descripcion, r.especie, r.raza].some(v => normalize(v).includes(q));
+                const matchTipo =
+                    tipo === "TODOS" ||
+                    (tipo === "PERDIDO" && r.estado === "PERDIDO") ||
+                    (tipo === "ENCONTRADO" && r.estado === "ENCONTRADO");
+                const matchZona = zona === "TODAS" || r.zona === zona;
+                return matchQ && matchTipo && matchZona;
+            });
+
+            out.sort((a,b) => {
+                const da = new Date(a.fecha).getTime();
+                const db = new Date(b.fecha).getTime();
+                return orden === "RECIENTES" ? (db - da) : (da - db);
+            });
+
+            return out;
+        }
+
+        let currentMarkers = [];
+        function clearMarkers(){
+            currentMarkers.forEach(m => cluster.removeLayer(m));
+            currentMarkers = [];
+        }
+
+        function renderMarkers(data){
+            clearMarkers();
+            data.forEach(r => {
+                if (typeof r.lat !== "number" || typeof r.lng !== "number") return;
+                const marker = L.marker([r.lat, r.lng], { icon: r.estado === "PERDIDO" ? iconLost : iconFound });
+                marker.on("click", () => openModal(r));
+                cluster.addLayer(marker);
+                currentMarkers.push(marker);
+            });
+        }
+
+        // MODAL DETALLE
+        const petModal = document.getElementById("petModal");
+        const closeModal = document.getElementById("closeModal");
+        const modalTitle = document.getElementById("modalTitle");
+        const modalImg = document.getElementById("modalImg");
+        const modalName = document.getElementById("modalName");
+        const modalSub = document.getElementById("modalSub");
+        const modalZone = document.getElementById("modalZone");
+        const modalDate = document.getElementById("modalDate");
+        const modalDesc = document.getElementById("modalDesc");
+        const modalBadge = document.getElementById("modalBadge");
+        const modalReporter = document.getElementById("modalReporter");
+        const modalReporterChip = document.getElementById("modalReporterChip");
+        const callBtn = document.getElementById("callBtn");
+
+        function reporterLabel(r){
+            return r.rolReportante === "DUENO" ? "Dueño (la perdió)" : "Encontrador (la vio / encontró)";
+        }
+
+        function modalTitleByRole(r){
+            if (r.estado === "PERDIDO" && r.rolReportante === "ENCONTRADOR"){
+                return "Mascota perdida (reportada por quien la encontró)";
+            }
+            return r.estado === "PERDIDO" ? "Mascota perdida" : "Mascota encontrada";
+        }
+
+        function openModal(r){
+            modalTitle.textContent = modalTitleByRole(r);
+            modalName.textContent = r.nombre || "—";
+            modalSub.textContent = `${r.especie || "Mascota"} • ${r.raza || "—"}`;
+            modalZone.textContent = r.zona || "—";
+            modalDate.textContent = r.fecha || "—";
+            modalDesc.textContent = r.descripcion || "—";
+
+            modalReporter.textContent = reporterLabel(r);
+            modalReporterChip.textContent = `Reportó: ${r.rolReportante === "DUENO" ? "Dueño" : "Encontrador"}`;
+
+            if (r.estado === "PERDIDO"){
+                modalBadge.className = "chip chip-lost";
+                modalBadge.textContent = "PERDIDO";
+            } else {
+                modalBadge.className = "chip chip-found";
+                modalBadge.textContent = "ENCONTRADO";
+            }
+
+            const photoBg = document.querySelector("#petModal .photo-bg");
+            if (r.foto){
+                modalImg.src = r.foto;
+                modalImg.style.display = "block";
+                if (photoBg) photoBg.style.backgroundImage = `url("${r.foto}")`;
+            } else {
+                modalImg.src = "";
+                modalImg.style.display = "none";
+                if (photoBg) photoBg.style.backgroundImage = "none";
+            }
+
+            if (r.contactoTel){
+                callBtn.disabled = false;
+                callBtn.onclick = () => window.location.href = `tel:${r.contactoTel}`;
+            } else {
+                callBtn.disabled = true;
+                callBtn.onclick = null;
+            }
+
+            petModal.classList.add("show");
+            petModal.setAttribute("aria-hidden","false");
+        }
+
+        function hideModal(){
+            petModal.classList.remove("show");
+            petModal.setAttribute("aria-hidden","true");
+        }
+
+        closeModal.addEventListener("click", hideModal);
+        petModal.addEventListener("click", (e) => { if (e.target === petModal) hideModal(); });
+        document.addEventListener("keydown", (e) => { if (e.key === "Escape") hideModal(); });
+
+        // MODAL REPORTAR
+        const reportModalEl = document.getElementById("reportModal");
+        const reportForm = document.getElementById("reportForm");
+        const reportChip = document.getElementById("reportChip");
+        const foundModeWrap = document.getElementById("foundModeWrap");
+
+        function setReportMode(mode){
+            const isFound = (mode === "ENCONTRADO");
+
+            document.getElementById("reportFormTitle").textContent = isFound
+                ? "Reportar mascota encontrada"
+                : "Reportar mascota perdida";
+
+            document.getElementById("reportAsideSub").textContent = isFound
+                ? "Ayudá a que su familia la encuentre lo antes posible."
+                : "Mientras más datos, más chances de que vuelva a casa.";
+
+            reportChip.textContent = isFound ? "ENCONTRADO" : "PERDIDO";
+            reportChip.classList.remove("is-found","is-lost");
+            reportChip.classList.add(isFound ? "is-found" : "is-lost");
+
+            foundModeWrap.style.display = isFound ? "grid" : "none";
+
+            document.getElementById("estado").value = isFound ? "ENCONTRADO" : "PERDIDO";
+            document.getElementById("rolReportante").value = isFound ? "ENCONTRADOR" : "DUENO";
+
+            reportForm.reset();
+            document.getElementById("fecha").valueAsDate = new Date();
+
+            const preview = document.getElementById("fotoPreview");
+            const previewImg = document.getElementById("fotoImg");
+            preview.style.display = "none";
+            previewImg.src = "";
+            preview.setAttribute("aria-hidden","true");
+        }
+
+        window.openReportLost = function(){
+            document.activeElement?.blur();
+            setReportMode("PERDIDO");
+            new bootstrap.Modal(reportModalEl).show();
+        }
+
+        window.openReportFound = function(){
+            document.activeElement?.blur();
+            setReportMode("ENCONTRADO");
+            new bootstrap.Modal(reportModalEl).show();
+        }
+
+        const fotoInput = document.getElementById("foto");
+        const preview = document.getElementById("fotoPreview");
+        const previewImg = document.getElementById("fotoImg");
+
+        fotoInput.addEventListener("change", (e) => {
+            const file = e.target.files?.[0];
+            if (!file){
+                preview.style.display = "none";
+                previewImg.src = "";
+                preview.setAttribute("aria-hidden","true");
+                return;
+            }
+            const url = URL.createObjectURL(file);
+            previewImg.src = url;
+            preview.style.display = "block";
+            preview.setAttribute("aria-hidden","false");
+        });
+
+        reportForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            const requiredIds = ["especie","zonaForm","fecha","descripcionForm","telefono"];
+            const ok = requiredIds.every(id => (document.getElementById(id).value || "").trim() !== "");
+            if (!ok){
+                alert("Te faltan campos obligatorios (*)");
+                return;
+            }
+
+            alert("Reporte publicado (demo). Cuando conectemos el back lo guardamos de verdad 😉");
+            bootstrap.Modal.getInstance(reportModalEl).hide();
+        });
+
+        function rerender(){
+            const filtered = applyFilters(REPORTS);
+            renderMarkers(filtered);
+        }
+
+        fillZones(REPORTS);
+        rerender();
+
+        [$q, $tipo, $zona, $orden].forEach(el => {
+            el.addEventListener("input", rerender);
+            el.addEventListener("change", rerender);
+        });
+
+        reportModalEl.addEventListener("show.bs.modal", () => {
+            document.activeElement && document.activeElement.blur && document.activeElement.blur();
+        });
+
+    });
+</script>
+
+</body>
+</html>

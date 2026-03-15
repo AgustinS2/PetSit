@@ -18,15 +18,16 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
   <!-- Estilos -->
-  <link th:href="@{/css/style.css}" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/core.css}">
+  <link rel="stylesheet" th:href="@{/css/nav-base.css}">
+  <link rel="stylesheet" th:href="@{/css/public.css}">
 
   <!-- Favicons -->
-  <link rel="icon" href="/assets/favicon/favicon.ico" sizes="any">
-  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
-  <link rel="manifest" href="/assets/favicon/site.webmanifest">
-  <meta name="theme-color" content="#0f6a67">
+  <link rel="icon" th:href="@{/assets/favicon/favicon.ico}" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" th:href="@{/assets/favicon/favicon-32x32.png}">
+  <link rel="icon" type="image/png" sizes="16x16" th:href="@{assets/favicon/favicon-16x16.png}">
+  <link rel="apple-touch-icon" sizes="180x180" th:href="@{assets/favicon/apple-touch-icon.png}">
+  <link rel="manifest" th:href="@{/assets/favicon/site.webmanifest}">
 </head>
 <body>
 
@@ -45,15 +46,19 @@
         </button>
 
         <div class="collapse navbar-collapse justify-content-center" id="mainNav">
-          <ul class="navbar-nav mx-auto nav-center gap-lg-4">
-            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/index}" aria-current="page">Inicio</a></li>
+          <ul class="navbar-nav ms-auto nav-links">
+            <li class="nav-item"><a class="nav-link active" th:href="@{/petsit/index}" aria-current="page">Inicio</a></li>
             <li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/nosotros}">¿Quiénes somos?</a></li>
-            <li class="nav-item"><a class="nav-link active" th:href="@{/petsit/home/contacto}">Contactanos</a></li>
-            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/refugios/list}">Refugios</a></li>
-            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/veterinarias/list}">Veterinarias</a></li>
-            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/mascotas/list}">Perdidos</a></li>
-            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/login}">Iniciar sesión</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/contacto}">Contactanos</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/refugios/index}">Refugios</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/alertas/mapa}">Mapa</a></li>
+            <li class="nav-item"><a class="nav-link" th:href="@{/petsit/veterinarias/index}">Veterinarias</a></li>
           </ul>
+
+          <!-- LOGIN -->
+          <div class="nav-login ms-lg-2">
+            <a th:href="@{/petsit/home/login}" class="user-chip">INICIAR SESIÓN</a>
+          </div>
         </div>
       </div>
     </nav>
@@ -63,46 +68,67 @@
   <main class="contact-wrap py-4 py-md-5">
     <div class="container">
       <section class="contact-card p-4 p-md-5" aria-labelledby="contactoTitle">
+
         <h1 id="contactoTitle" class="about-title">Contactanos</h1>
         <div class="about-accent"></div>
 
-        <form class="row g-4 mt-1" action="#" method="post" novalidate>
-          <div class="col-md-6">
-            <label for="c-nombre" class="form-label">Nombre</label>
-            <input id="c-nombre" name="nombre" type="text" class="form-control contact-input"
-                   placeholder="Tu nombre" autocomplete="name" required>
+        <!-- Layout horizontal -->
+        <div class="row g-4 mt-2 align-items-start">
+
+          <!-- FORM -->
+          <div class="col-lg-6">
+            <form class="row g-4" action="#" method="post" novalidate>
+
+              <div class="col-md-6">
+                <label for="c-nombre" class="form-label">Nombre</label>
+                <input id="c-nombre" name="nombre" type="text"
+                       class="form-control contact-input"
+                       placeholder="Tu nombre" autocomplete="name" required>
+              </div>
+
+              <div class="col-md-6">
+                <label for="c-email" class="form-label">Email</label>
+                <input id="c-email" name="email" type="email"
+                       class="form-control contact-input"
+                       placeholder="nombre@correo.com"
+                       autocomplete="email" inputmode="email" required>
+              </div>
+
+              <div class="col-12">
+                <label for="c-mensaje" class="form-label">Mensaje</label>
+                <textarea id="c-mensaje" name="mensaje" rows="6"
+                          class="form-control contact-input"
+                          placeholder="Contanos en qué podemos ayudarte" required></textarea>
+              </div>
+
+              <!-- Botón: en desktop alineado a la izquierda (más pro), en mobile queda ok -->
+              <div class="col-12">
+                <button class="btn contact-btn px-5 py-2" type="submit">Enviar</button>
+              </div>
+
+            </form>
           </div>
 
-          <div class="col-md-6">
-            <label for="c-email" class="form-label">Email</label>
-            <input id="c-email" name="email" type="email" class="form-control contact-input"
-                   placeholder="nombre@correo.com" autocomplete="email" inputmode="email" required>
+          <!-- MAPA -->
+          <div class="col-lg-6">
+            <div class="mb-2 fw-semibold text-uppercase small">Ubicanos</div>
+
+            <div class="map-embed">
+              <iframe
+                      title="Mapa de ubicación"
+                      src="https://www.google.com/maps?q=Av.+Corrientes,+Buenos+Aires&output=embed"
+                      loading="lazy"
+                      referrerpolicy="no-referrer-when-downgrade"
+                      allowfullscreen>
+              </iframe>
+            </div>
           </div>
 
-          <div class="col-12">
-            <label for="c-mensaje" class="form-label">Mensaje</label>
-            <textarea id="c-mensaje" name="mensaje" rows="5" class="form-control contact-input"
-                      placeholder="Contanos en qué podemos ayudarte" required></textarea>
-          </div>
-
-          <div class="col-12 d-flex justify-content-center">
-            <button class="btn contact-btn px-5 py-2" type="submit">Enviar</button>
-          </div>
-        </form>
-
-        <hr class="my-4 my-md-5">
-
-        <div class="mb-2 fw-semibold text-uppercase small">Ubicanos</div>
-        <div class="map-embed">
-          <iframe
-            title="Mapa de ubicación"
-            src="https://www.google.com/maps?q=Av.+Corrientes,+Buenos+Aires&output=embed"
-            loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen>
-          </iframe>
         </div>
       </section>
     </div>
   </main>
+
 
   <!-- FOOTER -->
   <footer class="footer mt-5">
@@ -112,8 +138,8 @@
           <h2 class="visually-hidden">Enlaces del sitio</h2>
           <h6 class="fw-bold text-uppercase">Más información</h6>
           <ul class="list-unstyled">
-            <li><a href="@{contacto.html}" class="footer-link">Contactanos</a></li>
-            <li><a href="@{quienes-somos.html}" class="footer-link">Sobre nosotros</a></li>
+            <li><a th:href="@{/petsit/home/contacto}" class="footer-link">Contactanos</a></li>
+            <li><a th:href="@{/petsit/home/nosotros}" class="footer-link">Sobre nosotros</a></li>
           </ul>
         </div>
 
@@ -141,5 +167,12 @@
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
+  <script>
+    const nav = document.querySelector('.navbar');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('is-scrolled', window.scrollY > 12);
+    });
+  </script>
+
 </body>
 </html>

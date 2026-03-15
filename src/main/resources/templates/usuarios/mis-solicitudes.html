@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PetSit – Mis solicitudes de adopción</title>
+    <meta name="description" content="Listado de solicitudes de adopción del usuario.">
+
+    <!-- Bootstrap / Iconos / Fuentes -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Caudex:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Estilos -->
+    <link rel="stylesheet" th:href="@{/css/core.css}">
+    <link rel="stylesheet" th:href="@{/css/nav-user.css}">
+    <link rel="stylesheet" th:href="@{/css/user.css}">
+
+    <!-- Favicons -->
+    <link rel="icon" th:href="@{/assets/favicon/favicon.ico}" sizes="any">
+    <link rel="apple-touch-icon" sizes="180x180" th:href="@{/ssets/favicon/apple-touch-icon.png}">
+    <meta name="theme-color" content="#0f6a67">
+</head>
+
+<body class="petsit-bg page-requests in-app">
+
+<!-- NAVBAR INTERNO -->
+<nav class="navbar navbar-expand-lg navbar-light bg-nav border-bottom petsit-nav-user" aria-label="Menú interno">
+    <div class="container-fluid px-3 px-md-4">
+
+        <!-- Logo -->
+        <a id="brandLink" class="navbar-brand d-flex align-items-center gap-2 app-home"
+           th:href="@{/petsit/usuarios/index}" aria-label="Inicio de usuario">
+            <img th:src="@{/assets/img/icons/logo.png}" alt="Logo PetSit" height="56">
+            <img th:src="@{/assets/img/Petsit.png}" alt="PetSit" class="brand-name">
+        </a>
+
+        <!-- Toggle -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#mainNav" aria-controls="mainNav"
+                aria-expanded="false" aria-label="Abrir menú">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Nav -->
+        <div class="collapse navbar-collapse" id="mainNav">
+
+            <!-- LINKS CENTRALES -->
+            <ul id="appNavList" class="navbar-nav mx-auto nav-center gap-lg-3">
+                <li class="nav-item"><a class="nav-link" th:href="@{/petsit/mascotas/mis-mascotas}">Mis mascotas</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/usuarioveterinarias}">Veterinarias</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/usuariorefugio}">Refugios</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/usuarioadoptar}">Adoptar</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/usuariomapa}">Mapa</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/mis-solicitudes}">Solicitudes</a></li>
+
+
+                <!-- MOBILE ONLY -->
+                <li class="nav-item d-lg-none"><hr class="dropdown-divider my-2"></li>
+
+                <li class="nav-item d-lg-none">
+                    <a class="nav-link d-flex align-items-center gap-2" th:href="@{/petsit/usuarios/perfil}">
+                        <i class="bi bi-person-gear"></i> Mi perfil
+                    </a>
+                </li>
+
+                <!-- Notificaciones (mobile) -->
+                <li class="nav-item d-lg-none">
+                    <a class="nav-link d-flex align-items-center gap-2" href="#" id="openNotificationsMobile">
+                        <i class="bi bi-bell"></i> Notificaciones
+                        <span id="notifDotMobile"
+                              class="ms-1 d-inline-block p-1 bg-danger border border-light rounded-circle d-none"
+                              aria-hidden="true"></span>
+                    </a>
+                </li>
+
+                <li class="nav-item d-lg-none">
+                    <a class="nav-link d-flex align-items-center gap-2 text-danger"
+                       id="logoutBtnMobile"  th:href="@{/petsit/}">
+                        <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                    </a>
+                </li>
+            </ul>
+
+            <!-- DROPDOWN DESKTOP -->
+            <ul class="navbar-nav ms-auto align-items-center d-none d-lg-flex nav-login">
+                <li class="nav-item dropdown">
+                    <a class="nav-link user-chip dropdown-toggle d-flex align-items-center gap-2"
+                       href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <span class="user-avatar position-relative">
+                <img th:src="@{/assets/img/icons/usuario.png}" alt="Avatar usuario">
+                  <!-- Dot desktop -->
+                <span id="notifDotDesktop"
+                      class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle d-none"
+                      aria-hidden="true"></span>
+              </span>
+                        <span id="navUser">Usuario</span>
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-end user-menu">
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center gap-2" th:href="@{/petsit/usuarios/perfil}">
+                                <i class="bi bi-person-gear"></i> Mi perfil
+                            </a>
+                        </li>
+
+                        <!-- Notificaciones (desktop) -->
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center gap-2" href="#" id="openNotifications">
+                                <i class="bi bi-bell"></i> Notificaciones
+                            </a>
+                        </li>
+
+                        <li><hr class="dropdown-divider"></li>
+
+                        <li>
+                            <a class="dropdown-item text-danger d-flex align-items-center gap-2"
+                               id="logoutBtn"  th:href="@{/petsit/}">
+                                <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</nav>
+
+<!-- HERO -->
+<header class="requests-hero">
+    <div class="container">
+        <div class="requests-header">
+            <div>
+                <h1 class="requests-title">Mis solicitudes de adopción</h1>
+                <div class="requests-accent"></div>
+                <p class="requests-subtitle">
+                    Acá podés ver el estado de cada solicitud y los mensajes del refugio.
+                </p>
+            </div>
+
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                    <i class="bi bi-funnel"></i> Filtrar
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item js-filter active" href="#" data-filter="all">Todas</a></li>
+                    <li><a class="dropdown-item js-filter" href="#" data-filter="pending">Pendientes</a></li>
+                    <li><a class="dropdown-item js-filter" href="#" data-filter="approved">Aprobadas</a></li>
+                    <li><a class="dropdown-item js-filter" href="#" data-filter="rejected">Rechazadas</a></li>
+                    <li><a class="dropdown-item js-filter" href="#" data-filter="adopted">Adoptadas</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wave -->
+    <svg class="requests-wave" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true">
+        <path fill="#eef1ef"
+              d="M0,64L80,74.7C160,85,320,107,480,101.3C640,96,800,64,960,53.3C1120,43,1280,53,1360,58.7L1440,64V120H0Z"></path>
+    </svg>
+</header>
+
+<!-- CONTENIDO -->
+<main class="container py-4">
+    <section class="requests-wrap" id="requestsWrap"></section>
+
+    <div class="empty-state d-none" id="requestsEmpty">
+        <i class="bi bi-inbox"></i>
+        <h3>No tenés solicitudes todavía</h3>
+        <p>Cuando envíes una solicitud, aparece acá con su estado.</p>
+        <a class="btn btn-primary" th:href="@{/petsit/usuarios/usuarioadoptar}">Ir a Adoptar</a>
+    </div>
+</main>
+
+<!-- ✅ MODAL: Detalle de solicitud -->
+<div class="modal fade petsit-modal petsit-request-modal" id="requestDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title d-flex align-items-center gap-2">
+                    <i class="bi bi-clipboard-heart"></i>
+                    <span id="reqModalTitle">Detalle de solicitud</span>
+                </h5>
+                <button class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="req-modal-split">
+
+                    <!-- Imagen -->
+                    <div class="req-modal-photo">
+                        <img id="reqModalImg" src="" alt="Foto de la mascota">
+                        <span id="reqModalStatusBadge" class="req-modal-badge">
+                <i class="bi bi-clock"></i> Pendiente
+              </span>
+                    </div>
+
+                    <!-- Info -->
+                    <div class="req-modal-info">
+                        <h3 id="reqModalPet" class="req-modal-pet">—</h3>
+
+                        <div class="req-modal-grid">
+                            <div class="req-modal-row">
+                                <div class="req-modal-k">Enviada</div>
+                                <div id="reqModalDate" class="req-modal-v">—</div>
+                            </div>
+
+                            <div class="req-modal-row">
+                                <div class="req-modal-k">Refugio</div>
+                                <div id="reqModalShelter" class="req-modal-v">—</div>
+                            </div>
+
+                            <div class="req-modal-row d-none" id="reqModalResolvedRow">
+                                <div class="req-modal-k">Finalizada</div>
+                                <div id="reqModalResolved" class="req-modal-v">—</div>
+                            </div>
+                        </div>
+
+                        <div class="req-modal-msg">
+                            <div class="req-modal-msg-k">Mensaje del refugio</div>
+                            <p id="reqModalMessage" class="mb-0">—</p>
+                        </div>
+
+                        <div class="req-modal-actions">
+                            <a id="reqModalGoShelter" class="btn btn-sm btn-outline-secondary" href="usuariorefugio.html">
+                                <i class="bi bi-house-heart"></i> Ver refugio
+                            </a>
+
+                            <button id="reqModalPrimaryAction" class="btn btn-sm btn-brand-cta" type="button">
+                                Acción
+                            </button>
+
+                            <button id="reqModalSecondaryAction" class="btn btn-sm btn-danger-soft" type="button">
+                                Cancelar solicitud
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- ✅ MODAL: Confirmar cancelación -->
+<div class="modal fade" id="cancelConfirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content petsit-confirm">
+
+            <div class="modal-header">
+                <h5 class="modal-title d-flex align-items-center gap-2">
+                    <span class="confirm-ico"><i class="bi bi-exclamation-triangle-fill"></i></span>
+                    ¿Cancelar solicitud?
+                </h5>
+                <button class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+
+            <div class="modal-body">
+                <p class="mb-2 confirm-text">
+                    Vas a cancelar esta solicitud y el refugio no la va a seguir evaluando.
+                </p>
+                <div class="confirm-sub">
+                    Si te arrepentís, podés volver a solicitar más adelante.
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-outline-secondary" data-bs-dismiss="modal" type="button">
+                    No, volver
+                </button>
+                <button id="confirmCancelBtn" class="btn btn-danger" type="button">
+                    Sí, cancelar
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- ✅ MODAL: Notificaciones -->
+<div class="modal fade notifications-modal" id="notificationsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-bell me-2"></i> Notificaciones
+                </h5>
+                <button class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="notifications-actions">
+                    <button class="btn btn-sm btn-outline-secondary" id="selectAllBtn">Seleccionar todas</button>
+
+                    <div class="actions-right">
+                        <button class="btn btn-sm btn-outline-primary" id="markReadBtn">Marcar como leídas</button>
+                        <button class="btn btn-sm btn-outline-danger" id="deleteBtn">Borrar</button>
+                        <button class="btn btn-sm btn-danger" id="deleteAllBtn">Borrar todas</button>
+                    </div>
+                </div>
+
+                <div id="notificationsList" class="list-group notifications-list"></div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer mt-5">
+    <div class="container py-4">
+        <div class="row text-white">
+            <div class="col-md-4 mb-3">
+                <h6 class="fw-bold text-uppercase">Más información</h6>
+                <ul class="list-unstyled">
+                    <li><a th:href="@{/petsit/usuarios/usuariocontacto}" class="footer-link">Contactanos</a></li>
+                    <li><a th:href="@{/petsit/usuarios/usuarioquienessomos}" class="footer-link">Sobre nosotros</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4 mb-3">
+                <h6 class="fw-bold text-uppercase">Legal</h6>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="footer-link">Políticas de privacidad</a></li>
+                    <li><a href="#" class="footer-link">Términos de servicio</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4 mb-3">
+                <h6 class="fw-bold text-uppercase">Seguinos</h6>
+                <a href="#" class="footer-social me-2" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                <a href="#" class="footer-social me-2" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                <a href="#" class="footer-social" aria-label="Twitter/X"><i class="bi bi-twitter"></i></a>
+            </div>
+        </div>
+        <div class="text-center small mt-3 text-white">
+            Copyright 2025 © Escuela Da Vinci | Keila Degregorio | Maia Cohen | Matias Bernal | Agustin Segovia
+        </div>
+    </div>
+</footer>
+
+<!-- JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- ✅ NAV: sombra/estado scrolled -->
+<script>
+    const nav = document.querySelector('.navbar');
+    window.addEventListener('scroll', () => {
+        nav.classList.toggle('is-scrolled', window.scrollY > 12);
+    });
+</script>
+
+<!-- ✅ USER: nombre + logout -->
+<script>
+    (() => {
+        const params = new URLSearchParams(window.location.search);
+        const queryName = params.get('name');
+        const storedName = localStorage.getItem('userName');
+        const name = (queryName && queryName.trim()) || (storedName && storedName.trim()) || 'Usuario';
+
+        if (queryName) localStorage.setItem('userName', name);
+
+        const setText = (id) => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = name;
+        };
+        setText('navUser');
+
+        const doLogout = () => {
+            localStorage.removeItem('auth');
+            localStorage.removeItem('userName');
+        };
+        document.getElementById('logoutBtn')?.addEventListener('click', doLogout);
+        document.getElementById('logoutBtnMobile')?.addEventListener('click', doLogout);
+    })();
+</script>
+
+<!-- ✅ APP: requests + modal + filtro + notificaciones -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        function toast(msg){
+            const t = document.createElement('div');
+            t.textContent = msg;
+            t.style.cssText = `
+        position:fixed; bottom:18px; left:50%; transform:translateX(-50%);
+        background:rgba(0,0,0,.85); color:#fff; padding:.5rem .75rem; border-radius:12px;
+        z-index:1060; font-size:.9rem; box-shadow:0 6px 18px rgba(0,0,0,.2)`;
+            document.body.appendChild(t);
+            setTimeout(()=>t.remove(), 1800);
+        }
+
+        function safeJSONParse(value, fallback){
+            try { return JSON.parse(value) ?? fallback; }
+            catch { return fallback; }
+        }
+
+        function escapeHtml(str){
+            return (str ?? '').toString()
+                .replaceAll('&','&amp;')
+                .replaceAll('<','&lt;')
+                .replaceAll('>','&gt;')
+                .replaceAll('"','&quot;')
+                .replaceAll("'","&#039;");
+        }
+
+        const KEY_REQ = 'petsit_requests';
+
+        /* =========================================================
+           ✅ SEED: ASEGURA ROCKY + NINA AUNQUE YA HAYA LOCALSTORAGE
+           (sin duplicar)
+           ========================================================= */
+        (function ensureRequests(){
+            let arr = safeJSONParse(localStorage.getItem(KEY_REQ), []);
+            if(!Array.isArray(arr)) arr = [];
+
+            const now = Date.now();
+
+            const rocky = {
+                id: crypto.randomUUID(),
+                petId: "rocky-001",
+                petName: "Rocky",
+                petImg: "assets/img/adoptar/perro4.jpg",   /* <-- Rocky usa su foto */
+                shelter: "The Pets Hotel",
+                status: "Pendiente",
+                sentDate: "12/02/2026",
+                resolvedDate: "",
+                message: "Estamos revisando tu solicitud. Si necesitamos más info, te contactamos por mail.",
+                updatedAt: now - 1000*60*60*2
+            };
+
+            const nina = {
+                id: crypto.randomUUID(),
+                petId: "4",
+                petName: "Nina",
+                petImg: "assets/img/mimascota4.jpg",       /* <-- esta TIENE que existir */
+                shelter: "Lost & Found",
+                status: "Adoptada",
+                sentDate: "28/01/2026",
+                resolvedDate: "01/02/2026",
+                message: "¡Felicitaciones! La adopción fue aprobada y finalizada.",
+                updatedAt: now - 1000*60*60*24*3
+            };
+
+            const hasRocky = arr.some(x => x.petId === rocky.petId);
+            const hasNina  = arr.some(x => x.petId === nina.petId);
+
+            if(!hasRocky) arr.unshift(rocky);
+            if(!hasNina)  arr.unshift(nina);
+
+            localStorage.setItem(KEY_REQ, JSON.stringify(arr));
+        })();
+
+        const wrap = document.getElementById('requestsWrap');
+        const empty = document.getElementById('requestsEmpty');
+
+        function normalizeStatus(status){
+            const s = (status || '').toLowerCase();
+            if (s.includes('adopt')) return 'adopted';
+            if (s.includes('aprob')) return 'approved';
+            if (s.includes('rech'))  return 'rejected';
+            return 'pending';
+        }
+
+        function badgeInfo(status){
+            const key = normalizeStatus(status);
+            if (key === 'adopted')  return { cls:'status-approved', icon:'bi-heart-fill', txt:'Adoptada' };
+            if (key === 'approved') return { cls:'status-approved', icon:'bi-check2-circle', txt:'Aprobada' };
+            if (key === 'rejected') return { cls:'status-rejected', icon:'bi-x-circle', txt:'Rechazada' };
+            return { cls:'status-pending', icon:'bi-clock', txt:'Pendiente' };
+        }
+
+        function loadRequests(){
+            const arr = safeJSONParse(localStorage.getItem(KEY_REQ), []);
+            return Array.isArray(arr) ? arr : [];
+        }
+
+        let currentFilter = 'all';
+
+        function render(){
+            const all = loadRequests()
+                .slice()
+                .sort((a,b) => (b.updatedAt||0) - (a.updatedAt||0));
+
+            console.log('petsit_requests =', all); // <-- debug (podés borrarlo después)
+
+            const filtered = currentFilter === 'all'
+                ? all
+                : all.filter(r => normalizeStatus(r.status) === currentFilter);
+
+            wrap.innerHTML = '';
+
+            if(!filtered.length){
+                empty?.classList.remove('d-none');
+                return;
+            }
+            empty?.classList.add('d-none');
+
+            const frag = document.createDocumentFragment();
+
+            filtered.forEach(r => {
+                const b = badgeInfo(r.status);
+                const img = r.petImg || 'assets/img/placeholder-pet.jpg';
+
+                const card = document.createElement('article');
+                card.className = 'request-card';
+                card.innerHTML = `
+          <div class="request-media">
+            <img class="request-photo"
+                 src="${escapeHtml(img)}"
+                 alt="Mascota asociada a la solicitud"
+                 onerror="this.onerror=null; this.src='assets/img/placeholder-pet.jpg';">
+            <span class="status-badge ${b.cls}"><i class="bi ${b.icon}"></i> ${b.txt}</span>
+          </div>
+
+          <div class="request-body">
+            <div class="d-flex align-items-start justify-content-between gap-2">
+              <div>
+                <h2 class="request-title">${escapeHtml(r.petName || 'Mascota')}</h2>
+                <div class="request-meta">
+                  <span><i class="bi bi-calendar3"></i> Enviada: <strong>${escapeHtml(r.sentDate || '—')}</strong></span>
+                  <span><i class="bi bi-house-heart"></i> Refugio: <strong>${escapeHtml(r.shelter || '—')}</strong></span>
+                </div>
+              </div>
+
+              <a class="btn btn-sm btn-outline-primary js-open-request"
+                 href="#"
+                 data-bs-toggle="modal"
+                 data-bs-target="#requestDetailModal"
+                 data-pet="${escapeHtml(r.petName)}"
+                 data-status="${escapeHtml(r.status)}"
+                 data-date="${escapeHtml(r.sentDate)}"
+                 data-resolved="${escapeHtml(r.resolvedDate || '')}"
+                 data-shelter="${escapeHtml(r.shelter)}"
+                 data-img="${escapeHtml(img)}"
+                 data-message="${escapeHtml(r.message || '—')}">
+                Ver detalle <i class="bi bi-arrow-right"></i>
+              </a>
+            </div>
+
+            <div class="request-message">
+              <div class="msg-label">Mensaje del refugio</div>
+              <p class="mb-0">${escapeHtml(r.message || '—')}</p>
+            </div>
+          </div>
+        `;
+
+                frag.appendChild(card);
+            });
+
+            wrap.appendChild(frag);
+        }
+
+        document.querySelectorAll('.js-filter').forEach(a => {
+            a.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.querySelectorAll('.js-filter').forEach(x => x.classList.remove('active'));
+                a.classList.add('active');
+                currentFilter = a.dataset.filter || 'all';
+                render();
+            });
+        });
+
+        const modalEl = document.getElementById('requestDetailModal');
+        if(modalEl){
+            const titleEl   = document.getElementById('reqModalTitle');
+            const imgEl     = document.getElementById('reqModalImg');
+            const petEl     = document.getElementById('reqModalPet');
+            const dateEl    = document.getElementById('reqModalDate');
+            const shelterEl = document.getElementById('reqModalShelter');
+            const msgEl     = document.getElementById('reqModalMessage');
+            const badgeEl   = document.getElementById('reqModalStatusBadge');
+
+            const resolvedRow = document.getElementById('reqModalResolvedRow');
+            const resolvedEl  = document.getElementById('reqModalResolved');
+
+            const btnPrimary   = document.getElementById('reqModalPrimaryAction');
+            const btnSecondary = document.getElementById('reqModalSecondaryAction');
+
+            function setBadge(status){
+                const key = normalizeStatus(status);
+                badgeEl.classList.remove('is-pending','is-approved','is-rejected');
+                badgeEl.innerHTML = '';
+
+                if (key === 'adopted'){
+                    badgeEl.classList.add('is-approved');
+                    badgeEl.innerHTML = `<i class="bi bi-heart-fill"></i> Adoptada`;
+                } else if (key === 'approved'){
+                    badgeEl.classList.add('is-approved');
+                    badgeEl.innerHTML = `<i class="bi bi-check2-circle"></i> Aprobada`;
+                } else if (key === 'rejected'){
+                    badgeEl.classList.add('is-rejected');
+                    badgeEl.innerHTML = `<i class="bi bi-x-circle"></i> Rechazada`;
+                } else {
+                    badgeEl.classList.add('is-pending');
+                    badgeEl.innerHTML = `<i class="bi bi-clock"></i> Pendiente`;
+                }
+            }
+
+            function setActions(status){
+                const key = normalizeStatus(status);
+
+                btnPrimary.onclick = null;
+                btnSecondary.onclick = null;
+
+                if (key === 'adopted'){
+                    btnPrimary.innerHTML = `<i class="bi bi-heart"></i> Ver en Mis mascotas`;
+                    btnSecondary.classList.add('d-none');
+                    btnPrimary.onclick = () => window.location.href = 'mis-mascotas.html';
+                    return;
+                }
+
+                if (key === 'approved'){
+                    btnPrimary.innerHTML = `<i class="bi bi-calendar-heart"></i> Coordinar visita`;
+                    btnSecondary.classList.add('d-none');
+                    btnPrimary.onclick = () => alert('Demo: acá iría coordinar visita.');
+                    return;
+                }
+
+                if (key === 'rejected'){
+                    btnPrimary.innerHTML = `<i class="bi bi-search-heart"></i> Buscar otra mascota`;
+                    btnSecondary.classList.add('d-none');
+                    btnPrimary.onclick = () => window.location.href = 'usuarioadoptar.html';
+                    return;
+                }
+
+                // ✅ PENDING: NO "editar". Solo cancelar.
+                btnPrimary.classList.add('d-none');         // lo ocultamos
+                btnSecondary.classList.remove('d-none');    // dejamos cancelar
+                btnSecondary.innerHTML = `<i class="bi bi-x-circle"></i> Cancelar solicitud`;
+                btnSecondary.onclick = () => {
+                    // guardo contexto del modal actual (qué solicitud está abierta)
+                    const cancelModalEl = document.getElementById('cancelConfirmModal');
+                    const confirmBtn = document.getElementById('confirmCancelBtn');
+                    if(!cancelModalEl || !confirmBtn) return;
+
+                    const cancelModal = bootstrap.Modal.getOrCreateInstance(cancelModalEl);
+
+                    // evitamos duplicar listeners
+                    confirmBtn.onclick = null;
+
+                    confirmBtn.onclick = () => {
+                        cancelModal.hide();
+
+                        // ✅ DEMO: acá harías la baja real.
+                        // Si querés, después lo conectamos a localStorage para borrar esa request.
+                        toast('Solicitud cancelada');
+
+                        // opcional: cerrar el modal de detalle también
+                        const detailEl = document.getElementById('requestDetailModal');
+                        if(detailEl){
+                            bootstrap.Modal.getOrCreateInstance(detailEl).hide();
+                        }
+
+                        // re-render para reflejar cambios si después la borrás del storage
+                        // render();
+                    };
+
+                    cancelModal.show();
+                };
+
+            }
+
+            document.addEventListener('click', (e) => {
+                const btn = e.target.closest('[data-bs-target="#requestDetailModal"]');
+                if(!btn) return;
+
+                e.preventDefault();
+
+                const pet = btn.dataset.pet || 'Mascota';
+                const status = btn.dataset.status || 'Pendiente';
+                const date = btn.dataset.date || '—';
+                const shelter = btn.dataset.shelter || '—';
+                const img = btn.dataset.img || '';
+                const message = btn.dataset.message || '—';
+                const resolved = btn.dataset.resolved || '';
+
+                titleEl.textContent = `Detalle — ${pet}`;
+                petEl.textContent = pet;
+                dateEl.textContent = date;
+                shelterEl.textContent = shelter;
+                msgEl.textContent = message;
+
+                imgEl.src = img;
+                imgEl.alt = `Foto de ${pet}`;
+                imgEl.onerror = () => { imgEl.onerror=null; imgEl.src='assets/img/placeholder-pet.jpg'; };
+
+                setBadge(status);
+                setActions(status);
+
+                if(resolved){
+                    resolvedRow.classList.remove('d-none');
+                    resolvedEl.textContent = resolved;
+                } else {
+                    resolvedRow.classList.add('d-none');
+                    resolvedEl.textContent = '—';
+                }
+            });
+        }
+
+        /* NOTIFICACIONES: sin cambios (tu bloque completo) */
+        (function initNotifications(){
+            const modalN = document.getElementById('notificationsModal');
+            const listEl  = document.getElementById('notificationsList');
+            if(!modalN || !listEl || typeof bootstrap === 'undefined') return;
+
+            const KEY_NOTIFS = 'petsit_notifications';
+
+            function seed(){
+                const existing = safeJSONParse(localStorage.getItem(KEY_NOTIFS), null);
+                if(existing && Array.isArray(existing)) return;
+
+                const now = Date.now();
+                const demo = [
+                    { id: crypto.randomUUID(), title:'Refugio cercano', body:'Se publicó un nuevo animal en adopción.', read:false, ts: now - 1000*60*60*5, checked:false },
+                    { id: crypto.randomUUID(), title:'Recordatorio', body:'Actualizá la ficha de tu mascota.', read:true, ts: now - 1000*60*60*24, checked:false },
+                    { id: crypto.randomUUID(), title:'Novedad en veterinarias', body:'Agregamos nuevas clínicas en tu zona.', read:false, ts: now - 1000*60*45, checked:false }
+                ];
+                localStorage.setItem(KEY_NOTIFS, JSON.stringify(demo));
+            }
+
+            function load(){ return safeJSONParse(localStorage.getItem(KEY_NOTIFS), []); }
+            function save(arr){ localStorage.setItem(KEY_NOTIFS, JSON.stringify(arr)); }
+
+            function fmt(ts){
+                try{
+                    return new Date(ts).toLocaleString('es-AR', { dateStyle:'short', timeStyle:'short' });
+                }catch{ return ''; }
+            }
+
+            const notificationsModal = new bootstrap.Modal(modalN);
+
+            const btnSelectAll = document.getElementById('selectAllBtn');
+            const btnMarkRead  = document.getElementById('markReadBtn');
+            const btnDelete    = document.getElementById('deleteBtn');
+            const btnDeleteAll = document.getElementById('deleteAllBtn');
+
+            function updateDots(){
+                const notifs = load();
+                const hasUnread = notifs.some(n => !n.read);
+                const dotDesktop = document.getElementById('notifDotDesktop');
+                const dotMobile  = document.getElementById('notifDotMobile');
+                [dotDesktop, dotMobile].forEach(dot=>{
+                    if(!dot) return;
+                    dot.classList.toggle('d-none', !hasUnread);
+                });
+            }
+
+            function renderNotifs(){
+                const notifs = load().sort((a,b)=>b.ts-a.ts);
+                listEl.innerHTML = '';
+
+                if(!notifs.length){
+                    listEl.innerHTML = `<div class="p-3 text-muted">No tenés notificaciones.</div>`;
+                    updateDots();
+                    return;
+                }
+
+                const frag = document.createDocumentFragment();
+
+                notifs.forEach(n=>{
+                    const item = document.createElement('div');
+                    item.className = `notif-item ${n.read ? 'is-read' : ''}`;
+                    item.innerHTML = `
+            <div class="notif-check">
+              <input class="form-check-input notif-check-input" type="checkbox" data-id="${n.id}" ${n.checked ? 'checked' : ''}>
+            </div>
+
+            <div>
+              <p class="notif-title">${escapeHtml(n.title)}</p>
+              <p class="notif-desc">${escapeHtml(n.body)}</p>
+              ${n.read ? '' : `<span class="notif-badge">Nuevo</span>`}
+            </div>
+
+            <div class="notif-meta">${escapeHtml(fmt(n.ts))}</div>
+          `;
+
+                    const cb = item.querySelector('.notif-check-input');
+                    cb.addEventListener('change', ()=>{
+                        const all = load();
+                        const idx = all.findIndex(x => x.id === n.id);
+                        if(idx >= 0){
+                            all[idx].checked = cb.checked;
+                            save(all);
+                        }
+                    });
+
+                    frag.appendChild(item);
+                });
+
+                listEl.appendChild(frag);
+                updateDots();
+            }
+
+            function getSelectedIds(){
+                return new Set(
+                    Array.from(document.querySelectorAll('.notif-check-input:checked')).map(x => x.dataset.id)
+                );
+            }
+
+            document.getElementById('openNotifications')?.addEventListener('click', (e)=>{
+                e.preventDefault();
+                renderNotifs();
+                notificationsModal.show();
+            });
+
+            document.getElementById('openNotificationsMobile')?.addEventListener('click', (e)=>{
+                e.preventDefault();
+                renderNotifs();
+                notificationsModal.show();
+            });
+
+            btnSelectAll?.addEventListener('click', ()=>{
+                const all = load();
+                const allChecked = all.length && all.every(n => n.checked);
+                all.forEach(n => n.checked = !allChecked);
+                save(all);
+                renderNotifs();
+            });
+
+            btnMarkRead?.addEventListener('click', ()=>{
+                const ids = getSelectedIds();
+                if(!ids.size) return toast('Seleccioná al menos una notificación');
+                const all = load().map(n => ids.has(n.id) ? ({...n, read:true, checked:false}) : n);
+                save(all);
+                renderNotifs();
+                toast('Marcadas como leídas');
+            });
+
+            btnDelete?.addEventListener('click', ()=>{
+                const ids = getSelectedIds();
+                if(!ids.size) return toast('Seleccioná al menos una notificación');
+                const all = load().filter(n => !ids.has(n.id));
+                save(all);
+                renderNotifs();
+                toast('Notificación(es) borrada(s)');
+            });
+
+            btnDeleteAll?.addEventListener('click', ()=>{
+                if(!confirm('¿Borrar todas las notificaciones?')) return;
+                save([]);
+                renderNotifs();
+                toast('Borradas todas');
+            });
+
+            modalN.addEventListener('hidden.bs.modal', updateDots);
+
+            seed();
+            updateDots();
+        })();
+
+        render();
+    });
+</script>
+
+</body>
+</html>

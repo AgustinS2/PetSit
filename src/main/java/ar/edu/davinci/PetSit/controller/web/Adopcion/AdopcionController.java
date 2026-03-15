@@ -58,7 +58,7 @@ public class AdopcionController {
         return "redirect:/adopciones/list";
     }
 
-    @GetMapping("/edit/{id}")
+    @GetMapping("/edit/{id:\\d+}")
     public ModelAndView editAdopcionForm(@PathVariable("id") Long id) {
         LOGGER.info("GET - editAdopcionForm - /adopciones/edit/{id}");
         ModelAndView mav = new ModelAndView("adopciones/edit_adopcion");
@@ -71,7 +71,7 @@ public class AdopcionController {
         return mav;
     }
 
-    @GetMapping("/delete/{id}")
+    @GetMapping("/delete/{id:\\d+}")
     public String deleteAdopcion(@PathVariable("id") Long id) {
         LOGGER.info("GET - deleteAdopcion - /adopciones/delete/{id}");
         adopcionService.delete(id);

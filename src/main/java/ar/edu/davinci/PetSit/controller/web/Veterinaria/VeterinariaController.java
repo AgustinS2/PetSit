@@ -26,7 +26,7 @@ public class VeterinariaController {
 
     @GetMapping("/index")
 	    public String indexVeterinaria() {
-	        return "veterinarias/list_veterinarias"; // Renderiza templates/index2.html
+	        return "veterinarias/list_veterinarias";
 	}
 
 
@@ -64,7 +64,7 @@ public class VeterinariaController {
         return "redirect:/veterinarias/list";
     }
 
-    @GetMapping("/edit/{id}")
+    @GetMapping("/edit/{id:\\d+}")
     public ModelAndView editVeterinariaForm(@PathVariable("id") Long id) {
         LOGGER.info("GET - editVeterinariaForm - /veterinarias/edit/{id}");
         ModelAndView mav = new ModelAndView("veterinarias/edit_veterinaria");
@@ -77,7 +77,7 @@ public class VeterinariaController {
         return mav;
     }
 
-    @GetMapping("/delete/{id}")
+    @GetMapping("/delete/{id:\\d+}")
     public String deleteVeterinaria(@PathVariable("id") Long id) {
         LOGGER.info("GET - deleteVeterinaria - /veterinarias/delete/{id}");
         veterinariaService.delete(id);
