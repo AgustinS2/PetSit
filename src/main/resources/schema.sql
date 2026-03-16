@@ -102,12 +102,4 @@ CREATE TABLE veterinarias (
   vet_activa BOOLEAN DEFAULT TRUE
 );
 
-ALTER TABLE usuarios
-    MODIFY usr_correo VARCHAR(255) NOT NULL,
-    ADD UNIQUE (usr_correo);
-
-ALTER TABLE usuarios
-    MODIFY usr_tipo_usuario VARCHAR(255) NOT NULL;
-
-
 CREATE INDEX idx_alertas_lat_lng ON alertas (alt_lat, alt_lng); -- index para que encuentre más rápido las alertas

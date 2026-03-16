@@ -1,10 +1,12 @@
 package ar.edu.davinci.PetSit.repository;
 
-import ar.edu.davinci.PetSit.domain.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import ar.edu.davinci.PetSit.domain.Usuario;
 
+@Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-    boolean existsByCorreo(String correo);
+	
+
 }
