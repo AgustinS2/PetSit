@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PetSit – Crear cuenta</title>
+  <meta name="description" content="Creá tu cuenta en PetSit y sumate a una red que ayuda a volver a casa.">
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Fuente Caudex -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caudex:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Iconos -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+  <!-- Estilos -->
+  <link rel="stylesheet" th:href="@{/css/core.css}">
+  <link rel="stylesheet" th:href="@{/css/nav-base.css}">
+  <link rel="stylesheet" th:href="@{/css/public.css}">
+
+  <!-- Favicons -->
+  <link rel="icon" th:href="@{/assets/favicon/favicon.ico}" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" th:href="@{/assets/favicon/favicon-32x32.png}">
+  <link rel="icon" type="image/png" sizes="16x16" th:href="@{assets/favicon/favicon-16x16.png}">
+  <link rel="apple-touch-icon" sizes="180x180" th:href="@{assets/favicon/apple-touch-icon.png}">
+  <link rel="manifest" th:href="@{/assets/favicon/site.webmanifest}">
+  <meta name="theme-color" content="#0f6a67">
+</head>
+
+<body class="page-auth page-registro">
+
+<!-- NAVBAR -->
+<header>
+  <nav class="navbar navbar-expand-lg navbar-light bg-nav border-bottom">
+    <div class="container-fluid px-3 px-md-4">
+
+      <!-- Logo -->
+      <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/petsit/index}">
+        <img th:src="@{/assets/img/icons/logo.png}" alt="Logo PetSit" height="56">
+        <img th:src="@{/assets/img/Petsit.png}" alt="Marca PetSit" class="brand-name">
+      </a>
+
+      <!-- Toggler -->
+      <button
+              class="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#mainNav"
+              aria-controls="mainNav"
+              aria-expanded="false"
+              aria-label="Abrir menú"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Nav -->
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto nav-links">
+          <li class="nav-item"><a class="nav-link active" th:href="@{/petsit/index}" aria-current="page">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/nosotros}">¿Quiénes somos?</a></li>
+          <li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/contacto}">Contactanos</a></li>
+          <li class="nav-item"><a class="nav-link" th:href="@{/petsit/refugios/index}">Refugios</a></li>
+          <li class="nav-item"><a class="nav-link" th:href="@{/petsit/alertas/mapa}">Mapa</a></li>
+          <li class="nav-item"><a class="nav-link" th:href="@{/petsit/veterinarias/index}">Veterinarias</a></li>
+        </ul>
+
+        <!-- LOGIN -->
+        <div class="nav-login ms-lg-2">
+          <a th:href="@{/petsit/home/login}" class="user-chip">INICIAR SESIÓN</a>
+        </div>
+      </div>
+
+    </div>
+  </nav>
+</header>
+
+<!-- MAIN -->
+<main class="auth-wrap" role="main">
+
+  <!-- Peces decorativos (full width) -->
+  <div class="fish-layer" aria-hidden="true">
+    <!-- Fila principal -->
+    <img th:src="@{/assets/img/icons/registro/pez1.png}" class="fish fish-1 hero" alt="">
+    <img th:src="@{/assets/img/icons/registro/pez2.png}" class="fish fish-2 bg" alt="">
+    <img th:src="@{/assets/img/icons/registro/pez3.png}" class="fish fish-3 hero" alt="">
+    <img th:src="@{/assets/img/icons/registro/pez4.png}" class="fish fish-4" alt="">
+    <img th:src="@{/assets/img/icons/registro/pez5.png}" class="fish fish-5 bg" alt="">
+    <img th:src="@{/assets/img/icons/registro/pez6.png}" class="fish fish-6 bg" alt="">
+    <img th:src="@{/assets/img/icons/registro/pez7.png}" class="fish fish-7" alt="">
+    <img th:src="@{/assets/img/icons/registro/pez8.png}" class="fish fish-8" alt="">
+
+    <!-- Extras -->
+    <img th:src="@{/assets/img/icons/registro/pez9.png}" class="fish fish-9 prom" alt="">
+    <img th:src="@{/assets/img/icons/registro/pez10.png}" class="fish fish-10 bg" alt="">
+    <img th:src="@{/assets/img/icons/registro/pez11.png}" class="fish fish-11 hero" alt="">
+    <img th:src="@{/assets/img/icons/registro/pez12.png}" class="fish fish-12 hero" alt="">
+    <img th:src="@{/assets/img/icons/registro/pez13.png}" class="fish fish-13 hero" alt="">
+    <img th:src="@{/assets/img/icons/registro/pez3.png}" class="fish fish-14 bg" alt="">
+    <img th:src="@{/assets/img/icons/registro/pez5.png}" class="fish fish-15" alt="">
+
+    <!-- Derecha extra -->
+    <img th:src="@{/assets/img/icons/registro/pez2.png}" class="fish fish-16 bg" alt="">
+    <img th:src="@{/assets/img/icons/registro/pez7.png}" class="fish fish-17 bg" alt="">
+    <img th:src="@{/assets/img/icons/registro/pez1.png}" class="fish fish-18" alt="">
+    <img th:src="@{/assets/img/icons/registro/pez5.png}" class="fish fish-19 bg" alt="">
+  </div>
+
+  <div class="container">
+    <div class="auth-grid">
+
+      <!-- Visual -->
+      <aside class="auth-visual" aria-hidden="true">
+        <div class="auth-blob"></div>
+        <img th:src="@{/assets/img/registro.png}" alt="" class="auth-cat">
+      </aside>
+
+      <!-- Card -->
+      <section class="auth-card" aria-labelledby="authTitle">
+        <header class="auth-head">
+          <h1 id="authTitle" class="auth-title">Bienvenido a PetSit</h1>
+          <p class="auth-subtitle">
+            Creá tu cuenta y sumate a una red que ayuda a volver a casa.
+          </p>
+        </header>
+
+		<form class="auth-form" th:action="@{/petsit/usuarios/usuarios/save}" th:object="${usuario}" method="post">
+
+          <!-- Nombre + Apellido -->
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="auth-field">
+                <label for="nombre" class="auth-label">Nombre</label>
+                <input
+                        id="nombre"
+                        th:field="*{nombre}"
+                        type="text"
+                        class="auth-input"
+                        placeholder="Tu nombre"
+                        required
+                >
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="auth-field">
+                <label for="apellido" class="auth-label">Apellido</label>
+                <input
+                        id="apellido"
+                        th:field="*{apellido}"
+                        type="text"
+                        class="auth-input"
+                        placeholder="Tu apellido"
+                        required
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Teléfono -->
+          <div class="auth-field">
+            <label for="telefono" class="auth-label">Teléfono</label>
+            <input
+                    id="telefono"
+                    th:field="*{telefono}"
+                    type="tel"
+                    class="auth-input"
+                    placeholder="+54 9 11 1234 5678"
+                    inputmode="tel"
+                    required
+            >
+          </div>
+
+          <!-- Email -->
+          <div class="auth-field">
+            <label for="email" class="auth-label">Email</label>
+            <input
+                    id="email"
+                    th:field="*{correo}"
+                    type="email"
+                    class="auth-input"
+                    placeholder="tu@correo.com"
+                    required
+            >
+          </div>
+
+          <!-- Contraseña -->
+          <div class="auth-field">
+            <label for="pass" class="auth-label">Contraseña</label>
+            <div class="auth-pass">
+              <input
+                      id="pass"
+                      th:field="*{contrasena}"
+                      type="password"
+                      class="auth-input"
+                      placeholder="••••••••"
+                      required
+              >
+              <button
+                      class="auth-eye"
+                      type="button"
+                      data-toggle-pass="#pass"
+                      aria-label="Mostrar u ocultar contraseña"
+              >
+                <i class="bi bi-eye" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Repetir contraseña -->
+          <div class="auth-field">
+            <label for="pass2" class="auth-label">Repetir contraseña</label>
+            <div class="auth-pass">
+              <input
+                      id="pass2"
+                      name="password_confirm"
+                      type="password"
+                      class="auth-input"
+                      placeholder="••••••••"
+                      required
+              >
+              <button
+                      class="auth-eye"
+                      type="button"
+                      data-toggle-pass="#pass2"
+                      aria-label="Mostrar u ocultar contraseña"
+              >
+                <i class="bi bi-eye" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+			
+          <!-- Botón -->
+          <button type="submit" class="auth-btn-primary">Crear cuenta</button>
+
+          <p class="auth-foot">
+            ¿Ya tenés cuenta?
+            <a th:href="@{/petsit/home/login}" class="auth-link">Iniciar sesión</a>
+          </p>
+
+        </form>
+      </section>
+
+    </div>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="footer mt-5">
+  <div class="container py-4">
+    <div class="row text-white">
+
+      <div class="col-md-4 mb-3">
+        <h6 class="fw-bold text-uppercase">Más información</h6>
+        <ul class="list-unstyled">
+          <li><a href="contacto.html" class="footer-link">Contactanos</a></li>
+          <li><a href="quienes-somos.html" class="footer-link">Sobre nosotros</a></li>
+        </ul>
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <h6 class="fw-bold text-uppercase">Legal</h6>
+        <ul class="list-unstyled">
+          <li><a href="#" class="footer-link">Políticas de privacidad</a></li>
+          <li><a href="#" class="footer-link">Términos de servicio</a></li>
+        </ul>
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <h6 class="fw-bold text-uppercase">Seguinos</h6>
+        <a href="#" class="footer-social me-2" aria-label="Facebook">
+          <i class="bi bi-facebook" aria-hidden="true"></i>
+        </a>
+        <a href="#" class="footer-social me-2" aria-label="Instagram">
+          <i class="bi bi-instagram" aria-hidden="true"></i>
+        </a>
+        <a href="#" class="footer-social" aria-label="Twitter/X">
+          <i class="bi bi-twitter" aria-hidden="true"></i>
+        </a>
+      </div>
+
+    </div>
+
+    <div class="text-center small mt-3 text-white">
+      Copyright 2025 © Escuela Da Vinci | Keila Degregorio | Maia Cohen | Matias Bernal | Agustin Segovia
+    </div>
+  </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
+
+<!-- Ojo password (limpio) -->
+<script>
+  document.querySelectorAll('[data-toggle-pass]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const target = btn.getAttribute('data-toggle-pass');
+      const input = document.querySelector(target);
+      const icon = btn.querySelector('i');
+      if (!input) return;
+
+      const isPass = input.type === 'password';
+      input.type = isPass ? 'text' : 'password';
+      icon.className = isPass ? 'bi bi-eye-slash' : 'bi bi-eye';
+    });
+  });
+</script>
+
+</body>
+</html>

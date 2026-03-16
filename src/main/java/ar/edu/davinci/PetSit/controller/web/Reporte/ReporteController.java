@@ -58,7 +58,7 @@ public class ReporteController {
         return "redirect:/reportes/list";
     }
 
-    @GetMapping("/edit/{id}")
+    @GetMapping("/edit/{id:\\d+}")
     public ModelAndView editReporteForm(@PathVariable("id") Long id) {
         LOGGER.info("GET - editReporteForm - /reportes/edit/{id}");
         ModelAndView mav = new ModelAndView("reportes/edit_reporte");
@@ -71,7 +71,7 @@ public class ReporteController {
         return mav;
     }
 
-    @GetMapping("/delete/{id}")
+    @GetMapping("/delete/{id:\\d+}")
     public String deleteReporte(@PathVariable("id") Long id) {
         LOGGER.info("GET - deleteReporte - /reportes/delete/{id}");
         reporteService.delete(id);

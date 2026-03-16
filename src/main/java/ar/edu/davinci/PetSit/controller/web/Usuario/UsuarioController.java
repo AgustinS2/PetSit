@@ -17,9 +17,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.davinci.PetSit.controller.PetSitApp;
+import ar.edu.davinci.PetSit.domain.Mascota;
+import ar.edu.davinci.PetSit.domain.TipoUsuario;
 import ar.edu.davinci.PetSit.domain.Usuario;
 import ar.edu.davinci.PetSit.exceptions.BusinessException;
 import ar.edu.davinci.PetSit.service.Usuario.UsuarioService;
+
+import java.security.Principal;
+import java.util.Collections;
+import java.util.List;
 
 @Controller
 @RequestMapping("/petsit/usuarios")
@@ -36,14 +42,51 @@ public class UsuarioController extends PetSitApp {
 	}
 
     @GetMapping("/perfil")
-	    public String perfilUsuario() {
+	    public String perfilUsuario(Model model, Principal principal) {
+			LOGGER.info("GET - perfilUsuario - /petsit/usuarios/perfil");
+
+			if (principal == null) {
+				LOGGER.warn("No hay usuario logueado");
+				return "redirect:/petsit/home/login";
+			}
+
+			try {
+				// Buscar el usuario logueado por su correo (username)
+				Usuario usuario = usuarioService.findByCorreo(principal.getName());
+				List<Mascota> mascotas = usuario.getMascotas() != null ? usuario.getMascotas() : Collections.emptyList();
+
+				model.addAttribute("usuario",usuario);
+				model.addAttribute("mascotas", mascotas);
+				model.addAttribute("cantidadMascotas", mascotas.size());
+			
+
+				LOGGER.info("Usuario cargado: {}", usuario.getCorreo());
+			} catch (Exception e) {
+				LOGGER.error("Error al cargar el perfil del usuario", e);
+				return "redirect:/petsit/home/login";
+			}
+
 	        return "usuarios/perfil_usuarios"; // Renderiza templates/"""".html
 	}
 
     @GetMapping("/index")
-	    public String indexUsuario() {
-	        return "usuarios/user_index"; // Renderiza templates/"""".html
-	}
+    public String indexUsuario(Model model, Principal principal) {
+        LOGGER.info("GET - indexUsuario - /petsit/usuarios/index");
+
+        if (principal == null) {
+            return "redirect:/petsit/home/login";
+        }
+
+        try {
+            Usuario usuario = usuarioService.findByCorreo(principal.getName());
+            model.addAttribute("usuario", usuario);
+        } catch (Exception e) {
+            LOGGER.error("Error al cargar usuario logueado", e);
+            return "redirect:/petsit/home/login";
+        }
+
+        return "usuarios/user_index";
+    }
 
 	@GetMapping(path = "/usuarios/list")
 	public String showUsuarioPage(Model model) {
@@ -69,30 +112,21 @@ public class UsuarioController extends PetSitApp {
 	return "usuarios/new_usuarios";
 	}
 	
-	@GetMapping(path = "/usuarios/index")
-	public String indexUsuario(Model model) {
-	LOGGER.info("GET - indexUsuario - /usuarios/index");
-	return "usuarios/user_index";
-	}
-	
 	@PostMapping(value = "/usuarios/save")
 	public String saveUsuario(@ModelAttribute("usuario") Usuario usuario) {
-	LOGGER.info("POST - saveUsuario - /usuarios/save");
-	
-	
-	LOGGER.info("usuario: " + usuario.toString());
-	try {
-	if (usuario.getId() == null) {
-	usuarioService.save(usuario);
-	} else {
-	usuarioService.update(usuario);
-	}
-	} catch (BusinessException e) {
-	// TODO Auto-generated catch block
-	e.printStackTrace();
-	}
-	return "redirect:/petsit/usuarios/list";
+	    LOGGER.info("POST - saveUsuario - /usuarios/save");
 
+	    try {
+	        if (usuario.getId() == null) {
+	            usuario.setTipo(TipoUsuario.DUENO);
+	            usuarioService.save(usuario);
+	        } else {
+	            usuarioService.update(usuario);
+	        }
+	    } catch (BusinessException e) {
+	        e.printStackTrace();
+	    }
+	    return "redirect:/petsit/home/login";
 	}
 	
 	@RequestMapping(value = "/usuarios/edit/{id}", method = RequestMethod.GET)

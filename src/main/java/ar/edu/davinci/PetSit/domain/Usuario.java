@@ -2,14 +2,21 @@ package ar.edu.davinci.PetSit.domain;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hibernate.annotations.GenericGenerator;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -49,4 +56,9 @@ public class Usuario implements Serializable {
 	private String contrasena;
 	@Column(name = "usr_telefono", nullable = false)
 	private String telefono;
+	@Column (name = "usr_avatar", nullable = true)
+	private String fotoPerfil;
+	@OneToMany(mappedBy = "dueno", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Mascota> mascotas = new ArrayList<>();
+
 }

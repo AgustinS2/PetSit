@@ -8,37 +8,43 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import ar.edu.davinci.PetSit.controller.PetSitApp;
+import ar.edu.davinci.PetSit.domain.Usuario;
 
 @Controller
-@RequestMapping("/petsit/")
+@RequestMapping("/petsit")
 public class HomeController extends PetSitApp {
-	private final Logger LOGGER = LoggerFactory.getLogger(HomeController.class);
-	@GetMapping({"/" , "/index"})
-	public String viewHomePage(Model model) {
-	LOGGER.info("GET - viewHomePage - /index");
-	return "index";
-	}
-	
-	@GetMapping("/index2")
-	    public String index2() {
-	        return "index2"; // Renderiza templates/index2.html
-	    }
-	@GetMapping("/home/login")
-	    public String login() {
-	        return "home/login"; // Renderiza templates/login.html
-	    }
-	@GetMapping("/home/nosotros")
-	    public String nosotros() {
-	        return "home/nosotros"; // Renderiza templates/home/nosotros.html
-	    }
-	@GetMapping("/home/contacto")
-	    public String contacto() {
-	        return "home/contacto"; // Renderiza templates/home/contacto.html
-	    }
+
+    private final Logger LOGGER = LoggerFactory.getLogger(HomeController.class);
+
+    @GetMapping({"/", "/index"})
+    public String viewHomePage(Model model) {
+        LOGGER.info("GET - viewHomePage - /index");
+        return "index";
+    }
+
+    @GetMapping("/home/registro")
+    public String showRegistro(Model model) {
+        model.addAttribute("usuario", new Usuario());
+        return "home/registro";
+    }
+
+    @GetMapping("/home/login")
+    public String login() {
+        return "home/login";
+    }
+
+    @GetMapping("/home/nosotros")
+    public String nosotros() {
+        return "home/nosotros";
+    }
+
+    @GetMapping("/home/contacto")
+    public String contacto() {
+        return "home/contacto";
+    }
 
     @GetMapping("/home/recuperarpass")
-	    public String recuperarpass() {
-	        return "home/recuperarpass"; // Renderiza templates/"""".html
-	}
-
+    public String recuperarpass() {
+        return "home/recuperarpass";
+    }
 }

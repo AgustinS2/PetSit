@@ -1,5 +1,7 @@
 package ar.edu.davinci.PetSit.controller.web.Mascota;
 
+import ar.edu.davinci.PetSit.domain.Usuario;
+import ar.edu.davinci.PetSit.service.Usuario.UsuarioService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,9 @@ import org.springframework.web.servlet.ModelAndView;
 import ar.edu.davinci.PetSit.domain.Mascota;
 import ar.edu.davinci.PetSit.exceptions.BusinessException;
 import ar.edu.davinci.PetSit.service.Mascota.MascotaService;
+import java.security.Principal;
+import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 @RequestMapping("/petsit/mascotas")
@@ -24,19 +29,18 @@ public class MascotaController {
     @Autowired
     private MascotaService mascotaService;
 
-    @GetMapping("/mis-mascotas")
-	    public String misMascotas() {
-	        return "mascotas/mis_mascotas"; // Renderiza templates/"""".html
-	}
+    @Autowired
+    private UsuarioService usuarioService;
+
     
     @GetMapping("/adoptar")
 	    public String adoptar() {
-	        return "mascotas/adoptar_mascotas"; // Renderiza templates/"""".html
+	        return "mascotas/adoptar_mascotas";
 	}
 
     @GetMapping("/document")
 	    public String document() {
-	        return "mascotas/document_mascotas"; // Renderiza templates/"""".html
+	        return "mascotas/document_mascotas";
 	}
 
     @GetMapping("/list")
@@ -47,6 +51,18 @@ public class MascotaController {
         model.addAttribute("listMascotas", mascotas.getContent());
         model.addAttribute("pageNumber", mascotas.getPageable().getPageNumber());
         model.addAttribute("totalPages", mascotas.getTotalPages());
+        return "mascotas/list_mascotas";
+    }
+
+    @GetMapping("/mis-mascotas")
+    public String misMascotas(Model model, Principal principal) throws BusinessException {
+
+        Usuario usuario = usuarioService.findByCorreo(principal.getName());
+
+        List<Mascota> mascotas = mascotaService.findByDueno(usuario);
+
+        model.addAttribute("listMascotas", mascotas);
+
         return "mascotas/list_mascotas";
     }
 
@@ -73,7 +89,7 @@ public class MascotaController {
         return "redirect:/mascotas/list";
     }
 
-    @GetMapping("/edit/{id}")
+    @GetMapping("/edit/{id:\\d+}")
     public ModelAndView editMascotaForm(@PathVariable("id") Long id) {
         LOGGER.info("GET - editMascotaForm - /mascotas/edit/{id}");
         ModelAndView mav = new ModelAndView("mascotas/edit_mascota");
@@ -86,7 +102,7 @@ public class MascotaController {
         return mav;
     }
 
-    @GetMapping("/delete/{id}")
+    @GetMapping("/delete/{id:\\d+}")
     public String deleteMascota(@PathVariable("id") Long id) {
         LOGGER.info("GET - deleteMascota - /mascotas/delete/{id}");
         mascotaService.delete(id);
