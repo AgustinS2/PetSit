@@ -4,53 +4,51 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ar.edu.davinci.PetSit.domain.Usuario;
 import ar.edu.davinci.PetSit.domain.TipoUsuario;
-import org.springframework.test.context.ActiveProfiles; // PARA QUE LOS TESTS DEJEN DE DEPENDER DE DATA.SQL,SCHEMA.SQL Y SECURITY
 
-@DataJpaTest
-@ActiveProfiles("test") // PARA QUE LOS TESTS DEJEN DE DEPENDER DE DATA.SQL,SCHEMA.SQL Y SECURITY
+@SpringBootTest
+@ExtendWith(SpringExtension.class)
 class UsuarioRepositoryTest {
 	private final Logger LOGGER = LoggerFactory.getLogger(UsuarioRepositoryTest.class);
 	
 	@Autowired
 	private UsuarioRepository usuarioRepository;
-
+	
 	@Test
 	void testFindAll() {
-		Usuario u = Usuario.builder()
-				.nombre("Agustin")
-				.apellido("Segovia")
-				.correo("ags@gmail.com")
-				.tipo(TipoUsuario.DUENO)
-				.contrasena("asdasd")
-				.telefono("12341234")
-				.build();
-
-		usuarioRepository.save(u);
-
-		List<Usuario> usuarios = usuarioRepository.findAll();
-		assertFalse(usuarios.isEmpty());
+	assertNotNull(usuarioRepository, "El repositorio es nulo.");
+	List<Usuario> usuarios = usuarioRepository.findAll();
+	LOGGER.info("usuarios encontrados: " + usuarios.size());
+	assertNotNull(usuarios, "Usuarios es nulo");
+	assertTrue(usuarios.size() > 0, "No existen usuarios.");
+	
 	}
-
-
+	
 	@Test
 	void testFindById() {
-		Usuario u = usuarioRepository.save(Usuario.builder()
-				.nombre("Matias")
-				.apellido("Bernal")
-				.correo("matibernal2000@gmail.com")
-				.tipo(TipoUsuario.DUENO)
-				.contrasena("matute123")
-				.telefono("2478556492")
-				.build());
-
-		Optional<Usuario> usuarioOptional = usuarioRepository.findById(u.getId());
-		assertTrue(usuarioOptional.isPresent());
-		assertEquals(TipoUsuario.DUENO, usuarioOptional.get().getTipo());
+	Long id = 1L;
+	Usuario usuario = null;
+	Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
+	if (usuarioOptional.isPresent()) {
+		usuario = usuarioOptional.get();
+		LOGGER.info("Usuario encontrada para el id: " + usuario.getId());
+		LOGGER.info("Usuario Tipo: " + usuario.getTipo());
+		LOGGER.info("Usuario Tipo.Descripcion: " +
+	
+	usuario.getTipo().getDescripcion());
+	
+	assertEquals(TipoUsuario.DUENO, usuario.getTipo());
+	} else {
+	LOGGER.info("Usuario no encontrada para el id: " + id);
+	usuario = usuarioOptional.get();
+	assertNull(usuario);
+	}
 	}
 }
