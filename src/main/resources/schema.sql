@@ -58,12 +58,16 @@ CREATE TABLE alertas (
 
 CREATE TABLE reportes (
   rep_id INT AUTO_INCREMENT PRIMARY KEY,
-  rep_usuario_id INT NOT NULL,
+  rep_usuario_id INT NULL,
   rep_fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   rep_ubicacion VARCHAR(255),
   rep_descripcion VARCHAR(255),
   rep_foto VARCHAR(255),
   rep_estado VARCHAR(255) DEFAULT 'PENDIENTE',
+  rep_tipo_reporte VARCHAR(50) NOT NULL,
+  rep_estado_mascota VARCHAR(50) NOT NULL,
+  rep_lat DECIMAL(9,6) NULL,
+  rep_lng DECIMAL(9,6) NULL,
   rep_refugio_id INT,
   rep_alerta_id INT, -- Relación con alerta si se asocia
   FOREIGN KEY (rep_usuario_id) REFERENCES usuarios(usr_id),

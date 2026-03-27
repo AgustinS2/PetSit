@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import ar.edu.davinci.PetSit.domain.Reporte;
 import ar.edu.davinci.PetSit.exceptions.BusinessException;
+import ar.edu.davinci.PetSit.dto.ReporteMapaDTO;
 
 public interface ReporteService {
 
@@ -19,5 +20,8 @@ public interface ReporteService {
     Page<Reporte> list(Pageable pageable);
 
     long count();
+
+    //Esto es el nuevo metodo del mapa
+    List<ReporteMapaDTO> obtenerReportesParaMapa();
 }
 

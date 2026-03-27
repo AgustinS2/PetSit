@@ -37,4 +37,8 @@ public class AlertaMapaController {
         //model.addAttribute("alertas", puntos);
         return "alertas/mapa";
     }
+    @GetMapping("/usuarios/usuariomapa")
+    public String usuarioMapa() {
+        return "usuarios/usuariomapa";
+    }
 }
