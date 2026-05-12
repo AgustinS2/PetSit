@@ -154,4 +154,59 @@ public class UsuarioController extends PetSitApp {
 	usuarioService.delete(usuarioId);
 	return "redirect:/petsit/usuarios/list";
 	}
+
+	@GetMapping("/usuarioadoptar")
+	public String usuarioAdoptar(Model model, Principal principal) {
+		if (principal == null) {
+			return "redirect:/petsit/home/login";
+		}
+		try {
+			Usuario usuario = usuarioService.findByCorreo(principal.getName());
+			model.addAttribute("usuario", usuario);
+		} catch (Exception e) {
+			LOGGER.error("Error al cargar usuario logueado", e);
+			return "redirect:/petsit/home/login";
+		}
+		return "usuarios/usuarioadoptar";
+	}
+
+	@GetMapping("/usuariocontacto")
+	public String usuarioContacto() {
+		return "usuarios/usuariocontacto";
+	}
+
+	@GetMapping("/usuarioquienessomos")
+	public String usuarioQuienesSomos() {
+		return "usuarios/usuarioquienessomos";
+	}
+
+	@GetMapping("/usuariorefugio")
+	public String usuarioRefugio(Model model, Principal principal) {
+		if (principal == null) {
+			return "redirect:/petsit/home/login";
+		}
+		try {
+			Usuario usuario = usuarioService.findByCorreo(principal.getName());
+			model.addAttribute("usuario", usuario);
+		} catch (Exception e) {
+			LOGGER.error("Error al cargar usuario logueado", e);
+			return "redirect:/petsit/home/login";
+		}
+		return "usuarios/usuariorefugio";
+	}
+
+	@GetMapping("/usuarioveterinarias")
+	public String usuarioVeterinarias(Model model, Principal principal) {
+		if (principal == null) {
+			return "redirect:/petsit/home/login";
+		}
+		try {
+			Usuario usuario = usuarioService.findByCorreo(principal.getName());
+			model.addAttribute("usuario", usuario);
+		} catch (Exception e) {
+			LOGGER.error("Error al cargar usuario logueado", e);
+			return "redirect:/petsit/home/login";
+		}
+		return "usuarios/usuarioveterinarias";
+	}
 }

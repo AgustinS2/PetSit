@@ -54,7 +54,7 @@ public class MascotaController {
         return "mascotas/list_mascotas";
     }
 
-    @GetMapping("/mis-mascotas")
+    @GetMapping("/mis_mascotas")
     public String misMascotas(Model model, Principal principal) throws BusinessException {
 
         Usuario usuario = usuarioService.findByCorreo(principal.getName());
@@ -63,7 +63,7 @@ public class MascotaController {
 
         model.addAttribute("listMascotas", mascotas);
 
-        return "mascotas/list_mascotas";
+        return "mascotas/mis_mascotas";
     }
 
     @GetMapping("/new")

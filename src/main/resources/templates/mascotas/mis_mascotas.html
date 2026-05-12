@@ -47,6 +47,7 @@
     <!-- Nav -->
     <div class="collapse navbar-collapse" id="mainNav">
 
+
       <!-- LINKS CENTRALES -->
       <ul id="appNavList" class="navbar-nav mx-auto nav-center gap-lg-3">
         <li class="nav-item"><a class="nav-link" th:href="@{/petsit/mascotas/mis-mascotas}">Mis mascotas</a></li>
@@ -95,7 +96,7 @@
                       class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle d-none"
                       aria-hidden="true"></span>
               </span>
-            <span id="navUser">Usuario</span>
+            <span id="navUser" th:text="${usuario.nombre}"></span>
           </a>
 
           <ul class="dropdown-menu dropdown-menu-end user-menu">

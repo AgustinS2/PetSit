@@ -18,18 +18,13 @@
     <link rel="stylesheet" th:href="@{/css/core.css}">
     <link rel="stylesheet" th:href="@{/css/nav-user.css}">
     <link rel="stylesheet" th:href="@{/css/user.css}">
-    <link rel="stylesheet" th:href="@{/css/public.css}">
 
     <!-- Favicons -->
     <link rel="icon" href="assets/favicon/favicon.ico" sizes="any">
-    <link rel="icon" type="image/png" sizes="32x32" th:href="@{/assets/favicon/favicon-32x32.png}">
-    <link rel="icon" type="image/png" sizes="16x16" th:href="@{/assets/favicon/favicon-16x16.png}">
     <link rel="apple-touch-icon" sizes="180x180" th:href="@{/assets/favicon/apple-touch-icon.png}">
-    <link rel="manifest" th:href="@{/assets/favicon/site.webmanifest}">
 </head>
 
 <body class="page-veterinarias in-app petsit-bg">
-
 <!-- NAVBAR INTERNO -->
 <nav class="navbar navbar-expand-lg navbar-light bg-nav border-bottom petsit-nav-user" aria-label="Menú interno">
     <div class="container-fluid px-3 px-md-4">
@@ -53,7 +48,7 @@
 
             <!-- LINKS CENTRALES -->
             <ul id="appNavList" class="navbar-nav mx-auto nav-center gap-lg-3">
-                <li class="nav-item"><a class="nav-link" th:href="@{/petsit/mascotas/mis-mascotas}">Mis mascotas</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/petsit/mascotas/mis_mascotas}">Mis mascotas</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/usuarioveterinarias}">Veterinarias</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/usuariorefugio}">Refugios</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/usuarioadoptar}">Adoptar</a></li>
@@ -88,18 +83,18 @@
             </ul>
 
             <!-- DROPDOWN DESKTOP -->
-            <ul class="navbar-nav ms-auto align-items-center d-none d-lg-flex">
+            <ul class="navbar-nav ms-auto align-items-center d-none d-lg-flex nav-login">
                 <li class="nav-item dropdown">
                     <a class="nav-link user-chip dropdown-toggle d-flex align-items-center gap-2"
                        href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <span class="user-avatar position-relative">
-                <img th:src="@{/assets/img/icons/usuario.png}" alt="Avatar usuario">
-                  <!-- ✅ Dot desktop -->
-                <span id="notifDotDesktop"
-                      class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle d-none"
-                      aria-hidden="true"></span>
-              </span>
-                        <span id="navUser">Usuario</span>
+                      <span class="user-avatar position-relative">
+                        <img th:src="@{/assets/img/icons/usuario.png}" alt="Avatar usuario">
+                          <!-- ✅ Dot desktop -->
+                        <span id="notifDotDesktop"
+                              class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle d-none"
+                              aria-hidden="true"></span>
+                      </span>
+                        <span th:text="${usuario.nombre}"></span>
                     </a>
 
                     <ul class="dropdown-menu dropdown-menu-end user-menu">
