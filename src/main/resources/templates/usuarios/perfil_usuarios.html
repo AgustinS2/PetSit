@@ -27,89 +27,58 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-nav border-bottom petsit-nav-user" aria-label="Menú interno">
   <div class="container-fluid px-3 px-md-4">
 
-    <a class="navbar-brand d-flex align-items-center gap-2 app-home"
+    <a id="brandLink" class="navbar-brand d-flex align-items-center gap-2 app-home"
        th:href="@{/petsit/usuarios/index}" aria-label="Inicio de usuario">
       <img th:src="@{/assets/img/icons/logo.png}" alt="Logo PetSit" height="56">
       <img th:src="@{/assets/img/Petsit.png}" alt="PetSit" class="brand-name">
     </a>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
-            aria-controls="mainNav" aria-expanded="false" aria-label="Abrir menú">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#mainNav" aria-controls="mainNav"
+            aria-expanded="false" aria-label="Abrir menú">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="mainNav">
 
-      <!-- LINKS CENTRALES -->
       <ul id="appNavList" class="navbar-nav mx-auto nav-center gap-lg-3">
-        <li class="nav-item"><a class="nav-link" th:href="@{/petsit/mascotas/mis-mascotas}">Mis mascotas</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/petsit/mascotas/mis_mascotas}">Mis mascotas</a></li>
         <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/usuarioveterinarias}">Veterinarias</a></li>
         <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/usuariorefugio}">Refugios</a></li>
         <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/usuarioadoptar}">Adoptar</a></li>
-        <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/usuariomapa}">Mapa</a></li>
         <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/mis-solicitudes}">Solicitudes</a></li>
 
-
-        <!-- MOBILE ONLY -->
         <li class="nav-item d-lg-none"><hr class="dropdown-divider my-2"></li>
-
         <li class="nav-item d-lg-none">
           <a class="nav-link d-flex align-items-center gap-2" th:href="@{/petsit/usuarios/perfil}">
             <i class="bi bi-person-gear"></i> Mi perfil
           </a>
         </li>
-
-        <!-- MOBILE: Notificaciones con dot -->
         <li class="nav-item d-lg-none">
-          <a class="nav-link d-flex align-items-center gap-2" href="#" id="openNotificationsMobile">
-            <span class="position-relative d-inline-flex align-items-center">
-              <i class="bi bi-bell"></i>
-              <span id="notifDotMobile"
-                    class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle d-none"
-                    aria-hidden="true"></span>
-            </span>
-            Notificaciones
-          </a>
-        </li>
-
-        <li class="nav-item d-lg-none">
-          <a class="nav-link d-flex align-items-center gap-2 text-danger" id="logoutBtnMobile" th:href="@{/petsit/}">
+          <a class="nav-link d-flex align-items-center gap-2 text-danger" th:href="@{/logout}">
             <i class="bi bi-box-arrow-right"></i> Cerrar sesión
           </a>
         </li>
       </ul>
 
-      <!-- DROPDOWN DESKTOP -->
-      <ul class="navbar-nav ms-auto align-items-center d-none d-lg-flex">
+      <ul class="navbar-nav ms-auto align-items-center d-none d-lg-flex nav-login">
         <li class="nav-item dropdown">
-          <a class="nav-link user-chip dropdown-toggle d-flex align-items-center gap-2" href="#"
-             role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="nav-link user-chip dropdown-toggle d-flex align-items-center gap-2"
+             href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <span class="user-avatar position-relative">
               <img th:src="@{/assets/img/icons/usuario.png}" alt="Avatar usuario">
-              <span id="notifDotDesktop"
-                    class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle d-none"
-                    aria-hidden="true"></span>
             </span>
-            <span th:text="${usuario.nombre}"></span>
+            <span id="navUser" th:text="${usuario.nombre}"></span>
           </a>
-
           <ul class="dropdown-menu dropdown-menu-end user-menu">
             <li>
               <a class="dropdown-item d-flex align-items-center gap-2" th:href="@{/petsit/usuarios/perfil}">
                 <i class="bi bi-person-gear"></i> Mi perfil
               </a>
             </li>
-
-            <li>
-              <a class="dropdown-item d-flex align-items-center gap-2" href="#" id="openNotifications">
-                <i class="bi bi-bell"></i> Notificaciones
-              </a>
-            </li>
-
             <li><hr class="dropdown-divider"></li>
-
             <li>
-              <a class="dropdown-item text-danger d-flex align-items-center gap-2" id="logoutBtn" th:href="@{/petsit/}">
+              <a class="dropdown-item text-danger d-flex align-items-center gap-2" th:href="@{/logout}">
                 <i class="bi bi-box-arrow-right"></i> Cerrar sesión
               </a>
             </li>
@@ -117,8 +86,8 @@
         </li>
       </ul>
 
-    </div><!-- /collapse -->
-  </div><!-- /container-fluid -->
+    </div>
+  </div>
 </nav>
 
 <!-- PERFIL -->

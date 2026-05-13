@@ -1,348 +1,147 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>PetSit – Veterinarias</title>
-  <meta name="description" content="Encontrá clínicas veterinarias cercanas, guardias 24 horas y atención a domicilio.">
-
-  <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Iconos -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-  <!-- Fuente Caudex -->
-  <link href="https://fonts.googleapis.com/css2?family=Caudex:wght@400;700&display=swap" rel="stylesheet">
-  <!-- Estilos globales -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caudex:wght@400;700&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" th:href="@{/css/core.css}">
   <link rel="stylesheet" th:href="@{/css/nav-base.css}">
   <link rel="stylesheet" th:href="@{/css/public.css}">
-
-
-  <!-- Favicons -->
   <link rel="icon" th:href="@{/assets/favicon/favicon.ico}" sizes="any">
-  <link rel="icon" type="image/png" sizes="32x32" th:href="@{/assets/favicon/favicon-32x32.png}">
-  <link rel="icon" type="image/png" sizes="16x16" th:href="@{/assets/favicon/favicon-16x16.png}">
-  <link rel="apple-touch-icon" sizes="180x180" th:href="@{/assets/favicon/apple-touch-icon.png}">
-  <link rel="manifest" th:href="@{/assets/favicon/site.webmanifest}">
-  <meta name="theme-color" content="#0f6a67">
 </head>
+<body>
 
-<body class="page-veterinarias">
-
-
-<!-- NAVBAR -->
-<header>
-  <nav class="navbar navbar-expand-lg navbar-light bg-nav border-bottom">
-    <div class="container-fluid px-3 px-md-4">
-
-      <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/petsit/home/login}">
-        <img th:src="@{/assets/img/icons/logo.png}" alt="Logo PetSit">
-        <img th:src="@{/assets/img/Petsit.png}" alt="PetSit" class="brand-name">
-      </a>
-
-      <button class="navbar-toggler" type="button"
-              data-bs-toggle="collapse" data-bs-target="#mainNav"
-              aria-controls="mainNav" aria-expanded="false" aria-label="Abrir menú">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse" id="mainNav">
-        <ul class="navbar-nav ms-auto nav-links">
-          <li class="nav-item"><a class="nav-link active" th:href="@{/petsit/index}" aria-current="page">Inicio</a></li>
-          <li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/nosotros}">¿Quiénes somos?</a></li>
-          <li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/contacto}">Contactanos</a></li>
-          <li class="nav-item"><a class="nav-link" th:href="@{/petsit/refugios/index}">Refugios</a></li>
-          <li class="nav-item"><a class="nav-link" th:href="@{/petsit/alertas/mapa}">Mapa</a></li>
-          <li class="nav-item"><a class="nav-link" th:href="@{/petsit/veterinarias/index}">Veterinarias</a></li>
-        </ul>
-
-        <!-- LOGIN -->
-        <div class="nav-login ms-lg-2">
-          <a th:href="@{/petsit/home/login}" class="user-chip">INICIAR SESIÓN</a>
-        </div>
-      </div>
-
-    </div>
-  </nav>
-</header>
-
-<!-- CONTENIDO -->
-<main class="container py-4 py-md-5">
-
-  <!-- HERO -->
-  <section class="vet-hero-soft mb-4">
-    <div class="row g-3 align-items-center">
-
-      <div class="col-md-6">
-        <div class="vet-hero-imgwrap">
-          <img th:src="@{/assets/img/hero/hero-vet.png}" alt="Atención veterinaria profesional" loading="lazy">
-        </div>
-      </div>
-
-      <div class="col-md-6">
-          <span class="vet-kicker">
-            <i class="bi bi-heart-fill" aria-hidden="true"></i> Cuidado animal
-          </span>
-        <h1 class="vet-title mb-1">Veterinarias</h1>
-        <div class="vet-accent"></div>
-
-        <p class="about-copy mb-3">
-          Clínicas, guardias y atención a domicilio para cuidar a quienes más querés.
-        </p>
-
-        <div class="vet-hero-cta">
-          <p class="vet-cta-title mb-2">¿Querés ser parte de PetSit?</p>
-
-          <div class="d-flex flex-wrap gap-2 align-items-center">
-            <button
-                    class="btn btn-primary vet-cta-btn"
-                    type="button"
-                    data-bs-toggle="modal"
-                    data-bs-target="#vetApplyModal">
-              <i class="bi bi-plus-circle me-1"></i> Sumate
-            </button>
-
-
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- CTAs filtros -->
-  <section class="row g-3 mb-3">
-    <div class="col-md-6">
-      <a id="ctaDomicilio" class="vet-hero card h-100 text-decoration-none" role="button" tabindex="0">
-        <div class="card-body d-flex align-items-center gap-3">
-          <div class="vet-hero-icon"><i class="bi bi-house-heart"></i></div>
-          <div>
-            <h3 class="h5 m-0">A domicilio</h3>
-            <small class="text-muted">Profesionales que atienden en tu casa</small>
-          </div>
-          <i class="bi bi-arrow-right ms-auto"></i>
-        </div>
-      </a>
-    </div>
-
-    <div class="col-md-6">
-      <a id="ctaGuardia" class="vet-hero card h-100 text-decoration-none" role="button" tabindex="0">
-        <div class="card-body d-flex align-items-center gap-3">
-          <div class="vet-hero-icon"><i class="bi bi-hospital"></i></div>
-          <div>
-            <h3 class="h5 m-0">Guardia veterinaria 24hs</h3>
-            <small class="text-muted">Clínicas abiertas las 24 horas</small>
-          </div>
-          <i class="bi bi-arrow-right ms-auto"></i>
-        </div>
-      </a>
-    </div>
-  </section>
-
-  <!-- Buscador + reset -->
-  <section class="row align-items-center g-3 mb-3">
-    <div class="col-lg-8">
-      <div class="search-input-wrap">
-        <i class="bi bi-search" aria-hidden="true"></i>
-        <input id="qVet" type="search" class="form-control vet-input"
-               placeholder="Buscar veterinarias (nombre o barrio)" aria-label="Buscar veterinarias">
-
-      </div>
-    </div>
-
-    <div class="col-lg-4 d-flex justify-content-lg-end">
-      <button id="resetQuick" class="btn btn-outline-secondary btn-chip d-none" type="button">
-        <i class="bi bi-arrow-counterclockwise me-1"></i> Ver todas
-      </button>
-    </div>
-  </section>
-
-  <div id="vetInfo" class="small text-muted mb-2" role="status" aria-live="polite"></div>
-  <section id="vetGrid" class="row g-4" aria-live="polite" aria-busy="false"></section>
-
-  <div id="vetEmpty" class="empty-state d-none mt-3">
-    No se encontraron veterinarias con los filtros actuales.
-  </div>
-
-</main>
-
-<!-- MODAL: REGISTRAR VETERINARIA -->
-<!-- MODAL: REGISTRAR VETERINARIA -->
-<div class="modal fade" id="vetApplyModal" tabindex="-1" aria-labelledby="vetApplyModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl modal-dialog-centered">
-
-    <div class="modal-content vet-modal-horizontal">
-
-      <!-- Close -->
-      <button type="button" class="btn-close vet-modal-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-
-      <div class="row g-0">
-
-        <!-- PANEL IZQUIERDO -->
-        <aside class="col-lg-5 vet-modal-side">
-          <!-- Header verde + divisor -->
-          <div class="vet-modal-head">
-            <h4 class="vet-modal-title">Sumá tu veterinaria a <span>PetSit</span> 🐾</h4>
-            <p class="vet-modal-lead">
-              Llegá a personas que buscan atención veterinaria confiable en tu zona.
-            </p>
-          </div>
-
-
-          <!-- Body izquierdo -->
-          <div class="vet-modal-sidebody">
-            <ul class="vet-modal-list">
-              <li><i class="bi bi-patch-check-fill"></i> Clínicas verificadas</li>
-              <li><i class="bi bi-clock-fill"></i> Respuesta en 24–72hs</li>
-              <li><i class="bi bi-search"></i> Revisión manual de datos</li>
-            </ul>
-
-
-            <div class="vet-modal-img">
-              <img th:src="@{/assets/img/vets/vet-form.png}" alt="Mascota PetSit">
-            </div>
-
-
-
-          </div>
-        </aside>
-
-        <!-- PANEL DERECHO: FORM -->
-        <section class="col-lg-7 vet-modal-form">
-          <form id="vetApplyFormModal" class="row g-3" novalidate>
-
-            <div class="col-12">
-              <label class="form-label" for="mName">Nombre de la veterinaria *</label>
-              <input id="mName" name="name" class="form-control" required
-                     placeholder="Ej: Clínica Veterinaria San Martín">
-              <div class="invalid-feedback">Ingresá el nombre.</div>
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label" for="mCity">Barrio / Ciudad *</label>
-              <input id="mCity" name="city" class="form-control" required placeholder="Ej: Palermo">
-              <div class="invalid-feedback">Ingresá la zona.</div>
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label" for="mAddr">Dirección *</label>
-              <input id="mAddr" name="address" class="form-control" required placeholder="Ej: Av. Santa Fe 1234">
-              <div class="invalid-feedback">Ingresá la dirección.</div>
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label" for="mPhone">Teléfono / WhatsApp *</label>
-              <input id="mPhone" name="phone" class="form-control" required placeholder="+54 11 4444-4444">
-              <div class="invalid-feedback">Ingresá un teléfono.</div>
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label" for="mEmail">Email *</label>
-              <input id="mEmail" name="email" type="email" class="form-control" required placeholder="contacto@vet.com">
-              <div class="invalid-feedback">Ingresá un email válido.</div>
-            </div>
-
-            <div class="col-12">
-              <label class="form-label" for="mHours">Horarios</label>
-              <input id="mHours" name="hours" class="form-control" placeholder="Ej: Lun a Sáb 9–20 h / Guardia 24 h">
-            </div>
-
-            <div class="col-12">
-              <label class="form-label">Servicios</label>
-              <div class="d-flex flex-wrap gap-3">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="mDomicilio" name="domicilio">
-                  <label class="form-check-label" for="mDomicilio">A domicilio</label>
-                </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="mGuardia" name="guardia">
-                  <label class="form-check-label" for="mGuardia">Guardia 24 h</label>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-12">
-              <label class="form-label" for="mNotes">Comentarios (opcional)</label>
-              <textarea id="mNotes" name="notes" class="form-control" rows="3"
-                        placeholder="Ej: Atendemos animales exóticos."></textarea>
-            </div>
-
-            <!-- Footer sticky -->
-            <div class="col-12 vet-modal-actions">
-              <button class="btn btn-primary" type="submit">
-                <i class="bi bi-send me-1"></i> Solicitar registro
-              </button>
-              <span id="vetApplyMsgModal" class="small text-muted ms-auto" role="status" aria-live="polite"></span>
-            </div>
-
-          </form>
-        </section>
-
+<!-- NAV PÚBLICO -->
+<nav class="navbar navbar-expand-lg navbar-light bg-nav border-bottom">
+  <div class="container-fluid px-3 px-md-4">
+    <!-- Logo apunta al index, no al login (bug original) -->
+    <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/petsit/index}">
+      <img th:src="@{/assets/img/icons/logo.png}" alt="Logo PetSit" height="56">
+      <img th:src="@{/assets/img/Petsit.png}" alt="PetSit" class="brand-name">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav ms-auto nav-links">
+        <li class="nav-item"><a class="nav-link" th:href="@{/petsit/index}">Inicio</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/nosotros}">¿Quiénes somos?</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/contacto}">Contactanos</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/petsit/refugios/list}">Refugios</a></li>
+        <li class="nav-item"><a class="nav-link active" th:href="@{/petsit/veterinarias/list}">Veterinarias</a></li>
+      </ul>
+      <div class="nav-login ms-lg-2">
+        <a th:href="@{/petsit/home/login}" class="user-chip">INICIAR SESIÓN</a>
       </div>
     </div>
   </div>
-</div>
+</nav>
 
+<!-- HERO -->
+<section class="hero-sticker">
+  <div class="container py-4 py-md-5">
+    <h1 class="about-title mb-1">Veterinarias</h1>
+    <div class="about-accent"></div>
+    <p class="refugios-subtitle mb-3">
+      Encontrá clínicas veterinarias cercanas, consultá horarios y contactalas directamente.
+    </p>
+    <div class="search-input-wrap" style="max-width:420px;">
+      <i class="bi bi-search"></i>
+      <input id="qVet" type="search" class="form-control refugios-input"
+             placeholder="Buscar por nombre o barrio" autocomplete="off">
+    </div>
+  </div>
+  <svg class="hero-wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
+    <path fill="#eef1ef"
+          d="M0,32L60,37.3C120,43,240,53,360,58.7C480,64,600,64,720,58.7C840,53,960,43,1080,32C1200,21,1320,11,1380,5.3L1440,0V80H0Z"/>
+  </svg>
+</section>
 
-<!-- MODAL: DETALLE VETERINARIA (sin mapa embebido + WhatsApp) -->
-<div class="modal fade" id="vetModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content vet-detail-modal">
-      <div class="modal-header">
-        <h5 class="modal-title">Veterinaria</h5>
-        <button class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-      </div>
+<main class="container py-4">
+  <div id="vetInfo" class="small text-muted mb-3"></div>
 
-      <div class="modal-body">
-        <div class="row g-3">
-          <div class="col-md-6">
-            <img id="vmImg" class="img-fluid rounded" alt="Foto de la clínica">
-          </div>
+  <!-- ══ EMPTY STATE ══ -->
+  <div th:if="${#lists.isEmpty(listVeterinarias)}" class="text-center py-5">
+    <i class="bi bi-hospital fs-1 text-muted"></i>
+    <h3 class="mt-3">No hay veterinarias registradas todavía</h3>
+    <p class="text-muted">¿Tenés una clínica? Registrala acá.</p>
+    <a th:href="@{/petsit/registro/veterinaria}" class="btn btn-primary mt-2">
+      <i class="bi bi-plus-circle me-1"></i> Registrar veterinaria
+    </a>
+  </div>
 
-          <div class="col-md-6">
-            <h3 id="vmName" class="h4 mb-1"></h3>
-            <div class="text-muted small mb-2" id="vmCity"></div>
+  <!-- ══ GRID — solo las activas (vet_activa = true) ══ -->
+  <div id="vetGrid" class="row g-4" th:unless="${#lists.isEmpty(listVeterinarias)}">
 
-            <div class="refugio-detail mb-3">
-              <div class="mb-1">
+    <div class="col-sm-6 col-lg-4 d-flex vet-item"
+         th:each="v : ${listVeterinarias}"
+         th:if="${v.activa}"
+         th:attr="data-name=${v.nombre}, data-city=${v.ubicacion}">
+
+      <article class="card h-100 w-100 shadow-sm" style="border-radius:16px;">
+        <div class="card-body d-flex flex-column p-3">
+
+          <div class="d-flex align-items-center gap-3 mb-3">
+            <div style="width:44px;height:44px;background:#f0f9f8;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#0f6a67;font-size:1.4rem;flex-shrink:0;">
+              <i class="bi bi-hospital"></i>
+            </div>
+            <div>
+              <h3 class="h6 mb-0 fw-bold" th:text="${v.nombre}">Nombre</h3>
+              <small class="text-muted">
                 <i class="bi bi-geo-alt me-1"></i>
-                <a id="vmAddrLink" href="#" target="_blank" rel="noopener">
-                  <span id="vmAddr"></span>
-                </a>
-              </div>
-
-              <div class="mb-1">
-                <i class="bi bi-telephone me-1"></i>
-                <a id="vmPhone" href="#"></a>
-              </div>
-
-              <div class="mb-1">
-                <i class="bi bi-clock me-1"></i>
-                <span id="vmHours"></span>
-              </div>
+                <span th:text="${v.ubicacion != null ? v.ubicacion : 'Sin ubicación'}">Ciudad</span>
+              </small>
             </div>
+          </div>
 
-            <div class="vet-actions">
-              <div class="btn-grid">
-                <a id="vmGo" class="btn btn-vet ghost"><i class="bi bi-geo-alt me-2"></i>Ver en Maps</a>
-                <a id="vmWpp" class="btn btn-vet wpp"><i class="bi bi-whatsapp me-2"></i>WhatsApp</a>
-                <a id="vmCall" class="btn btn-vet solid"><i class="bi bi-telephone me-2"></i>Llamar</a>
-              </div>
-            </div>
+          <ul class="list-unstyled small text-muted flex-grow-1 mb-3">
+            <li th:if="${v.direccion != null}" class="mb-1">
+              <i class="bi bi-pin-map me-1"></i><span th:text="${v.direccion}">Dirección</span>
+            </li>
+            <li th:if="${v.horarioAtencion != null}" class="mb-1">
+              <i class="bi bi-clock me-1"></i><span th:text="${v.horarioAtencion}">Horario</span>
+            </li>
+            <li th:if="${v.telefono != null}">
+              <i class="bi bi-telephone me-1"></i>
+              <a th:href="'tel:' + ${v.telefono}" th:text="${v.telefono}" class="text-muted">Teléfono</a>
+            </li>
+          </ul>
 
-
-
-
-            <small class="text-muted d-block mt-2" id="vmWppHint"></small>
+          <div class="d-flex gap-2">
+            <a th:if="${v.telefono != null}"
+               th:href="'tel:' + ${v.telefono}"
+               class="btn btn-sm btn-outline-secondary flex-fill">
+              <i class="bi bi-telephone me-1"></i> Llamar
+            </a>
+            <a th:if="${v.telefono != null}"
+               th:href="'https://wa.me/' + ${#strings.replace(#strings.replace(#strings.replace(v.telefono, ' ', ''), '+', ''), '-', '')}"
+               target="_blank" rel="noopener"
+               class="btn btn-sm btn-success flex-fill">
+              <i class="bi bi-whatsapp me-1"></i> WhatsApp
+            </a>
           </div>
         </div>
-      </div>
-
+      </article>
     </div>
-  </div>
-</div>
 
+  </div>
+
+  <div id="vetEmpty" class="text-center py-4 d-none">
+    <p class="text-muted">No se encontraron veterinarias con esa búsqueda.</p>
+  </div>
+
+  <!-- CTA registrar veterinaria -->
+  <div class="text-center mt-5">
+    <p class="text-muted">¿Tenés una clínica y querés aparecer acá?</p>
+    <a th:href="@{/petsit/registro/veterinaria}" class="btn btn-outline-secondary">
+      <i class="bi bi-plus-circle me-1"></i> Registrar veterinaria
+    </a>
+  </div>
+</main>
 
 <!-- FOOTER -->
 <footer class="footer mt-5">
@@ -355,7 +154,6 @@
           <li><a th:href="@{/petsit/home/nosotros}" class="footer-link">Sobre nosotros</a></li>
         </ul>
       </div>
-
       <div class="col-md-4 mb-3">
         <h6 class="fw-bold text-uppercase">Legal</h6>
         <ul class="list-unstyled">
@@ -363,307 +161,42 @@
           <li><a href="#" class="footer-link">Términos de servicio</a></li>
         </ul>
       </div>
-
       <div class="col-md-4 mb-3">
         <h6 class="fw-bold text-uppercase">Seguinos</h6>
-        <a href="#" class="footer-social me-2" aria-label="Facebook"><i class="bi bi-facebook" aria-hidden="true"></i></a>
-        <a href="#" class="footer-social me-2" aria-label="Instagram"><i class="bi bi-instagram" aria-hidden="true"></i></a>
-        <a href="#" class="footer-social" aria-label="Twitter/X"><i class="bi bi-twitter" aria-hidden="true"></i></a>
+        <a href="#" class="footer-social me-2"><i class="bi bi-facebook"></i></a>
+        <a href="#" class="footer-social me-2"><i class="bi bi-instagram"></i></a>
+        <a href="#" class="footer-social"><i class="bi bi-twitter"></i></a>
       </div>
     </div>
-
     <div class="text-center small mt-3 text-white">
       Copyright 2025 © Escuela Da Vinci | Keila Degregorio | Maia Cohen | Matias Bernal | Agustin Segovia
     </div>
   </div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-  const nav = document.querySelector('.navbar');
-  window.addEventListener('scroll', () => {
-    nav.classList.toggle('is-scrolled', window.scrollY > 12);
-  });
-</script>
+  const $q     = document.getElementById('qVet');
+  const $info  = document.getElementById('vetInfo');
+  const $empty = document.getElementById('vetEmpty');
+  const items  = document.querySelectorAll('.vet-item');
 
-
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-
-    /* ============================
-       DATOS (8 veterinarias)
-       ============================ */
-    const VETS = [
-      { id:'clinica', name:'Clínica Veterinaria', city:'Belgrano', address:'Moldes 2345',
-        phone:'+54 11 4555-1111', hours:'Lun a Dom 24hs',
-        img:'assets/img/vets/veterinaria1.jpg', domicilio:true, guardia:true },
-
-      { id:'patitas', name:'Patitas', city:'Caballito', address:'Hidalgo 987',
-        phone:'+54 11 4321-3333', hours:'Lun a Sáb 9–20hs',
-        img:'assets/img/vets/veterinaria2.jpg', domicilio:false, guardia:true },
-
-      { id:'love', name:'Love Pets', city:'Palermo', address:'Av. Santa Fe 123',
-        phone:'+54 11 4000-7777', hours:'Lun a Dom 8–22hs',
-        img:'assets/img/vets/veterinaria3.jpg', domicilio:true, guardia:false },
-
-      { id:'black', name:'BlackDog', city:'Almagro', address:'Corrientes 3560',
-        phone:'+54 11 4777-1212', hours:'Lun a Sáb 9–21hs',
-        img:'assets/img/vets/veterinaria4.jpg', domicilio:true, guardia:false },
-
-      { id:'galia', name:'Galia Vet', city:'Recoleta', address:'Azcuénaga 1450',
-        phone:'+54 11 4511-9090', hours:'Lun a Dom 24hs',
-        img:'assets/img/vets/veterinaria5.jpg', domicilio:false, guardia:true },
-
-      { id:'hub', name:'Hub City', city:'Palermo', address:'Honduras 4901',
-        phone:'+54 11 4899-2200', hours:'Lun a Vie 10–20hs · Sáb 10–14hs',
-        img:'assets/img/vets/veterinaria6.jpg', domicilio:true, guardia:false },
-
-      { id:'pet', name:'Pet World', city:'Saavedra', address:'Balbín 4700',
-        phone:'+54 11 4701-3344', hours:'Lun a Dom 8–23hs',
-        img:'assets/img/vets/veterinaria7.jpg', domicilio:false, guardia:true },
-
-      { id:'master', name:'Master-Animal', city:'Villa Urquiza', address:'Av. Monroe 5200',
-        phone:'+54 11 4521-7788', hours:'Lun a Sáb 9–20hs',
-        img:'assets/img/vets/veterinaria8.jpg', domicilio:true, guardia:false }
-    ];
-
-    /* ============================
-       REFS UI (listado / filtros)
-       ============================ */
-    const $grid  = document.getElementById('vetGrid');
-    const $empty = document.getElementById('vetEmpty');
-    const $info  = document.getElementById('vetInfo');
-    const $q     = document.getElementById('qVet');
-    const $reset = document.getElementById('resetQuick');
-
-    const $ctaD = document.getElementById('ctaDomicilio');
-    const $ctaG = document.getElementById('ctaGuardia');
-
-    let quick = null; // 'domicilio' | 'guardia' | null
-
-    /* ============================
-       MODAL DETALLE VETERINARIA
-       (sin mapa embebido + WPP)
-       ============================ */
-    const vetModal = new bootstrap.Modal(document.getElementById('vetModal'));
-
-    const $vmImg      = document.getElementById('vmImg');
-    const $vmName     = document.getElementById('vmName');
-    const $vmCity     = document.getElementById('vmCity');
-    const $vmAddr     = document.getElementById('vmAddr');
-    const $vmAddrLink = document.getElementById('vmAddrLink');
-    const $vmPhone    = document.getElementById('vmPhone');
-    const $vmHours    = document.getElementById('vmHours');
-    const $vmGo       = document.getElementById('vmGo');
-    const $vmCall     = document.getElementById('vmCall');
-    const $vmWpp      = document.getElementById('vmWpp');
-    const $vmWppHint  = document.getElementById('vmWppHint');
-
-    function openModal(v){
-      const safe = (s) => (s ?? '').toString().trim();
-
-      // Tel para tel: y WhatsApp
-      const telRaw    = safe(v.phone);
-      const telDigits = telRaw.replace(/\D/g,''); // SOLO dígitos
-
-      // Imagen
-      $vmImg.src = v.img;
-      $vmImg.alt = v.name;
-      $vmImg.onerror = () => {
-        $vmImg.src = 'https://images.unsplash.com/photo-1560807707-8cc77767d783?q=80&w=1200&auto=format&fit=crop';
-      };
-
-      // Textos
-      $vmName.textContent  = safe(v.name) || 'Veterinaria';
-      $vmCity.textContent  = safe(v.city) || '';
-      $vmAddr.textContent  = safe(v.address) || '—';
-      $vmHours.textContent = safe(v.hours) || '—';
-
-      // Tel link
-      if(telDigits){
-        $vmPhone.textContent = telRaw;
-        $vmPhone.href = `tel:${telDigits}`;
-        $vmCall.href  = `tel:${telDigits}`;
-        $vmCall.classList.remove('disabled');
-        $vmCall.setAttribute('aria-disabled','false');
-      } else {
-        $vmPhone.textContent = '—';
-        $vmPhone.href = '#';
-        $vmCall.href  = '#';
-        $vmCall.classList.add('disabled');
-        $vmCall.setAttribute('aria-disabled','true');
-      }
-
-      // Google Maps: dirección clickeable
-      const mapsQuery = encodeURIComponent(`${safe(v.address)} ${safe(v.city)} ${safe(v.name)}`.trim());
-      const mapsUrl   = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
-
-      $vmAddrLink.href = mapsUrl;
-      $vmGo.href       = mapsUrl;
-
-      // WhatsApp: necesita código país (AR = 54)
-      let waNumber = telDigits;
-      if(waNumber && !waNumber.startsWith('54')) waNumber = '54' + waNumber;
-
-      if(waNumber){
-        $vmWpp.href = `https://wa.me/${waNumber}`;
-        $vmWpp.classList.remove('disabled');
-        $vmWpp.setAttribute('aria-disabled','false');
-      } else {
-        $vmWpp.href = '#';
-        $vmWpp.classList.add('disabled');
-        $vmWpp.setAttribute('aria-disabled','true');
-        $vmWppHint.textContent = 'Esta veterinaria no tiene WhatsApp cargado.';
-      }
-
-      vetModal.show();
-    }
-
-    /* ============================
-       RENDER LISTADO
-       ============================ */
-    function render(list){
-      $grid.innerHTML = '';
-
-      if(!list.length){
-        $empty.classList.remove('d-none');
-        $info.textContent = '';
-        return;
-      }
-
-      $empty.classList.add('d-none');
-
-      const frag = document.createDocumentFragment();
-
-      list.forEach(v => {
-        const col = document.createElement('div');
-        col.className = 'col-sm-6 col-lg-4 d-flex';
-
-        const card = document.createElement('article');
-        card.className = 'clinic-card h-100';
-
-        const img = document.createElement('img');
-        img.className = 'clinic-img';
-        img.src = v.img;
-        img.alt = v.name;
-        img.loading = 'lazy';
-        img.onerror = () => img.src = 'https://images.unsplash.com/photo-1560807707-8cc77767d783?q=80&w=1200&auto=format&fit=crop';
-
-        const body = document.createElement('div');
-        body.className = 'p-3 d-flex flex-column';
-
-        const h = document.createElement('h3');
-        h.className = 'clinic-name';
-        h.textContent = v.name;
-
-        const meta = document.createElement('div');
-        meta.className = 'd-flex justify-content-between align-items-center text-muted small mb-2';
-        meta.innerHTML = `<span><i class="bi bi-geo-alt me-1"></i>${v.city}</span>`;
-
-        const tags = document.createElement('div');
-        tags.className = 'd-flex gap-2 flex-wrap mb-2';
-        if(v.domicilio) tags.innerHTML += `<span class="tag">A domicilio</span>`;
-        if(v.guardia)   tags.innerHTML += `<span class="tag">Guardia 24 h</span>`;
-
-        const btn = document.createElement('button');
-        btn.className = 'btn btn-outline-secondary mt-auto';
-        btn.textContent = 'Ver más';
-        btn.setAttribute('aria-label', `Ver más de ${v.name}`);
-        btn.addEventListener('click', () => openModal(v));
-
-        body.append(h, meta, tags, btn);
-        card.append(img, body);
-        col.append(card);
-        frag.append(col);
-      });
-
-      $grid.append(frag);
-
-      const labelQuick = quick
-              ? ` · filtro: ${quick === 'domicilio' ? 'A domicilio' : 'Guardia 24 h'}`
-              : '';
-
-      $info.textContent = `${list.length} veterinaria(s) encontradas${labelQuick}`;
-    }
-
-    /* ============================
-       APLICAR FILTROS / BUSCADOR
-       ============================ */
-    function apply(){
-      const q = $q.value.toLowerCase().trim();
-
-      let list = VETS.map(v => ({...v}));
-
-      if(q){
-        list = list.filter(v =>
-                v.name.toLowerCase().includes(q) ||
-                v.city.toLowerCase().includes(q) ||
-                v.address.toLowerCase().includes(q)
-        );
-      }
-
-      if(quick === 'domicilio') list = list.filter(v => v.domicilio);
-      if(quick === 'guardia')   list = list.filter(v => v.guardia);
-
-      list.sort((a,b) => a.name.localeCompare(b.name));
-
-      $reset.classList.toggle('d-none', !quick);
-
-      render(list);
-    }
-
-    // CTAs
-    $ctaD.addEventListener('click', () => { quick = 'domicilio'; apply(); });
-    $ctaG.addEventListener('click', () => { quick = 'guardia'; apply(); });
-    [$ctaD,$ctaG].forEach(el => el.addEventListener('keydown', e => {
-      if(e.key === 'Enter' || e.key === ' ') el.click();
-    }));
-
-    // Reset
-    $reset.addEventListener('click', () => { quick = null; apply(); });
-
-    // Search debounce
-    let t = null;
-    $q.addEventListener('input', () => {
-      clearTimeout(t);
-      t = setTimeout(apply, 180);
+  function filter() {
+    const q = ($q?.value || '').toLowerCase().trim();
+    let visible = 0;
+    items.forEach(item => {
+      const name = (item.dataset.name || '').toLowerCase();
+      const city = (item.dataset.city || '').toLowerCase();
+      const show = !q || name.includes(q) || city.includes(q);
+      item.style.display = show ? '' : 'none';
+      if (show) visible++;
     });
+    if ($info) $info.textContent = visible + ' veterinaria(s) encontrada(s)';
+    if ($empty) $empty.classList.toggle('d-none', visible > 0);
+  }
 
-    // Init
-    apply();
-
-    /* ============================
-       FORM MODAL REGISTRO (horizontal)
-       ============================ */
-    const $applyFormModal = document.getElementById('vetApplyFormModal');
-    const $applyMsgModal  = document.getElementById('vetApplyMsgModal');
-
-    if($applyFormModal){
-      $applyFormModal.addEventListener('submit', (e) => {
-        e.preventDefault();
-
-        const required = ['mName','mCity','mAddr','mPhone','mEmail'];
-        let ok = true;
-
-        required.forEach(id => {
-          const el = document.getElementById(id);
-          const valid = el.value.trim() !== '' && (el.type !== 'email' || el.checkValidity());
-          el.classList.toggle('is-invalid', !valid);
-          ok = ok && valid;
-        });
-
-        if(!ok){
-          $applyMsgModal.textContent = 'Revisá los campos marcados.';
-          return;
-        }
-
-        $applyFormModal.reset();
-        $applyMsgModal.textContent = 'Solicitud enviada. Te contactaremos cuando se revise.';
-      });
-    }
-
-  });
+  $q?.addEventListener('input', filter);
+  filter();
 </script>
 </body>
 </html>

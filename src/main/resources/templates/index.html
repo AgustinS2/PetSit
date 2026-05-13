@@ -38,36 +38,28 @@
 	<nav class="navbar navbar-expand-lg navbar-light bg-nav border-bottom">
 		<div class="container-fluid px-3 px-md-4">
 
-			<!-- LOGO -->
-			<a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/petsit/index}">
+			<a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/petsit/index}" aria-label="Inicio">
 				<img th:src="@{/assets/img/icons/logo.png}" alt="Logo PetSit" height="56">
-				<img th:src="@{/assets/img/Petsit.png}" alt="Marca PetSit" class="brand-name">
+				<img th:src="@{/assets/img/Petsit.png}" alt="PetSit" class="brand-name">
 			</a>
 
-			<!-- TOGGLER -->
 			<button class="navbar-toggler" type="button"
 					data-bs-toggle="collapse" data-bs-target="#mainNav"
 					aria-controls="mainNav" aria-expanded="false" aria-label="Abrir menú">
 				<span class="navbar-toggler-icon"></span>
 			</button>
 
-			<!-- NAV -->
 			<div class="collapse navbar-collapse" id="mainNav">
-
 				<ul class="navbar-nav ms-auto nav-links">
 					<li class="nav-item"><a class="nav-link active" th:href="@{/petsit/index}" aria-current="page">Inicio</a></li>
 					<li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/nosotros}">¿Quiénes somos?</a></li>
 					<li class="nav-item"><a class="nav-link" th:href="@{/petsit/home/contacto}">Contactanos</a></li>
-					<li class="nav-item"><a class="nav-link" th:href="@{/petsit/refugios/index}">Refugios</a></li>
-					<li class="nav-item"><a class="nav-link" th:href="@{/petsit/alertas/mapa}">Mapa</a></li>
-					<li class="nav-item"><a class="nav-link" th:href="@{/petsit/veterinarias/index}">Veterinarias</a></li>
+					<li class="nav-item"><a class="nav-link" th:href="@{/petsit/refugios/list}">Refugios</a></li>
+					<li class="nav-item"><a class="nav-link" th:href="@{/petsit/veterinarias/list}">Veterinarias</a></li>
 				</ul>
-
-				<!-- LOGIN -->
 				<div class="nav-login ms-lg-2">
 					<a th:href="@{/petsit/home/login}" class="user-chip">INICIAR SESIÓN</a>
 				</div>
-
 			</div>
 		</div>
 	</nav>
@@ -228,6 +220,54 @@
 	</div>
 </section>
 
+<!-- SECCIÓN: SUMÁ TU NEGOCIO -->
+<section class="home-section home-section--soft" id="sumate">
+	<div class="container">
+		<div class="home-section__head text-center mb-5">
+			<p class="home-section__kicker">¿SOS PROFESIONAL?</p>
+			<h2 class="home-section__title">Sumá tu veterinaria o refugio</h2>
+			<p class="home-section__sub">
+				Llegá a las personas que necesitan tus servicios. Es gratis y sin complicaciones.
+			</p>
+		</div>
+
+		<div class="row g-4 justify-content-center">
+
+			<!-- Card: Veterinaria -->
+			<div class="col-sm-10 col-md-5">
+				<div class="home-action home-action--card h-100 d-flex flex-column">
+					<div class="home-action__avatar mb-3" aria-hidden="true">
+						<i class="bi bi-hospital fs-2"></i>
+					</div>
+					<h3 class="home-action__title">Soy veterinaria</h3>
+					<p class="home-action__text flex-grow-1">
+						Registrá tu clínica, guardias y horarios. Los dueños de mascotas te van a encontrar fácil.
+					</p>
+					<a th:href="@{/petsit/home/registro}" class="btn btn-primary home-btn home-btn--primary mt-3">
+						<i class="bi bi-plus-circle me-1"></i> Registrar veterinaria
+					</a>
+				</div>
+			</div>
+
+			<!-- Card: Refugio -->
+			<div class="col-sm-10 col-md-5">
+				<div class="home-action home-action--card h-100 d-flex flex-column">
+					<div class="home-action__avatar mb-3" aria-hidden="true">
+						<i class="bi bi-house-heart fs-2"></i>
+					</div>
+					<h3 class="home-action__title">Soy un refugio</h3>
+					<p class="home-action__text flex-grow-1">
+						Publicá tus animales disponibles y conectá con familias que quieren adoptar responsablemente.
+					</p>
+					<a th:href="@{/petsit/home/registro}" class="btn btn-primary home-btn home-btn--primary mt-3">
+						<i class="bi bi-plus-circle me-1"></i> Registrar refugio
+					</a>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</section>
 
 <!-- CTA SUMATE -->
 <section class="home-cta">
@@ -242,7 +282,7 @@
 
 				<div class="home-cta__actions">
 					<a th:href="@{/petsit/home/registro}" class="btn home-btn home-btn--primary">Crear cuenta</a>
-					<a th:href="@{/petsit/usuarios/login}" class="btn home-btn home-btn--ghost">Ya tengo cuenta</a>
+					<a th:href="@{/petsit/home/login}" class="btn home-btn home-btn--ghost">Ya tengo cuenta</a>
 				</div>
 			</div>
 
