@@ -1,5 +1,15 @@
 package ar.edu.davinci.PetSit.controller.web.Usuario;
 
+import ar.edu.davinci.PetSit.controller.PetSitApp;
+import ar.edu.davinci.PetSit.domain.*;
+import ar.edu.davinci.PetSit.exceptions.BusinessException;
+import ar.edu.davinci.PetSit.service.Adopcion.AdopcionService;
+import ar.edu.davinci.PetSit.service.Mascota.MascotaService;
+import ar.edu.davinci.PetSit.service.Postulacion.PostulacionService;
+import ar.edu.davinci.PetSit.service.Refugio.RefugioService;
+import ar.edu.davinci.PetSit.service.Usuario.UsuarioService;
+import ar.edu.davinci.PetSit.service.Veterinaria.VeterinariaService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,20 +18,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-import ar.edu.davinci.PetSit.controller.PetSitApp;
-import ar.edu.davinci.PetSit.domain.Mascota;
-import ar.edu.davinci.PetSit.domain.TipoUsuario;
-import ar.edu.davinci.PetSit.domain.Usuario;
-import ar.edu.davinci.PetSit.exceptions.BusinessException;
-import ar.edu.davinci.PetSit.service.Usuario.UsuarioService;
 
 import java.security.Principal;
 import java.util.Collections;
@@ -30,183 +28,171 @@ import java.util.List;
 @Controller
 @RequestMapping("/petsit/usuarios")
 public class UsuarioController extends PetSitApp {
-	
+
 	private final Logger LOGGER = LoggerFactory.getLogger(UsuarioController.class);
-	
-	@Autowired
-	private UsuarioService usuarioService;
-	
-    @GetMapping("/chat")
-	    public String chat() {
-	        return "usuarios/chat_usuarios"; // Renderiza templates/"""".html
-	}
 
-    @GetMapping("/perfil")
-	    public String perfilUsuario(Model model, Principal principal) {
-			LOGGER.info("GET - perfilUsuario - /petsit/usuarios/perfil");
+	@Autowired private UsuarioService     usuarioService;
+	@Autowired private MascotaService     mascotaService;
+	@Autowired private PostulacionService postulacionService;
+	@Autowired private RefugioService     refugioService;
+	@Autowired private VeterinariaService veterinariaService;
+	@Autowired private AdopcionService    adopcionService;
 
-			if (principal == null) {
-				LOGGER.warn("No hay usuario logueado");
-				return "redirect:/petsit/home/login";
-			}
-
-			try {
-				// Buscar el usuario logueado por su correo (username)
-				Usuario usuario = usuarioService.findByCorreo(principal.getName());
-				List<Mascota> mascotas = usuario.getMascotas() != null ? usuario.getMascotas() : Collections.emptyList();
-
-				model.addAttribute("usuario",usuario);
-				model.addAttribute("mascotas", mascotas);
-				model.addAttribute("cantidadMascotas", mascotas.size());
-			
-
-				LOGGER.info("Usuario cargado: {}", usuario.getCorreo());
-			} catch (Exception e) {
-				LOGGER.error("Error al cargar el perfil del usuario", e);
-				return "redirect:/petsit/home/login";
-			}
-
-	        return "usuarios/perfil_usuarios"; // Renderiza templates/"""".html
-	}
-
-    @GetMapping("/index")
-    public String indexUsuario(Model model, Principal principal) {
-        LOGGER.info("GET - indexUsuario - /petsit/usuarios/index");
-
-        if (principal == null) {
-            return "redirect:/petsit/home/login";
-        }
-
-        try {
-            Usuario usuario = usuarioService.findByCorreo(principal.getName());
-            model.addAttribute("usuario", usuario);
-        } catch (Exception e) {
-            LOGGER.error("Error al cargar usuario logueado", e);
-            return "redirect:/petsit/home/login";
-        }
-
-        return "usuarios/user_index";
-    }
-
-	@GetMapping(path = "/usuarios/list")
-	public String showUsuarioPage(Model model) {
-		LOGGER.info("GET - showUsuarioPage - /usuarios/list");
-		
-		Pageable pageable = PageRequest.of(0, 20);
-		Page<Usuario> usuarios = usuarioService.list(pageable);
-		model.addAttribute("listUsuarios", usuarios.getContent());
-		model.addAttribute("pageNumber", usuarios.getPageable().getPageNumber());
-		model.addAttribute("totalPages", usuarios.getTotalPages());
-		
-		LOGGER.info("usuarios.size: " + usuarios.getNumberOfElements());
-		return "usuarios/list_usuarios";
-	}
-	
-	@GetMapping(path = "/usuarios/new")
-	public String showNewUsuarioPage(Model model) {
-	LOGGER.info("GET - showNewUsuarioPage - /usuarios/new");
-	Usuario usuario = new Usuario();
-	model.addAttribute("usuario", usuario);
-	model.addAttribute("tipoUsuarios", usuarioService.getTipoUsuarios());
-	LOGGER.info("usuarios: " + usuario.toString());
-	return "usuarios/new_usuarios";
-	}
-	
-	@PostMapping(value = "/usuarios/save")
-	public String saveUsuario(@ModelAttribute("usuario") Usuario usuario) {
-	    LOGGER.info("POST - saveUsuario - /usuarios/save");
-
-	    try {
-	        if (usuario.getId() == null) {
-	            usuario.setTipo(TipoUsuario.DUENO);
-	            usuarioService.save(usuario);
-	        } else {
-	            usuarioService.update(usuario);
-	        }
-	    } catch (BusinessException e) {
-	        e.printStackTrace();
-	    }
-	    return "redirect:/petsit/home/login";
-	}
-	
-	@RequestMapping(value = "/usuarios/edit/{id}", method = RequestMethod.GET)
-	public ModelAndView showEditUsuarioPage(@PathVariable(name = "id") Long usuarioId) {
-	LOGGER.info("GET - showEditUsuarioPage - /usuarios/edit/{id}");
-	LOGGER.info("usuario: " + usuarioId);
-	ModelAndView mav = new ModelAndView("usuarios/edit_usuarios");
-	Usuario usuario = null;
-	try {
-	usuario = usuarioService.findById(usuarioId);
-	mav.addObject("usuario", usuario);
-	mav.addObject("tipoUsuarioActual", usuario.getTipo());
-	} catch (BusinessException e) {
-	LOGGER.error("ERROR AL TRAER LA USUARIO");
-	e.printStackTrace();
-	}
-	mav.addObject("tipoUsuarios", usuarioService.getTipoUsuarios());
-	return mav;
-	}
-	
-	@RequestMapping(value = "/usuarios/delete/{id}", method = RequestMethod.GET)
-	public String deleteUsuario(@PathVariable(name = "id") Long usuarioId) {
-	LOGGER.info("GET - deleteUsuario - /usuarios/delete/{id}");
-	LOGGER.info("usuario: " + usuarioId);
-	usuarioService.delete(usuarioId);
-	return "redirect:/petsit/usuarios/list";
-	}
-
-	@GetMapping("/usuarioadoptar")
-	public String usuarioAdoptar(Model model, Principal principal) {
-		if (principal == null) {
-			return "redirect:/petsit/home/login";
-		}
+	// ── INDEX ─────────────────────────────────────────────────────────────────
+	@GetMapping("/index")
+	public String indexUsuario(Model model, Principal principal) {
+		if (principal == null) return "redirect:/petsit/home/login";
 		try {
 			Usuario usuario = usuarioService.findByCorreo(principal.getName());
 			model.addAttribute("usuario", usuario);
+			// Si es admin, redirigir al panel admin
+			if (usuario.getTipo() == TipoUsuario.ADMINISTRADOR) {
+				return "redirect:/petsit/admin/index";
+			}
 		} catch (Exception e) {
-			LOGGER.error("Error al cargar usuario logueado", e);
 			return "redirect:/petsit/home/login";
 		}
+		return "usuarios/user_index";
+	}
+
+	// ── PERFIL ────────────────────────────────────────────────────────────────
+	@GetMapping("/perfil")
+	public String perfilUsuario(Model model, Principal principal) {
+		if (principal == null) return "redirect:/petsit/home/login";
+		try {
+			Usuario usuario = usuarioService.findByCorreo(principal.getName());
+			List<Mascota>     mascotas     = usuario.getMascotas() != null ? usuario.getMascotas() : Collections.emptyList();
+			List<Postulacion> postulaciones = postulacionService.findByUsuario(usuario);
+			model.addAttribute("usuario",           usuario);
+			model.addAttribute("mascotas",           mascotas);
+			model.addAttribute("cantidadMascotas",   mascotas.size());
+			model.addAttribute("cantidadSolicitudes", postulaciones.size());
+		} catch (Exception e) {
+			return "redirect:/petsit/home/login";
+		}
+		return "usuarios/perfil_usuarios";
+	}
+
+	// ── MIS SOLICITUDES ───────────────────────────────────────────────────────
+	@GetMapping("/mis-solicitudes")
+	public String misSolicitudes(Model model, Principal principal) throws BusinessException {
+		if (principal == null) return "redirect:/petsit/home/login";
+		Usuario usuario = usuarioService.findByCorreo(principal.getName());
+		List<Postulacion> postulaciones = postulacionService.findByUsuario(usuario);
+		model.addAttribute("usuario",           usuario);
+		model.addAttribute("listPostulaciones", postulaciones);
+		return "usuarios/mis-solicitudes";
+	}
+
+	// ── VISTAS DE USUARIO ─────────────────────────────────────────────────────
+	@GetMapping("/usuarioadoptar")
+	public String usuarioAdoptar(Model model, Principal principal) throws BusinessException {
+		if (principal == null) return "redirect:/petsit/home/login";
+		Usuario usuario = usuarioService.findByCorreo(principal.getName());
+		model.addAttribute("usuario",       usuario);
+		model.addAttribute("listAdopciones", adopcionService.list());
 		return "usuarios/usuarioadoptar";
 	}
 
-	@GetMapping("/usuariocontacto")
-	public String usuarioContacto() {
-		return "usuarios/usuariocontacto";
-	}
-
-	@GetMapping("/usuarioquienessomos")
-	public String usuarioQuienesSomos() {
-		return "usuarios/usuarioquienessomos";
-	}
-
 	@GetMapping("/usuariorefugio")
-	public String usuarioRefugio(Model model, Principal principal) {
-		if (principal == null) {
-			return "redirect:/petsit/home/login";
-		}
-		try {
-			Usuario usuario = usuarioService.findByCorreo(principal.getName());
-			model.addAttribute("usuario", usuario);
-		} catch (Exception e) {
-			LOGGER.error("Error al cargar usuario logueado", e);
-			return "redirect:/petsit/home/login";
-		}
+	public String usuarioRefugio(Model model, Principal principal) throws BusinessException {
+		if (principal == null) return "redirect:/petsit/home/login";
+		Usuario usuario = usuarioService.findByCorreo(principal.getName());
+		model.addAttribute("usuario",      usuario);
+		model.addAttribute("listRefugios", refugioService.list());
 		return "usuarios/usuariorefugio";
 	}
 
 	@GetMapping("/usuarioveterinarias")
-	public String usuarioVeterinarias(Model model, Principal principal) {
-		if (principal == null) {
-			return "redirect:/petsit/home/login";
-		}
-		try {
-			Usuario usuario = usuarioService.findByCorreo(principal.getName());
-			model.addAttribute("usuario", usuario);
-		} catch (Exception e) {
-			LOGGER.error("Error al cargar usuario logueado", e);
-			return "redirect:/petsit/home/login";
-		}
+	public String usuarioVeterinarias(Model model, Principal principal) throws BusinessException {
+		if (principal == null) return "redirect:/petsit/home/login";
+		Usuario usuario = usuarioService.findByCorreo(principal.getName());
+		model.addAttribute("usuario",          usuario);
+		model.addAttribute("listVeterinarias", veterinariaService.list());
 		return "usuarios/usuarioveterinarias";
+	}
+
+	@GetMapping("/usuariocontacto")
+	public String usuarioContacto(Model model, Principal principal) throws BusinessException {
+		if (principal != null) model.addAttribute("usuario", usuarioService.findByCorreo(principal.getName()));
+		return "usuarios/usuariocontacto";
+	}
+
+	@GetMapping("/usuarioquienessomos")
+	public String usuarioQuienesSomos(Model model, Principal principal) throws BusinessException {
+		if (principal != null) model.addAttribute("usuario", usuarioService.findByCorreo(principal.getName()));
+		return "usuarios/usuarioquienessomos";
+	}
+
+	@GetMapping("/chat")
+	public String chat(Model model, Principal principal) throws BusinessException {
+		if (principal == null) return "redirect:/petsit/home/login";
+		model.addAttribute("usuario", usuarioService.findByCorreo(principal.getName()));
+		return "usuarios/chat_usuarios";
+	}
+
+	// ── REGISTRO (POST público) ───────────────────────────────────────────────
+	/**
+	 * Recibe el tipo desde el campo hidden del formulario de registro.
+	 * El tipo ADMINISTRADOR solo se acepta si la clave admin es correcta —
+	 * esa validación la hace el JS en el frontend; acá simplemente confiamos
+	 * en el valor enviado porque el form ya lo validó.
+	 * En producción: mover la validación de clave al servidor.
+	 */
+	@PostMapping("/save")
+	public String saveUsuario(@ModelAttribute("usuario") Usuario usuario,
+							  @RequestParam(value = "tipo", required = false) String tipoParam) {
+		try {
+			// El tipo viene como String desde el <input hidden>; lo parseamos
+			if (tipoParam != null && !tipoParam.isBlank()) {
+				try {
+					usuario.setTipo(TipoUsuario.valueOf(tipoParam));
+				} catch (IllegalArgumentException ex) {
+					usuario.setTipo(TipoUsuario.DUENO); // fallback seguro
+				}
+			} else {
+				usuario.setTipo(TipoUsuario.DUENO);
+			}
+			usuarioService.save(usuario);
+		} catch (BusinessException e) {
+			LOGGER.error("Error guardando usuario: {}", e.getMessage());
+		}
+		return "redirect:/petsit/home/login";
+	}
+
+	// ── CRUD ADMIN ────────────────────────────────────────────────────────────
+	@GetMapping("/list")
+	public String listUsuarios(Model model) {
+		Pageable pageable = PageRequest.of(0, 20);
+		Page<Usuario> usuarios = usuarioService.list(pageable);
+		model.addAttribute("listUsuarios", usuarios.getContent());
+		model.addAttribute("pageNumber",   usuarios.getPageable().getPageNumber());
+		model.addAttribute("totalPages",   usuarios.getTotalPages());
+		return "usuarios/list_usuarios";
+	}
+
+	@GetMapping("/new")
+	public String newUsuarioForm(Model model) {
+		model.addAttribute("usuario",      new Usuario());
+		model.addAttribute("tipoUsuarios", usuarioService.getTipoUsuarios());
+		return "usuarios/new_usuarios";
+	}
+
+	@GetMapping("/edit/{id:\\d+}")
+	public ModelAndView editUsuarioForm(@PathVariable Long id) {
+		ModelAndView mav = new ModelAndView("usuarios/edit_usuarios");
+		try {
+			Usuario usuario = usuarioService.findById(id);
+			mav.addObject("usuario",           usuario);
+			mav.addObject("tipoUsuarios",      usuarioService.getTipoUsuarios());
+			mav.addObject("tipoUsuarioActual", usuario.getTipo());
+		} catch (BusinessException e) { LOGGER.error(e.getMessage()); }
+		return mav;
+	}
+
+	@GetMapping("/delete/{id:\\d+}")
+	public String deleteUsuario(@PathVariable Long id) {
+		usuarioService.delete(id);
+		return "redirect:/petsit/usuarios/list";
 	}
 }

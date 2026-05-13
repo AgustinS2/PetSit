@@ -1,5 +1,10 @@
 package ar.edu.davinci.PetSit.controller.web.Refugio;
 
+import ar.edu.davinci.PetSit.controller.PetSitApp;
+import ar.edu.davinci.PetSit.domain.Refugio;
+import ar.edu.davinci.PetSit.exceptions.BusinessException;
+import ar.edu.davinci.PetSit.service.Refugio.RefugioService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +16,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import ar.edu.davinci.PetSit.controller.PetSitApp;
-import ar.edu.davinci.PetSit.domain.Refugio;
-import ar.edu.davinci.PetSit.exceptions.BusinessException;
-import ar.edu.davinci.PetSit.service.Refugio.RefugioService;
-
 @Controller
 @RequestMapping("/petsit/refugios")
 public class RefugioController extends PetSitApp {
@@ -25,15 +25,11 @@ public class RefugioController extends PetSitApp {
     @Autowired
     private RefugioService refugioService;
 
-    @GetMapping("/index")
-	    public String indexRefugio() {
-	        return "refugios/list_refugios"; //
-	}
-
-    @GetMapping("/list")
+    // /index y /list apuntan al mismo template
+    @GetMapping({"/index", "/list"})
     public String listRefugios(Model model) {
-        LOGGER.info("GET - listRefugios - /refugios/list");
-        Pageable pageable = PageRequest.of(0, 20);
+        LOGGER.info("GET /petsit/refugios/list");
+        Pageable pageable = PageRequest.of(0, 50);
         Page<Refugio> refugios = refugioService.list(pageable);
         model.addAttribute("listRefugios", refugios.getContent());
         model.addAttribute("pageNumber", refugios.getPageable().getPageNumber());
@@ -43,15 +39,12 @@ public class RefugioController extends PetSitApp {
 
     @GetMapping("/new")
     public String newRefugioForm(Model model) {
-        LOGGER.info("GET - newRefugioForm - /refugios/new");
-        Refugio refugio = new Refugio();
-        model.addAttribute("refugio", refugio);
+        model.addAttribute("refugio", new Refugio());
         return "refugios/new_refugio";
     }
 
     @PostMapping("/save")
     public String saveRefugio(@ModelAttribute("refugio") Refugio refugio) {
-        LOGGER.info("POST - saveRefugio - /refugios/save");
         try {
             if (refugio.getId() == null) {
                 refugioService.save(refugio);
@@ -59,29 +52,25 @@ public class RefugioController extends PetSitApp {
                 refugioService.update(refugio);
             }
         } catch (BusinessException e) {
-            e.printStackTrace();
+            LOGGER.error("Error guardando refugio: {}", e.getMessage());
         }
-        return "redirect:/refugios/list";
+        return "redirect:/petsit/refugios/list";   // ← CORREGIDO: faltaba /petsit
     }
 
     @GetMapping("/edit/{id:\\d+}")
     public ModelAndView editRefugioForm(@PathVariable("id") Long id) {
-        LOGGER.info("GET - editRefugioForm - /refugios/edit/{id}");
         ModelAndView mav = new ModelAndView("refugios/edit_refugio");
         try {
-            Refugio refugio = refugioService.findById(id);
-            mav.addObject("refugio", refugio);
+            mav.addObject("refugio", refugioService.findById(id));
         } catch (BusinessException e) {
-            e.printStackTrace();
+            LOGGER.error("Refugio no encontrado: {}", e.getMessage());
         }
         return mav;
     }
 
     @GetMapping("/delete/{id:\\d+}")
     public String deleteRefugio(@PathVariable("id") Long id) {
-        LOGGER.info("GET - deleteRefugio - /refugios/delete/{id}");
         refugioService.delete(id);
-        return "redirect:/refugios/list";
+        return "redirect:/petsit/refugios/list";   // ← CORREGIDO
     }
 }
-
