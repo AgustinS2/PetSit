@@ -1,87 +1,83 @@
 package ar.edu.davinci.PetSit.service.Refugio;
 
-import java.util.List;
-import java.util.Optional;
+import ar.edu.davinci.PetSit.domain.Refugio;
+import ar.edu.davinci.PetSit.exceptions.BusinessException;
+import ar.edu.davinci.PetSit.repository.RefugioRepository;
+import ar.edu.davinci.PetSit.service.GeocodificacionService;
+import ar.edu.davinci.PetSit.service.GeocodificacionService.Coordenadas;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import ar.edu.davinci.PetSit.domain.Refugio;
-import ar.edu.davinci.PetSit.exceptions.BusinessException;
-import ar.edu.davinci.PetSit.repository.RefugioRepository;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RefugioServiceImpl implements RefugioService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(RefugioServiceImpl.class);
-    private final RefugioRepository repository;
 
-    @Autowired
-    public RefugioServiceImpl(final RefugioRepository repository) {
-        this.repository = repository;
+    @Autowired private RefugioRepository      repository;
+    @Autowired private GeocodificacionService geocodificacionService;
+
+    private void geocodificarSiNecesario(Refugio r) {
+        if (r.getLat() != null && r.getLng() != null) return;
+        String query = buildQuery(r.getDireccion(), r.getUbicacion());
+        if (query == null) return;
+        Coordenadas coords = geocodificacionService.geocodificar(query);
+        if (coords.encontrado()) { r.setLat(coords.lat()); r.setLng(coords.lng()); }
+    }
+
+    private String buildQuery(String direccion, String ubicacion) {
+        if (direccion != null && !direccion.isBlank()) return direccion;
+        if (ubicacion  != null && !ubicacion.isBlank())  return ubicacion;
+        return null;
     }
 
     @Override
-    public Refugio save(final Refugio refugio) throws BusinessException {
-        LOGGER.debug("Grabamos el refugio: " + refugio.toString());
-        if (refugio.getId() == null) {
-            return repository.save(refugio);
-        }
-        throw new BusinessException("No se puede crear el refugio con un ID específico.");
+    public Refugio save(Refugio r) throws BusinessException {
+        if (r.getId() != null) throw new BusinessException("No se puede crear un refugio con ID específico.");
+        geocodificarSiNecesario(r);
+        return repository.save(r);
     }
 
     @Override
-    public Refugio update(final Refugio refugio) throws BusinessException {
-        LOGGER.debug("Modificamos el refugio: " + refugio.toString());
-        if (refugio.getId() != null) {
-            return repository.save(refugio);
-        }
-        throw new BusinessException("No se puede modificar un refugio que aún no fue creado.");
+    public Refugio update(Refugio r) throws BusinessException {
+        if (r.getId() == null) throw new BusinessException("No se puede actualizar un refugio sin ID.");
+        geocodificarSiNecesario(r);
+        return repository.save(r);
+    }
+
+    @Override public void delete(Refugio r)  { repository.delete(r); }
+    @Override public void delete(Long id)    { repository.deleteById(id); }
+
+    @Override
+    public Refugio findById(Long id) throws BusinessException {
+        Optional<Refugio> opt = repository.findById(id);
+        if (opt.isPresent()) return opt.get();
+        throw new BusinessException("Refugio no encontrado: " + id);
+    }
+
+    @Override public List<Refugio> list()                  { return repository.findAll(); }
+    @Override public Page<Refugio> list(Pageable pageable) { return repository.findAll(pageable); }
+    @Override public long count()                          { return repository.count(); }
+
+    @Override
+    public List<Refugio> listPendientes() {
+        return repository.findByEstadoAprobacion("PENDIENTE");
     }
 
     @Override
-    public void delete(final Refugio refugio) {
-        LOGGER.debug("Borramos el refugio: " + refugio.toString());
-        repository.delete(refugio);
+    public List<Refugio> listAprobadas() {
+        return repository.findByEstadoAprobacion("APROBADA");
     }
 
     @Override
-    public void delete(final Long id) {
-        LOGGER.debug("Borramos el refugio con ID: " + id);
-        repository.deleteById(id);
-    }
-
-    @Override
-    public Refugio findById(final Long id) throws BusinessException {
-        LOGGER.debug("Buscamos el refugio por ID: " + id);
-        Optional<Refugio> refugioOptional = repository.findById(id);
-        if (refugioOptional.isPresent()) {
-            return refugioOptional.get();
-        }
-        throw new BusinessException("No se encontró el refugio con el ID: " + id);
-    }
-
-    @Override
-    public List<Refugio> list() {
-        LOGGER.debug("Listado de todos los refugios");
-        return repository.findAll();
-    }
-
-    @Override
-    public Page<Refugio> list(Pageable pageable) {
-        LOGGER.debug("Listado paginado de refugios");
-        LOGGER.debug("Pageable: offset: " + pageable.getOffset() + ", pageSize: " +
-                pageable.getPageSize() + ", pageNumber: " + pageable.getPageNumber());
-        return repository.findAll(pageable);
-    }
-
-    @Override
-    public long count() {
-        return repository.count();
+    public long countPendientes() {
+        return repository.countByEstadoAprobacion("PENDIENTE");
     }
 }

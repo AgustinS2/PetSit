@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>PetSit Admin – Usuarios</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" th:href="@{/css/core.css}">
+  <link rel="icon" th:href="@{/assets/favicon/favicon.ico}" sizes="any">
+  <style>
+    body{background:#f5f7f5;}
+    .admin-sidebar{width:220px;min-height:100vh;background:#1a1a2e;display:flex;flex-direction:column;padding:1.5rem 0;position:fixed;top:0;left:0;}
+    .admin-brand{padding:0 1.25rem 1.5rem;border-bottom:1px solid rgba(255,255,255,.1);}
+    .admin-nav a{display:flex;align-items:center;gap:.75rem;padding:.6rem 1.25rem;color:rgba(255,255,255,.7);text-decoration:none;font-size:.88rem;transition:all .15s;}
+    .admin-nav a:hover,.admin-nav a.active{background:rgba(255,255,255,.08);color:#fff;}
+    .admin-nav a i{font-size:1rem;width:20px;}
+    .admin-nav .nav-section{padding:.5rem 1.25rem .25rem;font-size:.7rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.35);}
+    .admin-main{margin-left:220px;padding:2rem;}
+    .pending-badge{background:#ef4444;color:#fff;border-radius:10px;padding:.15rem .55rem;font-size:.72rem;font-weight:700;}
+    .role-pill{padding:.2rem .6rem;border-radius:20px;font-size:.72rem;font-weight:700;}
+  </style>
+</head>
+<body>
+<aside class="admin-sidebar">
+  <div class="admin-brand">
+    <img th:src="@{/assets/img/Petsit.png}" alt="PetSit" style="filter:brightness(10);height:36px;">
+  </div>
+  <nav class="admin-nav">
+    <div class="nav-section">Panel</div>
+    <a th:href="@{/petsit/admin/index}"><i class="bi bi-house"></i> Dashboard</a>
+    <a th:href="@{/petsit/alertas/mapa}"><i class="bi bi-map"></i> Ver mapa</a>
+    <div class="nav-section mt-2">Gestión</div>
+    <a th:href="@{/petsit/admin/usuarios}" class="active"><i class="bi bi-people"></i> Usuarios</a>
+    <a th:href="@{/petsit/admin/mascotas}"><i class="bi bi-heart"></i> Mascotas</a>
+    <a th:href="@{/petsit/admin/veterinarias}"><i class="bi bi-hospital"></i> Veterinarias
+      <span class="pending-badge ms-auto" th:if="${pendientesVet > 0}" th:text="${pendientesVet}">0</span></a>
+    <a th:href="@{/petsit/admin/refugios}"><i class="bi bi-house-heart"></i> Refugios
+      <span class="pending-badge ms-auto" th:if="${pendientesRef > 0}" th:text="${pendientesRef}">0</span></a>
+    <a th:href="@{/petsit/admin/adopciones}"><i class="bi bi-stars"></i> Adopciones</a>
+    <div class="nav-section mt-2">Cuenta</div>
+    <a th:href="@{/petsit/usuarios/index}"><i class="bi bi-arrow-left"></i> Volver al sitio</a>
+    <a th:href="@{/logout}" style="color:#f87171;"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</a>
+  </nav>
+</aside>
+
+<main class="admin-main">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="h3 mb-0">Usuarios</h1>
+      <p class="text-muted small mb-0" th:text="${#lists.size(listUsuarios)} + ' usuarios registrados'">0</p>
+    </div>
+    <a th:href="@{/petsit/admin/usuarios/nuevo-admin}" class="btn btn-sm btn-outline-danger">
+      <i class="bi bi-shield-check me-1"></i> Nuevo admin
+    </a>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Nombre</th>
+              <th>Email</th>
+              <th>Teléfono</th>
+              <th>Rol</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="u : ${listUsuarios}">
+              <td th:text="${u.nombre + ' ' + u.apellido}">—</td>
+              <td class="small text-muted" th:text="${u.correo}">—</td>
+              <td class="small" th:text="${u.telefono}">—</td>
+              <td>
+                <span class="role-pill"
+                      th:classappend="${u.tipo?.name() == 'ADMINISTRADOR'} ? 'bg-danger text-white' :
+                                      (${u.tipo?.name() == 'DUENO'} ? 'bg-primary text-white' : 'bg-secondary text-white')"
+                      th:text="${u.tipo}">—</span>
+              </td>
+              <td>
+                <div class="d-flex gap-1">
+                  <a th:href="@{/petsit/admin/usuarios/edit/{id}(id=${u.id})}"
+                     class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></a>
+                  <a th:href="@{/petsit/admin/usuarios/delete/{id}(id=${u.id})}"
+                     class="btn btn-sm btn-outline-danger"
+                     onclick="return confirm('¿Eliminar este usuario?')"><i class="bi bi-trash"></i></a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

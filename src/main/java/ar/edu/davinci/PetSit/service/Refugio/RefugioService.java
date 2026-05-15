@@ -2,6 +2,7 @@ package ar.edu.davinci.PetSit.service.Refugio;
 
 import java.util.List;
 
+import ar.edu.davinci.PetSit.domain.Veterinaria;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -25,5 +26,11 @@ public interface RefugioService {
     Page<Refugio> list(Pageable pageable);
 
     long count();
+
+    List<Refugio> listPendientes();
+
+    List<Refugio> listAprobadas();
+
+    long countPendientes();
 }
 

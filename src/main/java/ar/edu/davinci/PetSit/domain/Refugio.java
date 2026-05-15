@@ -1,27 +1,13 @@
 package ar.edu.davinci.PetSit.domain;
 
 import java.io.Serializable;
-
 import org.hibernate.annotations.GenericGenerator;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Table(name = "refugios")
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
-@Builder
+@NoArgsConstructor @AllArgsConstructor @Data @Builder
 public class Refugio implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -49,5 +35,22 @@ public class Refugio implements Serializable {
 
     @Column(name = "ref_ubicacion")
     private String ubicacion;
-}
 
+    @Column(name = "ref_lat")
+    private Double lat;
+
+    @Column(name = "ref_lng")
+    private Double lng;
+
+    /** Visible en listados y mapa cuando es true */
+    @Column(name = "ref_activa")
+    private Boolean activa;
+
+    /**
+     * PENDIENTE → espera aprobación del admin
+     * APROBADA  → visible (activa=true)
+     * RECHAZADA → no visible (activa=false)
+     */
+    @Column(name = "ref_estado_aprobacion")
+    private String estadoAprobacion;
+}

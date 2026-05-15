@@ -1,85 +1,92 @@
 package ar.edu.davinci.PetSit.service.Veterinaria;
 
-import java.util.List;
-import java.util.Optional;
+import ar.edu.davinci.PetSit.domain.Refugio;
+import ar.edu.davinci.PetSit.domain.Veterinaria;
+import ar.edu.davinci.PetSit.exceptions.BusinessException;
+import ar.edu.davinci.PetSit.repository.VeterinariaRepository;
+import ar.edu.davinci.PetSit.service.GeocodificacionService;
+import ar.edu.davinci.PetSit.service.GeocodificacionService.Coordenadas;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import ar.edu.davinci.PetSit.domain.Veterinaria;
-import ar.edu.davinci.PetSit.exceptions.BusinessException;
-import ar.edu.davinci.PetSit.repository.VeterinariaRepository;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class VeterinariaServiceImpl implements VeterinariaService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(VeterinariaServiceImpl.class);
-    private final VeterinariaRepository repository;
 
-    @Autowired
-    public VeterinariaServiceImpl(final VeterinariaRepository repository) {
-        this.repository = repository;
-    }
+    @Autowired private VeterinariaRepository   repository;
+    @Autowired private GeocodificacionService  geocodificacionService;
 
-    @Override
-    public Veterinaria save(final Veterinaria veterinaria) throws BusinessException {
-        LOGGER.debug("Guardamos la veterinaria: " + veterinaria.toString());
-        if (veterinaria.getId() == null) {
-            return repository.save(veterinaria);
+    private void geocodificarSiNecesario(Veterinaria v) {
+        if (v.getLat() != null && v.getLng() != null) return; // ya tiene, skip
+
+        // Construir la mejor dirección posible con los datos disponibles
+        String query = buildQuery(v.getDireccion(), v.getUbicacion());
+        if (query == null) return;
+
+        Coordenadas coords = geocodificacionService.geocodificar(query);
+        if (coords.encontrado()) {
+            v.setLat(coords.lat());
+            v.setLng(coords.lng());
         }
-        throw new BusinessException("No se puede crear una veterinaria con un ID específico.");
+    }
+
+    private String buildQuery(String direccion, String ubicacion) {
+        if (direccion != null && !direccion.isBlank()) return direccion;
+        if (ubicacion  != null && !ubicacion.isBlank())  return ubicacion;
+        return null;
     }
 
     @Override
-    public Veterinaria update(final Veterinaria veterinaria) throws BusinessException {
-        LOGGER.debug("Actualizamos la veterinaria: " + veterinaria.toString());
-        if (veterinaria.getId() != null) {
-            return repository.save(veterinaria);
-        }
-        throw new BusinessException("No se puede actualizar una veterinaria que no fue creada.");
+    public Veterinaria save(Veterinaria v) throws BusinessException {
+        if (v.getId() != null)
+            throw new BusinessException("No se puede crear una veterinaria con ID específico.");
+        geocodificarSiNecesario(v);
+        return repository.save(v);
     }
 
     @Override
-    public void delete(final Veterinaria veterinaria) {
-        LOGGER.debug("Eliminamos la veterinaria: " + veterinaria.toString());
-        repository.delete(veterinaria);
+    public Veterinaria update(Veterinaria v) throws BusinessException {
+        if (v.getId() == null)
+            throw new BusinessException("No se puede actualizar una veterinaria sin ID.");
+        geocodificarSiNecesario(v);
+        return repository.save(v);
+    }
+
+    @Override public void delete(Veterinaria v)  { repository.delete(v); }
+    @Override public void delete(Long id)         { repository.deleteById(id); }
+
+    @Override
+    public Veterinaria findById(Long id) throws BusinessException {
+        Optional<Veterinaria> opt = repository.findById(id);
+        if (opt.isPresent()) return opt.get();
+        throw new BusinessException("Veterinaria no encontrada: " + id);
+    }
+
+    @Override public List<Veterinaria> list()                  { return repository.findAll(); }
+    @Override public Page<Veterinaria> list(Pageable pageable) { return repository.findAll(pageable); }
+    @Override public long count()                              { return repository.count(); }
+
+    @Override
+    public List<Veterinaria> listPendientes() {
+        return repository.findByEstadoAprobacion("PENDIENTE");
     }
 
     @Override
-    public void delete(final Long id) {
-        LOGGER.debug("Eliminamos la veterinaria con ID: " + id);
-        repository.deleteById(id);
+    public List<Veterinaria> listAprobadas() {
+        return repository.findByEstadoAprobacion("APROBADA");
     }
 
     @Override
-    public Veterinaria findById(final Long id) throws BusinessException {
-        LOGGER.debug("Buscamos la veterinaria con ID: " + id);
-        Optional<Veterinaria> veterinariaOptional = repository.findById(id);
-        if (veterinariaOptional.isPresent()) {
-            return veterinariaOptional.get();
-        }
-        throw new BusinessException("No se encontró la veterinaria con el ID: " + id);
-    }
-
-    @Override
-    public List<Veterinaria> list() {
-        LOGGER.debug("Listamos todas las veterinarias");
-        return repository.findAll();
-    }
-
-    @Override
-    public Page<Veterinaria> list(Pageable pageable) {
-        LOGGER.debug("Listado paginado de veterinarias");
-        return repository.findAll(pageable);
-    }
-
-    @Override
-    public long count() {
-        return repository.count();
+    public long countPendientes() {
+        return repository.countByEstadoAprobacion("PENDIENTE");
     }
 }

@@ -1,367 +1,199 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>PetSit – Panel Admin</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Caudex:wght@400;700&amp;display=swap" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/css/core.css}">
-    <link rel="icon" th:href="@{/assets/favicon/favicon.ico}" sizes="any">
-    <style>
-        body { background: #f5f7f5; font-family: 'Caudex', serif; }
-        .admin-sidebar { background: #0f6a67; min-height: 100vh; padding: 1.5rem 1rem; }
-        .admin-sidebar .nav-link { color: rgba(255,255,255,.8); border-radius: 8px; padding: .5rem .75rem; }
-        .admin-sidebar .nav-link:hover, .admin-sidebar .nav-link.active { background: rgba(255,255,255,.15); color: #fff; }
-        .admin-sidebar .brand { color: #fff; font-size: 1.2rem; font-weight: 700; margin-bottom: 2rem; display: block; }
-        .stat-card { border: none; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
-        .stat-card .stat-icon { width:48px; height:48px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; }
-        .table-admin th { font-size:.8rem; text-transform:uppercase; letter-spacing:.05em; color:#6c757d; border-bottom: 2px solid #dee2e6; }
-        .badge-tipo { font-size:.7rem; }
-        .section-title { font-size:1rem; font-weight:700; color:#0f6a67; border-left:3px solid #0f6a67; padding-left:.75rem; margin-bottom:1rem; }
-    </style>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>PetSit Admin</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" th:href="@{/css/core.css}">
+  <link rel="icon" th:href="@{/assets/favicon/favicon.ico}" sizes="any">
+  <style>
+    body { background:#f5f7f5; font-family: 'Caudex', serif; }
+    .admin-sidebar {
+      width: 220px; min-height: 100vh; background:#1a1a2e;
+      display:flex; flex-direction:column; padding:1.5rem 0; position:fixed; top:0; left:0;
+    }
+    .admin-brand { padding:0 1.25rem 1.5rem; border-bottom:1px solid rgba(255,255,255,.1); }
+    .admin-brand img { height:36px; }
+    .admin-nav { flex:1; padding:.75rem 0; }
+    .admin-nav a {
+      display:flex; align-items:center; gap:.75rem;
+      padding:.6rem 1.25rem; color:rgba(255,255,255,.7);
+      text-decoration:none; font-size:.88rem; transition:all .15s;
+    }
+    .admin-nav a:hover, .admin-nav a.active { background:rgba(255,255,255,.08); color:#fff; }
+    .admin-nav a i { font-size:1rem; width:20px; }
+    .admin-nav .nav-section { padding:.5rem 1.25rem .25rem; font-size:.7rem; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.35); }
+    .admin-main { margin-left:220px; padding:2rem; }
+    .stat-card { background:#fff; border-radius:16px; padding:1.25rem 1.5rem; box-shadow:0 2px 12px rgba(0,0,0,.06); }
+    .stat-num { font-size:2rem; font-weight:700; line-height:1; }
+    .stat-label { font-size:.82rem; color:#666; margin-top:.25rem; }
+    .section-card {
+      background:#fff; border-radius:16px; padding:1.5rem;
+      box-shadow:0 2px 12px rgba(0,0,0,.06); text-decoration:none; color:inherit;
+      display:flex; flex-direction:column; gap:.75rem; transition:box-shadow .2s, transform .15s;
+    }
+    .section-card:hover { box-shadow:0 6px 24px rgba(0,0,0,.1); transform:translateY(-2px); color:inherit; }
+    .section-icon { width:48px; height:48px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; }
+    .pending-badge { background:#ef4444; color:#fff; border-radius:10px; padding:.15rem .55rem; font-size:.72rem; font-weight:700; }
+  </style>
 </head>
 <body>
 
-<div class="d-flex">
+<!-- SIDEBAR -->
+<aside class="admin-sidebar">
+  <div class="admin-brand">
+    <img th:src="@{/assets/img/Petsit.png}" alt="PetSit" style="filter:brightness(10);">
+  </div>
+  <nav class="admin-nav">
+    <div class="nav-section">Panel</div>
+    <a th:href="@{/petsit/admin/index}" class="active"><i class="bi bi-house"></i> Dashboard</a>
+    <a th:href="@{/petsit/alertas/mapa}"><i class="bi bi-map"></i> Ver mapa</a>
 
-    <!-- ── SIDEBAR ───────────────────────────────── -->
-    <nav class="admin-sidebar d-none d-md-flex flex-column" style="width:220px; flex-shrink:0;">
-        <a th:href="@{/petsit/admin/index}" class="brand">
-            <i class="bi bi-shield-check me-2"></i>Admin Panel
-        </a>
-        <ul class="nav flex-column gap-1">
-            <li class="nav-item"><a class="nav-link active" th:href="@{/petsit/admin/index}"><i class="bi bi-grid me-2"></i>Inicio</a></li>
-            <li class="nav-item"><a class="nav-link" href="#sec-usuarios"><i class="bi bi-people me-2"></i>Usuarios</a></li>
-            <li class="nav-item"><a class="nav-link" href="#sec-veterinarias"><i class="bi bi-hospital me-2"></i>Veterinarias</a></li>
-            <li class="nav-item"><a class="nav-link" href="#sec-refugios"><i class="bi bi-house-heart me-2"></i>Refugios</a></li>
-            <li class="nav-item"><a class="nav-link" href="#sec-mascotas"><i class="bi bi-heart me-2"></i>Mascotas</a></li>
-            <li class="nav-item"><a class="nav-link" href="#sec-adopciones"><i class="bi bi-stars me-2"></i>Adopciones</a></li>
-            <li class="nav-item mt-3 border-top pt-3">
-                <a class="nav-link" th:href="@{/petsit/usuarios/index}"><i class="bi bi-arrow-left me-2"></i>Volver al sitio</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-danger" th:href="@{/logout}"><i class="bi bi-box-arrow-right me-2"></i>Cerrar sesión</a>
-            </li>
-        </ul>
-    </nav>
+    <div class="nav-section mt-2">Gestión</div>
+    <a th:href="@{/petsit/admin/usuarios}"><i class="bi bi-people"></i> Usuarios</a>
+    <a th:href="@{/petsit/admin/mascotas}"><i class="bi bi-heart"></i> Mascotas</a>
+    <a th:href="@{/petsit/admin/veterinarias}">
+      <i class="bi bi-hospital"></i> Veterinarias
+      <span class="pending-badge ms-auto" th:if="${pendientesVet > 0}" th:text="${pendientesVet}">0</span>
+    </a>
+    <a th:href="@{/petsit/admin/refugios}">
+      <i class="bi bi-house-heart"></i> Refugios
+      <span class="pending-badge ms-auto" th:if="${pendientesRef > 0}" th:text="${pendientesRef}">0</span>
+    </a>
+    <a th:href="@{/petsit/admin/adopciones}"><i class="bi bi-stars"></i> Adopciones</a>
 
-    <!-- ── CONTENIDO ─────────────────────────────── -->
-    <div class="flex-grow-1 p-4">
+    <div class="nav-section mt-2">Cuenta</div>
+    <a th:href="@{/petsit/usuarios/index}"><i class="bi bi-arrow-left"></i> Volver al sitio</a>
+    <a th:href="@{/logout}" style="color:#f87171;"><i class="bi bi-box-arrow-right"></i> Cerrar sesión</a>
+  </nav>
+</aside>
 
-        <!-- Header -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h1 class="h4 mb-0">Panel de Administración</h1>
-                <small class="text-muted">Bienvenido, <span th:text="${usuario.nombre}">Admin</span></small>
-            </div>
-            <div class="d-flex gap-2">
-                <a th:href="@{/petsit/admin/veterinarias/new}" class="btn btn-sm btn-success">
-                    <i class="bi bi-hospital me-1"></i> Nueva veterinaria
-                </a>
-                <a th:href="@{/petsit/admin/refugios/new}" class="btn btn-sm btn-success">
-                    <i class="bi bi-house-heart me-1"></i> Nuevo refugio
-                </a>
-            </div>
+<!-- MAIN -->
+<main class="admin-main">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="h3 mb-0">Dashboard</h1>
+      <p class="text-muted small mb-0">Bienvenido, <span th:text="${usuario != null ? usuario.nombre : 'Admin'}">Admin</span></p>
+    </div>
+    <a th:href="@{/petsit/admin/usuarios/nuevo-admin}" class="btn btn-sm btn-outline-danger">
+      <i class="bi bi-shield-check me-1"></i> Nuevo admin
+    </a>
+  </div>
+
+  <!-- STATS -->
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-md-4 col-lg-2">
+      <div class="stat-card">
+        <div class="stat-num text-primary" th:text="${totalUsuarios}">0</div>
+        <div class="stat-label">Usuarios</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+      <div class="stat-card">
+        <div class="stat-num" style="color:#0f6a67;" th:text="${totalMascotas}">0</div>
+        <div class="stat-label">Mascotas</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+      <div class="stat-card">
+        <div class="stat-num text-info" th:text="${totalVeterinarias}">0</div>
+        <div class="stat-label">Veterinarias</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+      <div class="stat-card">
+        <div class="stat-num text-warning" th:text="${totalRefugios}">0</div>
+        <div class="stat-label">Refugios</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+      <div class="stat-card">
+        <div class="stat-num text-success" th:text="${totalAdopciones}">0</div>
+        <div class="stat-label">Adopciones</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-4 col-lg-2">
+      <div class="stat-card">
+        <div class="stat-num text-danger" th:text="${(pendientesVet ?: 0) + (pendientesRef ?: 0)}">0</div>
+        <div class="stat-label">Pendientes</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIONES -->
+  <h2 class="h5 mb-3">Secciones</h2>
+  <div class="row g-3">
+
+    <div class="col-md-4">
+      <a th:href="@{/petsit/admin/usuarios}" class="section-card">
+        <div class="section-icon" style="background:#ede9fe;color:#7c3aed;"><i class="bi bi-people-fill"></i></div>
+        <div>
+          <div class="fw-700">Usuarios</div>
+          <div class="small text-muted">Listado, edición y alta de admins</div>
         </div>
+      </a>
+    </div>
 
-        <!-- STATS -->
-        <div class="row g-3 mb-5">
-            <div class="col-6 col-lg-2">
-                <div class="card stat-card p-3 text-center">
-                    <div class="stat-icon mx-auto mb-2" style="background:#e8f5e9;color:#2e7d32;"><i class="bi bi-people"></i></div>
-                    <div class="fw-bold fs-4" th:text="${totalUsuarios}">0</div>
-                    <small class="text-muted">Usuarios</small>
-                </div>
-            </div>
-            <div class="col-6 col-lg-2">
-                <div class="card stat-card p-3 text-center">
-                    <div class="stat-icon mx-auto mb-2" style="background:#e3f2fd;color:#1565c0;"><i class="bi bi-heart"></i></div>
-                    <div class="fw-bold fs-4" th:text="${totalMascotas}">0</div>
-                    <small class="text-muted">Mascotas</small>
-                </div>
-            </div>
-            <div class="col-6 col-lg-2">
-                <div class="card stat-card p-3 text-center">
-                    <div class="stat-icon mx-auto mb-2" style="background:#fce4ec;color:#c62828;"><i class="bi bi-house-heart"></i></div>
-                    <div class="fw-bold fs-4" th:text="${totalRefugios}">0</div>
-                    <small class="text-muted">Refugios</small>
-                </div>
-            </div>
-            <div class="col-6 col-lg-2">
-                <div class="card stat-card p-3 text-center">
-                    <div class="stat-icon mx-auto mb-2" style="background:#f3e5f5;color:#6a1b9a;"><i class="bi bi-hospital"></i></div>
-                    <div class="fw-bold fs-4" th:text="${totalVeterinarias}">0</div>
-                    <small class="text-muted">Veterinarias</small>
-                </div>
-            </div>
-            <div class="col-6 col-lg-2">
-                <div class="card stat-card p-3 text-center">
-                    <div class="stat-icon mx-auto mb-2" style="background:#fff8e1;color:#f57f17;"><i class="bi bi-stars"></i></div>
-                    <div class="fw-bold fs-4" th:text="${totalAdopciones}">0</div>
-                    <small class="text-muted">Adopciones</small>
-                </div>
-            </div>
+    <div class="col-md-4">
+      <a th:href="@{/petsit/admin/mascotas}" class="section-card">
+        <div class="section-icon" style="background:#fce7f3;color:#db2777;"><i class="bi bi-heart-fill"></i></div>
+        <div>
+          <div class="fw-700">Mascotas</div>
+          <div class="small text-muted">Gestión de mascotas registradas</div>
         </div>
+      </a>
+    </div>
 
-        <!-- ── VETERINARIAS ──────────────────────── -->
-        <section id="sec-veterinarias" class="mb-5">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <div>
-                    <h2 class="section-title mb-0">Veterinarias</h2>
-                    <small class="text-muted">
-                        Mostrando
-                        <span th:text="${#lists.size(listVeterinarias)}">0</span>
-                        de
-                        <span th:text="${totalVeterinarias}">0</span>
-                        (más recientes)
-                    </small>
-                </div>
-                <a th:href="@{/petsit/admin/veterinarias/new}" class="btn btn-sm btn-outline-success">
-                    <i class="bi bi-plus-circle me-1"></i> Agregar
-                </a>
-            </div>
-            <div class="card shadow-sm">
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0 table-admin">
-                        <thead><tr>
-                            <th>Nombre</th><th>Dirección</th><th>Teléfono</th><th>Horario</th><th>Estado</th><th></th>
-                        </tr></thead>
-                        <tbody>
-                        <tr th:if="${#lists.isEmpty(listVeterinarias)}">
-                            <td colspan="6" class="text-center text-muted py-3">No hay veterinarias registradas</td>
-                        </tr>
-                        <tr th:each="v : ${listVeterinarias}">
-                            <td class="fw-semibold" th:text="${v.nombre}">—</td>
-                            <td class="small" th:text="${v.direccion}">—</td>
-                            <td class="small" th:text="${v.telefono}">—</td>
-                            <td class="small" th:text="${v.horarioAtencion}">—</td>
-                            <td>
-                                <span th:if="${v.activa}" class="badge bg-success">Activa</span>
-                                <span th:unless="${v.activa}" class="badge bg-warning text-dark">Inactiva</span>
-                            </td>
-                            <td class="text-end">
-                                <a th:href="@{/petsit/admin/veterinarias/edit/{id}(id=${v.id})}"
-                                   class="btn btn-sm btn-outline-secondary me-1">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                                <a th:href="@{/petsit/admin/veterinarias/delete/{id}(id=${v.id})}"
-                                   class="btn btn-sm btn-outline-danger"
-                                   onclick="return confirm('¿Eliminar esta veterinaria?')">
-                                    <i class="bi bi-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
+    <div class="col-md-4">
+      <a th:href="@{/petsit/admin/veterinarias}" class="section-card">
+        <div class="section-icon" style="background:#dbeafe;color:#2563eb;"><i class="bi bi-hospital-fill"></i></div>
+        <div>
+          <div class="d-flex align-items-center gap-2">
+            <span class="fw-700">Veterinarias</span>
+            <span th:if="${pendientesVet > 0}" class="pending-badge" th:text="${pendientesVet} + ' pendientes'">0</span>
+          </div>
+          <div class="small text-muted">Aprobar solicitudes y gestionar clínicas</div>
+        </div>
+      </a>
+    </div>
 
-        <!-- ── REFUGIOS ──────────────────────────── -->
-        <section id="sec-refugios" class="mb-5">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <div>
-                    <h2 class="section-title mb-0">Refugios</h2>
-                    <small class="text-muted">
-                        Mostrando
-                        <span th:text="${#lists.size(listRefugios)}">0</span>
-                        de
-                        <span th:text="${totalRefugios}">0</span>
-                        (más recientes)
-                    </small>
-                </div>
-                <a th:href="@{/petsit/admin/refugios/new}" class="btn btn-sm btn-outline-success">
-                    <i class="bi bi-plus-circle me-1"></i> Agregar
-                </a>
-            </div>
-            <div class="card shadow-sm">
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0 table-admin">
-                        <thead><tr>
-                            <th>Nombre</th><th>Dirección</th><th>Teléfono</th><th>Correo</th><th>Ubicación</th><th></th>
-                        </tr></thead>
-                        <tbody>
-                        <tr th:if="${#lists.isEmpty(listRefugios)}">
-                            <td colspan="6" class="text-center text-muted py-3">No hay refugios registrados</td>
-                        </tr>
-                        <tr th:each="r : ${listRefugios}">
-                            <td class="fw-semibold" th:text="${r.nombre}">—</td>
-                            <td class="small" th:text="${r.direccion}">—</td>
-                            <td class="small" th:text="${r.telefono}">—</td>
-                            <td class="small" th:text="${r.correo}">—</td>
-                            <td class="small" th:text="${r.ubicacion}">—</td>
-                            <td class="text-end">
-                                <a th:href="@{/petsit/admin/refugios/edit/{id}(id=${r.id})}"
-                                   class="btn btn-sm btn-outline-secondary me-1">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                                <a th:href="@{/petsit/admin/refugios/delete/{id}(id=${r.id})}"
-                                   class="btn btn-sm btn-outline-danger"
-                                   onclick="return confirm('¿Eliminar este refugio?')">
-                                    <i class="bi bi-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
+    <div class="col-md-4">
+      <a th:href="@{/petsit/admin/refugios}" class="section-card">
+        <div class="section-icon" style="background:#ede9fe;color:#7c3aed;"><i class="bi bi-house-heart-fill"></i></div>
+        <div>
+          <div class="d-flex align-items-center gap-2">
+            <span class="fw-700">Refugios</span>
+            <span th:if="${pendientesRef > 0}" class="pending-badge" th:text="${pendientesRef} + ' pendientes'">0</span>
+          </div>
+          <div class="small text-muted">Aprobar solicitudes y gestionar refugios</div>
+        </div>
+      </a>
+    </div>
 
-        <!-- ── USUARIOS ──────────────────────────── -->
-        <section id="sec-usuarios" class="mb-5">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <div>
-                    <h2 class="section-title mb-0">Usuarios</h2>
-                    <small class="text-muted">
-                        Mostrando
-                        <span th:text="${#lists.size(listUsuarios)}">0</span>
-                        de
-                        <span th:text="${totalUsuarios}">0</span>
-                        (más recientes)
-                    </small>
-                </div>
-                <a th:href="@{/petsit/admin/usuarios/nuevo-admin}" class="btn btn-sm btn-outline-danger">
-                    <i class="bi bi-shield-check me-1"></i> Nuevo admin
-                </a>
-            </div>
-            <div class="card shadow-sm">
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0 table-admin">
-                        <thead><tr>
-                            <th>Nombre</th><th>Correo</th><th>Teléfono</th><th>Tipo</th><th></th>
-                        </tr></thead>
-                        <tbody>
-                        <tr th:each="u : ${listUsuarios}">
-                            <td class="fw-semibold" th:text="${u.nombre + ' ' + u.apellido}">—</td>
-                            <td class="small" th:text="${u.correo}">—</td>
-                            <td class="small" th:text="${u.telefono}">—</td>
-                            <td>
-                  <span class="badge badge-tipo"
-                        th:text="${u.tipo}"
-                        th:classappend="${u.tipo?.name() == 'ADMINISTRADOR'} ? 'bg-danger' :
-                                        (${u.tipo?.name() == 'VETERINARIO'} ? 'bg-info text-dark' :
-                                        (${u.tipo?.name() == 'REFUGIO'} ? 'bg-warning text-dark' : 'bg-secondary'))">
-                  </span>
-                            </td>
-                            <td class="text-end">
-                                <a th:href="@{/petsit/admin/usuarios/edit/{id}(id=${u.id})}"
-                                   class="btn btn-sm btn-outline-secondary me-1">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                                <a th:href="@{/petsit/admin/usuarios/delete/{id}(id=${u.id})}"
-                                   class="btn btn-sm btn-outline-danger"
-                                   onclick="return confirm('¿Eliminar este usuario?')">
-                                    <i class="bi bi-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
+    <div class="col-md-4">
+      <a th:href="@{/petsit/admin/adopciones}" class="section-card">
+        <div class="section-icon" style="background:#d1fae5;color:#059669;"><i class="bi bi-stars"></i></div>
+        <div>
+          <div class="fw-700">Adopciones</div>
+          <div class="small text-muted">Publicaciones activas y postulaciones</div>
+        </div>
+      </a>
+    </div>
 
-        <!-- ── MASCOTAS ──────────────────────────── -->
-        <section id="sec-mascotas" class="mb-5">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <div>
-                    <h2 class="section-title mb-0">Mascotas</h2>
-                    <small class="text-muted">
-                        Mostrando
-                        <span th:text="${#lists.size(listMascotas)}">0</span>
-                        de
-                        <span th:text="${totalMascotas}">0</span>
-                        (más recientes)
-                    </small>
-                </div>
-            </div>
-            <div class="card shadow-sm">
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0 table-admin">
-                        <thead><tr>
-                            <th>Nombre</th><th>Raza</th><th>Tamaño</th><th>Edad</th><th>Dueño</th><th></th>
-                        </tr></thead>
-                        <tbody>
-                        <tr th:each="m : ${listMascotas}">
-                            <td class="fw-semibold" th:text="${m.nombre}">—</td>
-                            <td class="small" th:text="${m.raza}">—</td>
-                            <td class="small" th:text="${m.tamano}">—</td>
-                            <td class="small" th:text="${m.edad != null ? m.edad + ' año(s)' : '—'}">—</td>
-                            <td class="small" th:text="${m.dueno != null ? m.dueno.nombre + ' ' + m.dueno.apellido : 'Sin dueño'}">—</td>
-                            <td class="text-end">
-                                <a th:href="@{/petsit/mascotas/edit/{id}(id=${m.id})}"
-                                   class="btn btn-sm btn-outline-secondary me-1">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                                <a th:href="@{/petsit/mascotas/delete/{id}(id=${m.id})}"
-                                   class="btn btn-sm btn-outline-danger"
-                                   onclick="return confirm('¿Eliminar esta mascota?')">
-                                    <i class="bi bi-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
+    <div class="col-md-4">
+      <a th:href="@{/petsit/alertas/mapa}" class="section-card">
+        <div class="section-icon" style="background:#fef3c7;color:#d97706;"><i class="bi bi-map-fill"></i></div>
+        <div>
+          <div class="fw-700">Mapa</div>
+          <div class="small text-muted">Ver reportes de mascotas en el mapa</div>
+        </div>
+      </a>
+    </div>
 
-        <!-- ── ADOPCIONES ────────────────────────── -->
-        <section id="sec-adopciones" class="mb-5">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <div>
-                    <h2 class="section-title mb-0">Adopciones</h2>
-                    <small class="text-muted">
-                        Mostrando
-                        <span th:text="${#lists.size(listAdopciones)}">0</span>
-                        de
-                        <span th:text="${totalAdopciones}">0</span>
-                        (más recientes)
-                    </small>
-                </div>
-            </div>
-            <div class="card shadow-sm">
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0 table-admin">
-                        <thead><tr>
-                            <th>Mascota</th><th>Publicado por</th><th>Descripción</th><th>Estado</th><th></th>
-                        </tr></thead>
-                        <tbody>
-                        <tr th:each="a : ${listAdopciones}">
-                            <td class="fw-semibold" th:text="${a.mascota.nombre}">—</td>
-                            <td class="small" th:text="${a.usuario.nombre + ' ' + a.usuario.apellido}">—</td>
-                            <td class="small" th:text="${a.descripcion}">—</td>
-                            <td>
-                                <!-- Cambio de estado inline -->
-                                <form th:action="@{/petsit/admin/adopciones/estado/{id}(id=${a.id})}" method="post" class="d-inline">
-                                    <select name="estado" class="form-select form-select-sm d-inline-block w-auto"
-                                            onchange="this.form.submit()"
-                                            th:value="${a.estado}">
-                                        <option value="ACTIVA"   th:selected="${a.estado == 'ACTIVA'}">Activa</option>
-                                        <option value="PAUSADA"  th:selected="${a.estado == 'PAUSADA'}">Pausada</option>
-                                        <option value="CERRADA"  th:selected="${a.estado == 'CERRADA'}">Cerrada</option>
-                                    </select>
-                                </form>
-                            </td>
-                            <td class="text-end">
-                                <a th:href="@{/petsit/admin/adopciones/delete/{id}(id=${a.id})}"
-                                   class="btn btn-sm btn-outline-danger"
-                                   onclick="return confirm('¿Eliminar esta adopción?')">
-                                    <i class="bi bi-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-    </div><!-- /contenido -->
-</div><!-- /d-flex -->
+  </div>
+</main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

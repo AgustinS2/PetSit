@@ -23,12 +23,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/petsit/api/mapa/**")
+                )
                 .authorizeHttpRequests(auth -> auth
 
-                        // Panel admin solo para ADMINISTRADOR
                         .requestMatchers("/petsit/admin/**").hasRole("ADMINISTRADOR")
 
-                        // Rutas públicas
                         .requestMatchers(
                                 "/", "/petsit/", "/petsit/index",
                                 "/petsit/home/login",
@@ -37,17 +38,20 @@ public class SecurityConfig {
                                 "/petsit/home/nosotros",
                                 "/petsit/home/recuperarpass",
                                 "/petsit/usuarios/save",
+                                // Registro público de vet y refugio
                                 "/petsit/registro/veterinaria",
-                                "/petsit/registro/refugio",
                                 "/petsit/registro/veterinaria/save",
+                                "/petsit/registro/veterinaria/gracias",
+                                "/petsit/registro/refugio",
                                 "/petsit/registro/refugio/save",
+                                "/petsit/registro/refugio/gracias",
+                                // Listados públicos
                                 "/petsit/refugios/list",
                                 "/petsit/refugios/index",
                                 "/petsit/veterinarias/list",
                                 "/petsit/veterinarias/index",
                                 "/petsit/mascotas/list",
-                                // API del mapa — accesible sin login para el fetch de Leaflet
-                                // (el POST de reporte acepta anónimos, Reporte.usuario es nullable)
+                                // API mapa pública
                                 "/petsit/api/mapa/**",
                                 // Recursos estáticos
                                 "/css/**", "/js/**", "/images/**", "/assets/**"

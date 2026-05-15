@@ -20,12 +20,7 @@ public interface ReporteService {
     Page<Reporte> list(Pageable pageable);
     long count();
 
-    /** Todos los reportes con coordenadas, convertidos a DTO para el mapa */
     List<ReporteMapaDTO> obtenerReportesParaMapa();
 
-    /**
-     * Guarda el reporte y devuelve los usuarios dentro de ~10km para notificar.
-     * La lógica de notificación (email / push) se implementa en el controller.
-     */
     List<Usuario> guardarYObtenerUsuariosCercanos(Reporte reporte, List<Usuario> todosUsuarios);
 }
