@@ -98,8 +98,9 @@ public class UsuarioController extends PetSitApp {
 	public String usuarioRefugio(Model model, Principal principal) throws BusinessException {
 		if (principal == null) return "redirect:/petsit/home/login";
 		Usuario usuario = usuarioService.findByCorreo(principal.getName());
-		model.addAttribute("usuario",      usuario);
-		model.addAttribute("listRefugios", refugioService.list());
+		model.addAttribute("usuario", usuario);
+		// listAprobadas() incluye APROBADA y NULL (filas viejas sin el campo seteado)
+		model.addAttribute("listRefugios", refugioService.listAprobadas());
 		return "usuarios/usuariorefugio";
 	}
 

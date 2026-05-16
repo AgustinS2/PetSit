@@ -2,6 +2,7 @@ package ar.edu.davinci.PetSit.repository;
 
 import ar.edu.davinci.PetSit.domain.Reporte;
 import ar.edu.davinci.PetSit.domain.TipoReporte;
+import ar.edu.davinci.PetSit.domain.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,6 +12,9 @@ import java.util.List;
 
 @Repository
 public interface ReporteRepository extends JpaRepository<Reporte, Long> {
+
+    /** Reportes de un usuario específico (para "mis reportes") */
+    List<Reporte> findByUsuarioOrderByFechaDesc(Usuario usuario);
 
     /** Todos los reportes que tienen coordenadas — para el mapa */
     List<Reporte> findByLatIsNotNullAndLngIsNotNull();

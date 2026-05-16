@@ -493,17 +493,38 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function rerender() {
     const tipo = $tipo.value;
+
     if (tipo === 'VETERINARIA') {
-      map.addLayer(clusterVets); map.removeLayer(clusterRefugios); map.removeLayer(clusterReportes); clearReporteMarkers();
-      if ($toggleVets) $toggleVets.checked = true; if ($toggleRefugios) $toggleRefugios.checked = false; return;
+      // Solo vets: ocultar refugios y reportes
+      map.addLayer(clusterVets);
+      map.removeLayer(clusterRefugios);
+      map.removeLayer(clusterReportes);
+      clearReporteMarkers();
+      if ($toggleVets)     $toggleVets.checked = true;
+      if ($toggleRefugios) $toggleRefugios.checked = false;
+      return;
     }
+
     if (tipo === 'REFUGIO') {
-      map.addLayer(clusterRefugios); map.removeLayer(clusterVets); map.removeLayer(clusterReportes); clearReporteMarkers();
-      if ($toggleVets) $toggleVets.checked = false; if ($toggleRefugios) $toggleRefugios.checked = true; return;
+      // Solo refugios: ocultar vets y reportes
+      map.addLayer(clusterRefugios);
+      map.removeLayer(clusterVets);
+      map.removeLayer(clusterReportes);
+      clearReporteMarkers();
+      if ($toggleVets)     $toggleVets.checked = false;
+      if ($toggleRefugios) $toggleRefugios.checked = true;
+      return;
     }
-    map.addLayer(clusterReportes);
-    if ($toggleVets?.checked) map.addLayer(clusterVets);
+
+    // TODOS / PERDIDO / ENCONTRADO
+    // Vets y refugios: respetar estado del toggle (no forzar)
+    // Solo se muestran reportes filtrados + lo que el usuario dejó activo
+    if ($toggleVets?.checked)     map.addLayer(clusterVets);
+    else                          map.removeLayer(clusterVets);
     if ($toggleRefugios?.checked) map.addLayer(clusterRefugios);
+    else                          map.removeLayer(clusterRefugios);
+    map.addLayer(clusterReportes);
+
     let filtrados = applyFilters();
     if (tipo === 'PERDIDO')    filtrados = filtrados.filter(r => r.estadoMascota === 'PERDIDO');
     if (tipo === 'ENCONTRADO') filtrados = filtrados.filter(r => r.estadoMascota === 'ENCONTRADO');

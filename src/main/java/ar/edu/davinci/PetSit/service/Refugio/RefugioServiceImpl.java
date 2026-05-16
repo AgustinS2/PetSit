@@ -73,7 +73,13 @@ public class RefugioServiceImpl implements RefugioService {
 
     @Override
     public List<Refugio> listAprobadas() {
-        return repository.findByEstadoAprobacion("APROBADA");
+        // Incluye: estadoAprobacion=APROBADA o NULL (filas viejas)
+        // Excluye: activa=false explícito (0 en BD)
+        return repository.findAll().stream()
+                .filter(r -> r.getEstadoAprobacion() == null
+                          || "APROBADA".equals(r.getEstadoAprobacion()))
+                .filter(r -> !Boolean.FALSE.equals(r.getActiva()))
+                .toList();
     }
 
     @Override

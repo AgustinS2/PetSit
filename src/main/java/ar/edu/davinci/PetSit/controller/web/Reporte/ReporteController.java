@@ -2,6 +2,8 @@ package ar.edu.davinci.PetSit.controller.web.Reporte;
 
 import ar.edu.davinci.PetSit.domain.*;
 import ar.edu.davinci.PetSit.exceptions.BusinessException;
+import ar.edu.davinci.PetSit.repository.ReporteRepository;
+import ar.edu.davinci.PetSit.service.Mascota.MascotaService;
 import ar.edu.davinci.PetSit.service.Reporte.ReporteService;
 import ar.edu.davinci.PetSit.service.Usuario.UsuarioService;
 
@@ -29,9 +31,21 @@ public class ReporteController {
     private static final String UPLOAD_DIR = "src/main/resources/static/assets/img/uploads/";
 
     @Autowired private ReporteService reporteService;
+    @Autowired private ReporteRepository reporteRepository;
     @Autowired private UsuarioService usuarioService;
+    @Autowired private MascotaService mascotaService;
 
     // ── LISTADO (para admin) ──────────────────────────────────
+    @GetMapping("/mis-reportes")
+    public String misReportes(Model model, Principal principal) throws ar.edu.davinci.PetSit.exceptions.BusinessException {
+        if (principal == null) return "redirect:/petsit/home/login";
+        ar.edu.davinci.PetSit.domain.Usuario usuario = usuarioService.findByCorreo(principal.getName());
+        model.addAttribute("usuario", usuario);
+        // Solo los reportes del usuario logueado, ordenados por fecha desc
+        model.addAttribute("listReportes", reporteRepository.findByUsuarioOrderByFechaDesc(usuario));
+        return "reportes/mis_reportes";
+    }
+
     @GetMapping("/list")
     public String listReportes(Model model) {
         Pageable pageable = PageRequest.of(0, 50);
@@ -44,8 +58,14 @@ public class ReporteController {
     @GetMapping("/new/perdido")
     public String newReportePerdido(Model model, Principal principal) {
         if (principal != null) {
-            try { model.addAttribute("usuario", usuarioService.findByCorreo(principal.getName())); }
-            catch (Exception ignored) {}
+            try {
+                ar.edu.davinci.PetSit.domain.Usuario usuario = usuarioService.findByCorreo(principal.getName());
+                model.addAttribute("usuario", usuario);
+                // Si es dueño, pasar sus mascotas para el selector
+                if (ar.edu.davinci.PetSit.domain.TipoUsuario.DUENO.equals(usuario.getTipo())) {
+                    model.addAttribute("misMascotas", mascotaService.findByDueno(usuario));
+                }
+            } catch (Exception ignored) {}
         }
         model.addAttribute("reporte", new Reporte());
         return "reportes/new_reporte_perdido";

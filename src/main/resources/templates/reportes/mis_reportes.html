@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>PetSit – Mis reportes</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Caudex:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" th:href="@{/css/core.css}">
+  <link rel="stylesheet" th:href="@{/css/nav-user.css}">
+  <link rel="stylesheet" th:href="@{/css/user.css}">
+  <link rel="icon" th:href="@{/assets/favicon/favicon.ico}" sizes="any">
+</head>
+<body class="petsit-bg page-user-menu">
+
+<nav class="navbar navbar-expand-lg navbar-light bg-nav border-bottom petsit-nav-user">
+  <div class="container-fluid px-3 px-md-4">
+    <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/petsit/usuarios/index}">
+      <img th:src="@{/assets/img/icons/logo.png}" alt="Logo PetSit" height="56">
+      <img th:src="@{/assets/img/Petsit.png}" alt="PetSit" class="brand-name">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav mx-auto nav-center gap-lg-3">
+        <li class="nav-item"><a class="nav-link" th:href="@{/petsit/mascotas/mis_mascotas}">Mis mascotas</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/usuarioveterinarias}">Veterinarias</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/usuariorefugio}">Refugios</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/usuarioadoptar}">Adoptar</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/mis-solicitudes}">Solicitudes</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/usuariomapa}">Mapa</a></li>
+      </ul>
+      <ul class="navbar-nav ms-auto align-items-center d-none d-lg-flex nav-login">
+        <li class="nav-item dropdown">
+          <a class="nav-link user-chip dropdown-toggle d-flex align-items-center gap-2"
+             href="#" role="button" data-bs-toggle="dropdown">
+            <span class="user-avatar"><img th:src="@{/assets/img/icons/usuario.png}" alt="Avatar"></span>
+            <span th:text="${usuario != null ? usuario.nombre : 'Usuario'}">Usuario</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end user-menu">
+            <li><a class="dropdown-item" th:href="@{/petsit/usuarios/perfil}"><i class="bi bi-person-gear me-2"></i>Mi perfil</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" th:href="@{/logout}"><i class="bi bi-box-arrow-right me-2"></i>Cerrar sesion</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<main class="container py-5">
+
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
+    <div>
+      <h1 class="h3 mb-1">Mis reportes</h1>
+      <p class="text-muted small mb-0">Tus reportes de mascotas perdidas y encontradas,
+        ordenados del mas reciente al mas antiguo.</p>
+    </div>
+    <div class="d-flex gap-2">
+      <a th:href="@{/petsit/reportes/new/perdido}"
+         class="btn btn-sm fw-bold"
+         style="background:#ef4444;color:#fff;border:none;">
+        <i class="bi bi-exclamation-circle me-1"></i> Perdi una mascota
+      </a>
+      <a th:href="@{/petsit/reportes/new/encontrado}"
+         class="btn btn-sm fw-bold"
+         style="background:#10b981;color:#fff;border:none;">
+        <i class="bi bi-check-circle me-1"></i> Encontre una mascota
+      </a>
+    </div>
+  </div>
+
+  <!-- Filtro por tipo -->
+  <div class="d-flex gap-2 mb-4 flex-wrap">
+    <button class="btn btn-sm btn-primary active" id="btnTodos" onclick="filtrar('todos', this)">
+      Todos
+      <span class="badge bg-white text-primary ms-1" id="cntTodos">0</span>
+    </button>
+    <button class="btn btn-sm btn-outline-danger" id="btnPerdidos" onclick="filtrar('perdidos', this)">
+      <i class="bi bi-exclamation-circle me-1"></i> Perdidos
+      <span class="badge bg-danger text-white ms-1" id="cntPerdidos">0</span>
+    </button>
+    <button class="btn btn-sm btn-outline-success" id="btnEncontrados" onclick="filtrar('encontrados', this)">
+      <i class="bi bi-check-circle me-1"></i> Encontrados / Vi uno
+      <span class="badge bg-success text-white ms-1" id="cntEncontrados">0</span>
+    </button>
+  </div>
+
+  <!-- EMPTY STATE -->
+  <div th:if="${#lists.isEmpty(listReportes)}" class="text-center py-5">
+    <div style="width:72px;height:72px;background:#f0f9f8;border-radius:20px;display:flex;
+                align-items:center;justify-content:center;margin:0 auto 1.25rem;">
+      <i class="bi bi-clipboard-x" style="font-size:2rem;color:#0f6a67;"></i>
+    </div>
+    <h4 class="mb-2">No tenes reportes todavia</h4>
+    <p class="text-muted mb-4">Cuando reportes una mascota perdida o encontrada, aparecera aca.</p>
+    <div class="d-flex gap-2 justify-content-center">
+      <a th:href="@{/petsit/reportes/new/perdido}" class="btn btn-danger fw-bold">Perdi una mascota</a>
+      <a th:href="@{/petsit/reportes/new/encontrado}" class="btn btn-success fw-bold">Encontre una mascota</a>
+    </div>
+  </div>
+
+  <!-- GRID DE REPORTES -->
+  <div class="row g-3" id="reportesGrid" th:unless="${#lists.isEmpty(listReportes)}">
+
+    <div class="col-md-6 col-lg-4 reporte-item"
+         th:each="r : ${listReportes}"
+         th:attr="data-tipo=${r.tipoReporte != null ? r.tipoReporte.name() : ''}">
+
+      <div class="card h-100 shadow-sm" style="border-radius:16px;overflow:hidden;">
+
+        <!-- Foto o placeholder -->
+        <div style="height:160px;background:#f0f9f8;overflow:hidden;position:relative;">
+          <img th:if="${r.foto != null}"
+               th:src="@{/assets/img/{f}(f=${r.foto})}"
+               style="width:100%;height:160px;object-fit:cover;" alt="foto"
+               onerror="this.parentElement.innerHTML='<div class=\'d-flex align-items-center justify-content-center h-100\'><i class=\'bi bi-image text-muted\' style=\'font-size:2.5rem;\'></i></div>'">
+          <div th:unless="${r.foto != null}"
+               class="d-flex align-items-center justify-content-center h-100">
+            <i class="bi bi-image text-muted" style="font-size:2.5rem;"></i>
+          </div>
+
+          <!-- Badge tipo -->
+          <span style="position:absolute;top:.6rem;left:.6rem;padding:.25rem .65rem;
+                       border-radius:20px;font-size:.72rem;font-weight:700;"
+                th:classappend="${r.tipoReporte != null and r.tipoReporte.name() == 'MASCOTA_PERDIDA'}
+                                ? 'bg-danger text-white' : 'bg-success text-white'"
+                th:text="${r.tipoReporte != null and r.tipoReporte.name() == 'MASCOTA_PERDIDA'}
+                         ? 'PERDIDO'
+                         : (r.tipoReporte != null and r.tipoReporte.name() == 'TENGO_CONMIGO'
+                            ? 'LO TENGO' : 'LO VI')">
+          </span>
+        </div>
+
+        <!-- Cuerpo -->
+        <div class="card-body p-3">
+          <p class="small mb-2 text-muted"
+             style="overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;"
+             th:text="${r.descripcion}">—</p>
+
+          <div class="d-flex flex-column gap-1">
+            <div class="d-flex align-items-center gap-1 small text-muted">
+              <i class="bi bi-geo-alt" style="color:#0f6a67;"></i>
+              <span th:text="${r.ubicacion ?: '—'}">—</span>
+            </div>
+            <div class="d-flex align-items-center gap-1 small text-muted">
+              <i class="bi bi-calendar" style="color:#0f6a67;"></i>
+              <span th:text="${r.fecha != null ? #temporals.format(r.fecha, 'dd/MM/yyyy') : '—'}">—</span>
+            </div>
+            <div class="d-flex align-items-center gap-1 small"
+                 th:classappend="${r.estado == 'PENDIENTE'} ? 'text-warning' : 'text-success'">
+              <i class="bi bi-circle-fill" style="font-size:.5rem;"></i>
+              <span th:text="${r.estado ?: '—'}">—</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Acciones -->
+        <div class="card-footer bg-transparent p-2 pt-0 d-flex gap-2">
+          <a th:href="@{/petsit/alertas/mapa}"
+             class="btn btn-sm btn-outline-secondary flex-fill">
+            <i class="bi bi-map me-1"></i> Ver en mapa
+          </a>
+          <a th:href="@{/petsit/reportes/delete/{id}(id=${r.id})}"
+             class="btn btn-sm btn-outline-danger"
+             onclick="return confirm('Eliminar este reporte?')">
+            <i class="bi bi-trash"></i>
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /reportesGrid -->
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const items = document.querySelectorAll('.reporte-item');
+
+  // Contar por tipo para los badges
+  let perdidos = 0, encontrados = 0;
+  items.forEach(i => {
+    if (i.dataset.tipo === 'MASCOTA_PERDIDA') perdidos++;
+    else encontrados++;
+  });
+  document.getElementById('cntTodos').textContent      = items.length;
+  document.getElementById('cntPerdidos').textContent   = perdidos;
+  document.getElementById('cntEncontrados').textContent = encontrados;
+
+  function filtrar(tipo, btn) {
+    // Reset botones
+    document.querySelectorAll('#reportesGrid ~ * .btn, .d-flex.gap-2.mb-4 .btn').forEach(b => {
+      b.classList.remove('btn-primary','btn-danger','btn-success','active');
+      if (b.classList.contains('btn-outline-danger') || b.classList.contains('btn-outline-success') || b.classList.contains('btn-outline-primary')) return;
+    });
+
+    items.forEach(item => {
+      const t = item.dataset.tipo;
+      let show = true;
+      if (tipo === 'perdidos')    show = (t === 'MASCOTA_PERDIDA');
+      if (tipo === 'encontrados') show = (t !== 'MASCOTA_PERDIDA');
+      item.style.display = show ? '' : 'none';
+    });
+
+    // Highlight botón activo
+    document.querySelectorAll('.d-flex.gap-2.mb-4 .btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+</script>
+</body>
+</html>

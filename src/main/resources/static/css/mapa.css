@@ -4,18 +4,16 @@
    ════════════════════════════════════════════════════════════ */
 
 /* ── BASE ────────────────────────────────────────────────── */
-html, body {
-  height: 100%;
-  margin: 0;
-  overflow: hidden; /* el mapa ocupa toda la pantalla */
-}
-
+/* IMPORTANTE: no tocar html/body globalmente — contamina todas las páginas.
+   Todo queda encapsulado en .map-page-body que solo existe en usuariomapa.html */
 .map-page-body {
   font-family: 'Caudex', serif;
   background: #eef1ef;
   display: flex;
   flex-direction: column;
   height: 100vh;
+  overflow: hidden;
+  margin: 0;
 }
 
 /* ── TOPBAR DE FILTROS ───────────────────────────────────── */

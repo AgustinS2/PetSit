@@ -1,18 +1,20 @@
 package ar.edu.davinci.PetSit.controller.web.Refugio;
 
 import ar.edu.davinci.PetSit.domain.Refugio;
+import ar.edu.davinci.PetSit.domain.Veterinaria;
 import ar.edu.davinci.PetSit.exceptions.BusinessException;
 import ar.edu.davinci.PetSit.service.Refugio.RefugioService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/petsit/refugios")
@@ -28,12 +30,13 @@ public class RefugioController {
      */
     @GetMapping({"/index", "/list"})
     public String listRefugios(Model model) {
-        // Solo los aprobados y activos para la vista pública
-        List<Refugio> aprobados = refugioService.listAprobadas()
-                .stream()
-                .filter(r -> Boolean.TRUE.equals(r.getActiva()))
-                .toList();
-        model.addAttribute("listRefugios", aprobados);
+        LOGGER.info("GET /petsit/refugios/list");
+        Pageable pageable = PageRequest.of(0, 50);
+        Page<Refugio> refugios = refugioService.list(pageable);
+        model.addAttribute("listVeterinarias", refugios.getContent());
+        model.addAttribute("pageNumber", refugios.getPageable().getPageNumber());
+        model.addAttribute("totalPages", refugios.getTotalPages());
+        model.addAttribute("listRefugios", refugioService.listAprobadas());
         return "refugios/list_refugios";
     }
 

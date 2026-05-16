@@ -3,18 +3,17 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>PetSit – Reportar mascota perdida</title>
+  <title>PetSit - Reportar mascota perdida</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Caudex:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-  <link href="https://fonts.googleapis.com/css2?family=Caudex:wght@400;700&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" th:href="@{/css/core.css}">
   <link rel="stylesheet" th:href="@{/css/nav-user.css}">
   <link rel="stylesheet" th:href="@{/css/user.css}">
   <link rel="icon" th:href="@{/assets/favicon/favicon.ico}" sizes="any">
 </head>
-<body class="petsit-bg">
+<body class="petsit-bg page-user-menu">
 
-<!-- NAV -->
 <nav class="navbar navbar-expand-lg navbar-light bg-nav border-bottom petsit-nav-user">
   <div class="container-fluid px-3 px-md-4">
     <a class="navbar-brand d-flex align-items-center gap-2" th:href="@{/petsit/usuarios/index}">
@@ -30,13 +29,12 @@
         <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/usuarioveterinarias}">Veterinarias</a></li>
         <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/usuariorefugio}">Refugios</a></li>
         <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/usuarioadoptar}">Adoptar</a></li>
-        <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/usuariomapa}">Mapa</a></li>
         <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/mis-solicitudes}">Solicitudes</a></li>
+        <li class="nav-item"><a class="nav-link" th:href="@{/petsit/usuarios/usuariomapa}">Mapa</a></li>
       </ul>
       <ul class="navbar-nav ms-auto align-items-center d-none d-lg-flex nav-login">
         <li class="nav-item dropdown">
-          <a class="nav-link user-chip dropdown-toggle d-flex align-items-center gap-2"
-             href="#" role="button" data-bs-toggle="dropdown">
+          <a class="nav-link user-chip dropdown-toggle d-flex align-items-center gap-2" href="#" role="button" data-bs-toggle="dropdown">
             <span class="user-avatar"><img th:src="@{/assets/img/icons/usuario.png}" alt="Avatar"></span>
             <span th:text="${usuario != null ? usuario.nombre : 'Usuario'}">Usuario</span>
           </a>
@@ -52,85 +50,96 @@
 </nav>
 
 <main class="container py-5" style="max-width:800px;">
-
-  <!-- Header -->
   <div class="d-flex align-items-center gap-3 mb-4">
     <div style="width:52px;height:52px;background:#ef4444;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
       <i class="bi bi-exclamation-circle-fill text-white fs-4"></i>
     </div>
     <div>
       <h1 class="h3 mb-0">Reportar mascota perdida</h1>
-      <p class="text-muted small mb-0">Mientras más datos cargues, más chances de que vuelva a casa.</p>
+      <p class="text-muted small mb-0">Mientras mas datos cargues, mas chances de que vuelva a casa.</p>
     </div>
   </div>
 
-  <div class="alert alert-danger d-flex gap-2 align-items-start mb-4 p-3">
-    <i class="bi bi-info-circle-fill mt-1 flex-shrink-0"></i>
-    <div>Tu reporte aparecerá en el mapa para que otros usuarios cerca puedan ayudarte a encontrarla.</div>
-  </div>
+  <div th:if="${param.error}" class="alert alert-danger mb-3">Ocurrio un error. Por favor intenta de nuevo.</div>
 
-  <form th:action="@{/petsit/reportes/save/perdido}" th:object="${reporte}"
-        method="post" enctype="multipart/form-data" novalidate>
+  <form th:action="@{/petsit/reportes/save/perdido}" method="post" enctype="multipart/form-data" novalidate>
 
     <div class="card shadow-sm p-4 mb-4">
       <h5 class="mb-3">Datos de la mascota</h5>
       <div class="row g-3">
+
+        <!-- Si es DUEÑO y tiene mascotas: selector -->
+        <div class="col-12" th:if="${misMascotas != null and not #lists.isEmpty(misMascotas)}">
+          <label class="form-label fw-semibold">Elegir de mis mascotas (opcional)</label>
+          <select class="form-select" id="mascotaSelect" onchange="rellenarDesdeMascota(this)">
+            <option value="">— Ingresar datos manualmente —</option>
+            <option th:each="m : ${misMascotas}"
+                    th:value="${m.id}"
+                    th:data-nombre="${m.nombre}"
+                    th:data-raza="${m.raza}"
+                    th:data-color="${m.color}"
+                    th:data-tamano="${m.tamano}"
+                    th:text="${m.nombre + (m.raza != null ? ' (' + m.raza + ')' : '')}">
+            </option>
+          </select>
+          <div class="form-text">Al elegir una mascota se rellenan los datos automáticamente.</div>
+        </div>
+
         <div class="col-md-6">
           <label class="form-label fw-semibold">Nombre (opcional)</label>
-          <input type="text" class="form-control" name="nombre" placeholder="Ej: Milo">
+          <input type="text" class="form-control" name="nombre" id="inputNombre" placeholder="Ej: Milo">
         </div>
         <div class="col-md-6">
           <label class="form-label fw-semibold">Especie *</label>
-          <select class="form-select" name="especie" required>
-            <option value="" disabled selected>Elegí una</option>
+          <select class="form-select" name="especie" id="inputEspecie" required>
+            <option value="" disabled selected>Elegir una</option>
             <option>Perro</option><option>Gato</option><option>Otro</option>
           </select>
         </div>
         <div class="col-md-6">
           <label class="form-label fw-semibold">Raza</label>
-          <input type="text" class="form-control" name="raza" placeholder="Ej: Mestizo">
+          <input type="text" class="form-control" name="raza" id="inputRaza" placeholder="Ej: Mestizo">
         </div>
         <div class="col-md-3">
-          <label class="form-label fw-semibold">Tamaño</label>
-          <select class="form-select" name="tamano">
+          <label class="form-label fw-semibold">Tamano</label>
+          <select class="form-select" name="tamano" id="inputTamano">
             <option value="">—</option>
             <option>Chico</option><option>Mediano</option><option>Grande</option>
           </select>
         </div>
         <div class="col-md-3">
           <label class="form-label fw-semibold">Color</label>
-          <input type="text" class="form-control" name="color" placeholder="Ej: Marrón">
+          <input type="text" class="form-control" name="color" id="inputColor" placeholder="Ej: Marron">
         </div>
         <div class="col-12">
-          <label class="form-label fw-semibold">Señas / descripción *</label>
-          <textarea class="form-control" name="descripcion" rows="4" required
-                    placeholder="Ej: collar verde, mancha blanca en el pecho, responde a su nombre…"></textarea>
+          <label class="form-label fw-semibold">Senas / descripcion *</label>
+          <textarea class="form-control" name="descripcion" rows="3" required
+                    placeholder="Ej: collar verde, mancha blanca en el pecho, responde a su nombre..."></textarea>
         </div>
         <div class="col-12">
-          <label class="form-label fw-semibold">Foto (opcional pero muy recomendada)</label>
+          <label class="form-label fw-semibold">Foto (muy recomendada)</label>
           <input type="file" class="form-control" name="fotoFile" accept="image/*" id="fotoInput">
-          <div id="fotoPreview" style="display:none;margin-top:.5rem;">
-            <img id="fotoPreviewImg" style="max-height:200px;border-radius:8px;" alt="Preview">
+          <div id="fotoPreview" style="display:none;margin-top:.5rem;border-radius:8px;overflow:hidden;max-height:180px;">
+            <img id="fotoPreviewImg" style="width:100%;height:180px;object-fit:cover;" alt="Preview">
           </div>
         </div>
       </div>
     </div>
 
     <div class="card shadow-sm p-4 mb-4">
-      <h5 class="mb-3">¿Dónde y cuándo?</h5>
+      <h5 class="mb-3">Donde y cuando?</h5>
       <div class="row g-3">
         <div class="col-md-6">
           <label class="form-label fw-semibold">Barrio / Zona *</label>
           <input type="text" class="form-control" name="zona" placeholder="Ej: Palermo" required>
         </div>
         <div class="col-md-6">
-          <label class="form-label fw-semibold">Fecha de pérdida *</label>
+          <label class="form-label fw-semibold">Fecha de perdida *</label>
           <input type="date" class="form-control" name="fecha" required>
         </div>
         <div class="col-12">
-          <label class="form-label fw-semibold">Dirección aproximada</label>
+          <label class="form-label fw-semibold">Direccion aproximada</label>
           <input type="text" class="form-control" name="ubicacion" placeholder="Ej: Av. Santa Fe y Thames">
-          <div class="form-text">Se mostrará en el mapa de forma aproximada.</div>
         </div>
       </div>
     </div>
@@ -139,11 +148,11 @@
       <h5 class="mb-3">Contacto</h5>
       <div class="row g-3">
         <div class="col-md-6">
-          <label class="form-label fw-semibold">Teléfono / WhatsApp *</label>
+          <label class="form-label fw-semibold">Telefono / WhatsApp *</label>
           <input type="tel" class="form-control" name="telefono" placeholder="+54 11 4444-4444" required>
         </div>
         <div class="col-md-6">
-          <label class="form-label fw-semibold">Preferencia de contacto</label>
+          <label class="form-label fw-semibold">Preferencia</label>
           <select class="form-select" name="contactoPref">
             <option value="AMBOS">Llamadas y WhatsApp</option>
             <option value="WHATSAPP">Solo WhatsApp</option>
@@ -156,7 +165,7 @@
     <div class="d-flex gap-3 justify-content-end">
       <a th:href="@{/petsit/usuarios/usuariomapa}" class="btn btn-outline-secondary">Cancelar</a>
       <button type="submit" class="btn btn-danger fw-bold px-4">
-        <i class="bi bi-send me-2"></i> Publicar reporte de pérdida
+        <i class="bi bi-send me-2"></i> Publicar reporte de perdida
       </button>
     </div>
   </form>
@@ -164,13 +173,25 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-  document.getElementById('fotoInput').addEventListener('change', function(e) {
+  document.querySelector('input[name="fecha"]').valueAsDate = new Date();
+
+  document.getElementById('fotoInput')?.addEventListener('change', function(e) {
     const file = e.target.files?.[0];
     if (!file) { document.getElementById('fotoPreview').style.display = 'none'; return; }
     document.getElementById('fotoPreviewImg').src = URL.createObjectURL(file);
     document.getElementById('fotoPreview').style.display = 'block';
   });
-  document.querySelector('input[name="fecha"]').valueAsDate = new Date();
+
+  function rellenarDesdeMascota(sel) {
+    const opt = sel.selectedOptions[0];
+    if (!opt || !opt.value) return;
+    document.getElementById('inputNombre').value  = opt.dataset.nombre || '';
+    document.getElementById('inputRaza').value    = opt.dataset.raza   || '';
+    document.getElementById('inputColor').value   = opt.dataset.color  || '';
+    const tam = opt.dataset.tamano || '';
+    const tamSel = document.getElementById('inputTamano');
+    for (let o of tamSel.options) { if (o.value.toLowerCase() === tam.toLowerCase()) { o.selected = true; break; } }
+  }
 </script>
 </body>
 </html>
