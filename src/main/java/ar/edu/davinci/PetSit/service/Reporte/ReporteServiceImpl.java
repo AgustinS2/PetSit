@@ -25,7 +25,6 @@ public class ReporteServiceImpl implements ReporteService {
     private static final double RADIO_KM     = 10.0;
     private static final double EARTH_RADIUS = 6371.0;
 
-    // ~0.09 grados ≈ 10km (para el bounding box previo al Haversine)
     private static final double DELTA_GRADOS = 0.09;
 
     private final ReporteRepository repository;
@@ -63,9 +62,7 @@ public class ReporteServiceImpl implements ReporteService {
     @Override public Page<Reporte> list(Pageable pageable) { return repository.findAll(pageable); }
     @Override public long count()                          { return repository.count(); }
 
-    // ─────────────────────────────────────────────────────────────────────────
     //  MAPA
-    // ─────────────────────────────────────────────────────────────────────────
 
     @Override
     public List<ReporteMapaDTO> obtenerReportesParaMapa() {
@@ -76,15 +73,8 @@ public class ReporteServiceImpl implements ReporteService {
                 .toList();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
     //  NOTIFICACIÓN A USUARIOS CERCANOS (10km)
-    // ─────────────────────────────────────────────────────────────────────────
 
-    /**
-     * Guarda el reporte y filtra los usuarios que están a ≤ 10km.
-     * Usa Haversine para la distancia exacta.
-     * El controller decide qué hacer con la lista (enviar email, etc.).
-     */
     @Override
     public List<Usuario> guardarYObtenerUsuariosCercanos(Reporte reporte, List<Usuario> todosUsuarios) {
         Reporte saved;
@@ -105,9 +95,7 @@ public class ReporteServiceImpl implements ReporteService {
                 .toList();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
     //  PRIVADOS
-    // ─────────────────────────────────────────────────────────────────────────
 
     private ReporteMapaDTO toMapaDTO(Reporte r) {
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -136,10 +124,6 @@ public class ReporteServiceImpl implements ReporteService {
                 .build();
     }
 
-    /**
-     * Fórmula de Haversine — distancia en km entre dos coordenadas.
-     * Reservado para cuando Usuario tenga lat/lng.
-     */
     @SuppressWarnings("unused")
     private double distanciaKm(double lat1, double lng1, double lat2, double lng2) {
         double dLat = Math.toRadians(lat2 - lat1);

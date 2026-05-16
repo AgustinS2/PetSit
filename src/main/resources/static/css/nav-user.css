@@ -5,6 +5,7 @@
    ========================================================= */
 
 /* ===== BASE (antes nav-base.css) ===== */
+.petsit-nav-user{font-family:'Caudex',serif;}
 .petsit-nav-user.bg-nav{background:#e7ece9;}
 
 .petsit-nav-user.navbar{

@@ -65,12 +65,16 @@ public class MascotaController {
     //  NUEVA MASCOTA
     // ──────────────────────────────────────────────
     @GetMapping("/new")
-    public String newMascotaForm(Model model) {
+    public String newMascotaForm(Model model, java.security.Principal principal) {
         LOGGER.info("GET /petsit/mascotas/new");
         model.addAttribute("mascota", new Mascota());
-        // Lista de usuarios para el <select> del dueño (sólo vista de admin)
-        model.addAttribute("usuarios", usuarioService.list());
-        return "mascotas/new_mascotas";   // ← nombre correcto del template
+        // Pasar el usuario logueado para asignarlo como dueño automáticamente
+        if (principal != null) {
+            try {
+                model.addAttribute("usuarioLogueado", usuarioService.findByCorreo(principal.getName()));
+            } catch (Exception ignored) {}
+        }
+        return "mascotas/new_mascotas";
     }
 
     // ──────────────────────────────────────────────
@@ -86,20 +90,28 @@ public class MascotaController {
     public String saveMascota(
             @ModelAttribute("mascota") Mascota mascota,
             @RequestParam(value = "dueno.id", required = false) Long duenoId,
+            @RequestParam(value = "fotoFile", required = false) org.springframework.web.multipart.MultipartFile fotoFile,
             Principal principal) {
 
         LOGGER.info("POST /petsit/mascotas/save — id mascota: {}", mascota.getId());
 
         try {
-            // Resolver el dueño:
-            // Si viene un ID desde el <select> (panel admin) lo usamos.
-            // Si no, el dueño es el usuario logueado (alta desde "Mis mascotas").
+            // Foto: si se subió archivo, guardarlo y setear el path
+            if (fotoFile != null && !fotoFile.isEmpty()) {
+                java.nio.file.Path uploadPath = java.nio.file.Paths.get("src/main/resources/static/assets/img/uploads/");
+                if (!java.nio.file.Files.exists(uploadPath)) java.nio.file.Files.createDirectories(uploadPath);
+                String orig = fotoFile.getOriginalFilename();
+                String ext  = (orig != null && orig.contains(".")) ? orig.substring(orig.lastIndexOf('.')) : ".jpg";
+                String filename = "msc_" + System.currentTimeMillis() + ext;
+                java.nio.file.Files.copy(fotoFile.getInputStream(), uploadPath.resolve(filename), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                mascota.setFoto("uploads/" + filename);
+            }
+
+            // Resolver el dueño: si no viene ID del select, usar el usuario logueado
             if (duenoId != null) {
-                Usuario dueno = usuarioService.findById(duenoId);
-                mascota.setDueno(dueno);
+                mascota.setDueno(usuarioService.findById(duenoId));
             } else if (mascota.getDueno() == null && principal != null) {
-                Usuario dueno = usuarioService.findByCorreo(principal.getName());
-                mascota.setDueno(dueno);
+                mascota.setDueno(usuarioService.findByCorreo(principal.getName()));
             }
 
             if (mascota.getId() == null) {
@@ -109,6 +121,8 @@ public class MascotaController {
             }
         } catch (BusinessException e) {
             LOGGER.error("Error guardando mascota: {}", e.getMessage());
+        } catch (java.io.IOException e) {
+            LOGGER.error("Error guardando foto mascota: {}", e.getMessage());
         }
 
         // Redirige a "mis mascotas" si hay sesión, si no al listado general

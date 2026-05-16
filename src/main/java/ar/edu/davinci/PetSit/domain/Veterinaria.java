@@ -1,21 +1,13 @@
 package ar.edu.davinci.PetSit.domain;
 
 import java.io.Serializable;
-
 import org.hibernate.annotations.GenericGenerator;
-
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "veterinarias")
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
-@Builder
+@NoArgsConstructor @AllArgsConstructor @Data @Builder
 public class Veterinaria implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,4 +35,21 @@ public class Veterinaria implements Serializable {
 
     @Column(name = "vet_activa")
     private Boolean activa;
+
+    @Column(name = "vet_foto")
+    private String foto;
+
+    @Column(name = "vet_lat")
+    private Double lat;
+
+    @Column(name = "vet_lng")
+    private Double lng;
+
+    /**
+     * Estado de aprobación: PENDIENTE → admin la aprueba → pasa a activa=true.
+     * Cuando alguien registra una vet desde el formulario público,
+     * queda en estado PENDIENTE hasta que el admin la aprueba.
+     */
+    @Column(name = "vet_estado_aprobacion")
+    private String estadoAprobacion; // PENDIENTE / APROBADA / RECHAZADA
 }
