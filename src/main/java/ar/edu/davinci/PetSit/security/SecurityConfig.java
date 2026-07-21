@@ -3,12 +3,24 @@ package ar.edu.davinci.PetSit.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+/**
+ *
+ *   1. Agregue "/petsit/api/**" a la lista de rutas exceptuadas de CSRF
+ *      (porque la app Android no manda token CSRF).
+ *   2. Cambie a permitAll(): login/registro de la app y los listados
+ *      públicos de refugios/veterinarias vía la nueva API JSON.
+ *   3. Se agrego el bean AuthenticationManager, que hacia falta para poder
+ *      autenticar manualmente desde ApiAuthController y asi poder autenticar desde la app.
+ *
+ */
 @Configuration
 public class SecurityConfig {
 
@@ -21,10 +33,18 @@ public class SecurityConfig {
     }
 
     @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/petsit/api/mapa/**")
+                        .ignoringRequestMatchers(
+                                "/petsit/api/mapa/**",
+                                "/petsit/api/**"
+                        )
                 )
                 .authorizeHttpRequests(auth -> auth
 
@@ -53,6 +73,11 @@ public class SecurityConfig {
                                 "/petsit/mascotas/list",
                                 // API mapa pública
                                 "/petsit/api/mapa/**",
+                                // --- Nuevo: API JSON para la app Android ---
+                                "/petsit/api/auth/login",
+                                "/petsit/api/usuarios/registro",
+                                "/petsit/api/refugios/**",
+                                "/petsit/api/veterinarias/**",
                                 // Recursos estáticos
                                 "/css/**", "/js/**", "/images/**", "/assets/**"
                         ).permitAll()
