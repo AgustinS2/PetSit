@@ -1,5 +1,6 @@
 package ar.edu.davinci.PetSit.service.Postulacion;
 
+import ar.edu.davinci.PetSit.domain.Adopcion;
 import ar.edu.davinci.PetSit.domain.Postulacion;
 import ar.edu.davinci.PetSit.domain.Usuario;
 import ar.edu.davinci.PetSit.exceptions.BusinessException;
@@ -52,5 +53,15 @@ public class PostulacionServiceImpl implements PostulacionService {
     @Override
     public List<Postulacion> findByUsuario(Usuario usuario) {
         return repository.findByUsuario(usuario);
+    }
+
+    @Override
+    public List<Postulacion> findRecibidas(Usuario publicador) {
+        return repository.findByAdopcionUsuario(publicador);
+    }
+
+    @Override
+    public boolean yaPostulado(Adopcion adopcion, Usuario usuario) {
+        return repository.existsByAdopcionAndUsuario(adopcion, usuario);
     }
 }
